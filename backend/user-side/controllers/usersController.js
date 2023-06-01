@@ -7,7 +7,7 @@ const genrateToken = require("../database/genrateToken");
 // api: POST /api/user/register-user
 const registrationUser = asyncHandler(async (req, res) => {
   const { firstName, email, password } = req.body;
-
+console.log("Registeration Data: ",req.body);
   if (!firstName || !email || !password) {
     res.status(400);
     throw new Error("Please Enter all the Feilds");
@@ -44,6 +44,9 @@ const registrationUser = asyncHandler(async (req, res) => {
 
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+  if (email) {
+    
+  }
   // Find to user already exists or not
   const user = await User.findOne({ email });
   // Condition to check the user email and password to give user login access
@@ -62,10 +65,12 @@ const authUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid Email or Password");
   }
 });
-
+// show all the User  
+// GET /api/user/all-users
 const showUser = asyncHandler(async (req, res) => {
   try {
     const users = await User.find();
+    console.log(users);
     res.status(200).json({ meassge: "All users ", users });
   } catch (error) {
     res.status(400)
@@ -73,6 +78,21 @@ const showUser = asyncHandler(async (req, res) => {
   }
 });
 
+// Get the selected User  
+// GET /api/user/:userId
+const singleUser = asyncHandler(async (req, res) => {
+  try {
+    const  {userId}  = req.params;
+    const selectedUser = await User.findOne({ _id: userId })
+    res.status(200).json({ meassge: "Selected User ", selectedUser });
+  } catch (error) {
+    res.status(400)
+    throw new Error("Error occured Selecteduser not being showed...", error);
+  }
+});
+
+// Delete the selected User  
+// DELETE /api/user/:userId
 const deleteUser = asyncHandler(async (req, res) => {
   try {
     const { userId } = req.params;
@@ -84,11 +104,13 @@ const deleteUser = asyncHandler(async (req, res) => {
   }
 });
 
+// update the selected User  
+// PUT /api/user/:userId
 const updateUser = asyncHandler(async (req, res) => {
     try {
-        const { userId } = req.params
-        const { email, firstfirstName, password } = req.body;
-        const updated_User = await User.findByIdAndUpdate(userId ,{ email, firstfirstName, password } , {new:true} )
+      const { userId } = req.params;
+        let payload = req.body;
+        const updated_User = await User.findByIdAndUpdate(userId ,payload , {new:true} )
         res.status(200).json({message:"User updated." , updated_User})
       
     }
@@ -98,4 +120,5 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { registrationUser, showUser, deleteUser, updateUser, authUser };
+
+module.exports = { registrationUser, showUser, deleteUser, updateUser, authUser ,singleUser };

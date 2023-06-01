@@ -1,0 +1,11 @@
+.todo-list {width: 90%;color: #fff;padding: 60px 0px;margin: 0 auto 30px;}
+.todo-list h1{font-size: 50px;line-height: 70px;font-weight: bold;margin: 0 0 50px; color: #3bbdfb;}
+.todo-list .list-data{padding: 50px;background: #3bbdfb;border-radius: 20px;}
+.todo-list .list-data table.table{margin-bottom: 0;color: #fff;}
+.todo-list .list-data table.table thead tr td{color: #fff;font-size: 18px;font-weight: bold;}
+.todo-list .list-data table.table tbody tr td{color: #fff;font-size: 16px; font-weight: 300;}
+.todo-list .list-data table.table tbody .delete-button {background: transparent;border: none;color: red;padding: 0;opacity: 0.5;}
+.todo-list .list-data table.table tbody .delete-button:hover{opacity: 1;}
+.todo-list .list-data table.table tbody .no-data-found {width: 100%;height: 50px;background: #000;display: flex;border-radius: 10px;justify-content: center;align-items: center;font-size: 16px;font-weight: 500;}
+.button1 {font-size: 20px;line-height: 30px;font-weight: 500;background: #04abf8;color: #fff;border-radius: 20px;border: none;padding: 15px 30px;}
+.button1:hover{background: #fff;color: #000;}

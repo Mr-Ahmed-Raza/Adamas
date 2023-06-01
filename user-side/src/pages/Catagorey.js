@@ -4,10 +4,11 @@ import Footer from "../components/Footer";
 
 function Catagorey() {
   return (
+    
     <>
-      <wrapper>
+      
         <header>
-          <NavBar/>
+          <NavBar />
           <section className="navbar-section">
             <nav className="navbar navbar-expand-lg navbar-light">
               <div className="container">
@@ -540,15 +541,31 @@ function Catagorey() {
             </div>
           </section>
         </main>
-        <Footer/>
-      </wrapper>
-      {/* <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/bundle.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/slick.min.js"></script>
+        <Footer />
+      
+      </>
 
-    <script type="text/javascript">
+      
+     
+    
+    );
+
+}
+
+
+export default Catagorey;
+
+
+
+
+
+{/* <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+     <script src="js/bootstrap.min.js"></script>
+     <script src="js/bundle.min.js"></script>
+     <script src="js/popper.min.js"></script>
+     <script src="js/slick.min.js"></script>
+
+     <script type="text/javascript">
         (document).ready(function () {
             ('.single-item-rtl').slick({
                 infinite: true,
@@ -558,8 +575,8 @@ function Catagorey() {
                 cssEase: 'linear'
             })
         });
-    </script>    
-    <script>
+     </script>    
+     <script>
         ('.autoplay').slick(
         slidesToShow: 1,
         slidesToScroll: 1,
@@ -568,9 +585,4 @@ function Catagorey() {
          prevArrow:'  <span className="priv_arrow"><i className="fa fa-angle-left"></i></span>  ',
          nextArrow:'  <span className="next_arrow"><i className="fa fa-angle-right"></i></span>  ',
       )
-    </script> */}
-    </>
-  );
-}
-
-export default Catagorey;
+      </script> */}

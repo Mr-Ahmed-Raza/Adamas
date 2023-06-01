@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const categoriesSchema = mongoose.Schema({
-    name: {
+    title: {
         type: String, 
         required: true,
        
@@ -13,11 +13,8 @@ const categoriesSchema = mongoose.Schema({
     Image: {
         type: String, 
         
-    },
-    status: {
-        type: Boolean, 
-        default:true
     }
+    
 })
 const categories = mongoose.model("categories", categoriesSchema)
 module.exports = categories

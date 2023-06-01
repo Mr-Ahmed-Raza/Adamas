@@ -1,0 +1,12 @@
+.main-page {width: 100%;color: #fff;padding: 60px 0px;margin: 0 0 30px;}
+.main-page  h1{font-size: 50px;line-height: 70px;font-weight: bold;margin: 0 0 50px; color: #3bbdfb;}
+.main-page  h3{font-weight: bold; color: #000000;}
+.main-page  .text {text-align: start;font-size: 20px;line-height: 30px;font-weight: 500;margin: 0 0 50px;;}
+.main-page form {padding: 50px;background: #3bbdfb;border-radius: 20px;max-width: 700px;margin: 0 auto;}
+.main-page form .input-group {flex-direction: column;align-items: start;margin: 0 0 30px;}
+.main-page form .input-group label {font-size: 20px;line-height: 30px;display: block;margin: 0 0 15px;}
+.main-page form .input-group .input-field {width: 100%;}
+.main-page form .input-group input {width: 100%;height: 45px;}
+.main-page form .input-group textarea {width: 100%;height: 150px;resize: none;}
+.button1 {font-size: 20px;line-height: 30px;font-weight: 500;background: #04abf8;color: #fff;border-radius: 20px;border: none;padding: 15px 30px;}
+.button1:hover{background: #fff;color: #000;}

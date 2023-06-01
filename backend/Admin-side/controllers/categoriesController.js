@@ -2,29 +2,29 @@ const asyncHandler = require("express-async-handler");
 const categories = require("../models/CategoriesModel")
 
 const addCategories = asyncHandler(async (req, res) => {
-    const { name, description, image, status } = req.body
+    const { title, description } = req.body
+    const image  = req.file
     console.log(req.body);
 
     // Validation checks if the user is not entering required field data
-    if (!name && ! description) {
+    if (!title && ! description) {
         res.status(400)
         throw new Error ("Please fill all the required field")
     }
    // to check the enter product is already exists 
-    const categorey = await categories.findOne({ name })
-    if (categorey) {
+    const existingcategorey = await categories.findOne({ title })
+    if (existingcategorey) {
         res.status(400)
-        throw new Error("Category with same name is already exists")
+        throw new Error("Category with same title is already exists")
     }
 
-    const newCategory = await categories.create({
-        name, 
+    const Category = await categories.create({
+        title, 
         description,
         image,
-        status,
     })
-    if (newCategory) {
-        res.status(201).json(newCategory)
+    if (Category) {
+        res.status(201).json(Category)
     }
     
     
@@ -56,8 +56,9 @@ const deleteCategory = asyncHandler(async (req, res) => {
 
 const updateCategory = asyncHandler(async(req, res) => {
     const { categoryId } = req.params 
-    const { name, description, status } = req.body
-    const category = await categories.findByIdAndUpdate(categoryId, { name, description, status }, { new: true })
+    const { title, description } = req.body
+    const image  = req.file
+    const category = await categories.findByIdAndUpdate(categoryId, {title , description , image}, { new: true })
     res.status(200).json({message: "Successfully update the category",category})
 
 

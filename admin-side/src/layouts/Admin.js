@@ -43,7 +43,14 @@ function Admin() {
             key={key}
           />
         );
-      } else {
+      }
+      else if (prop.layout === "/adminlogin/") {
+        return (
+          <Route
+            
+          />
+        );
+      }else {
         return null;
       }
     });

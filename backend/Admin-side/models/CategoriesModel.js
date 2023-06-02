@@ -7,13 +7,14 @@ const categoriesSchema = mongoose.Schema({
        
     },
     description: {
-        type: String, 
-        required: true ,
-    },
-    Image: {
-        type: String, 
-        
+        type: String,
+        required: true,
     }
+    // ,
+    // Image: {
+    //     type: String, 
+        
+    // }
     
 })
 const categories = mongoose.model("categories", categoriesSchema)

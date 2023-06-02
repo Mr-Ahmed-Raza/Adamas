@@ -73,7 +73,7 @@ function Login() {
       }
       // make api call by fetch method
 
-      await fetch("http://localhost:5000/api/users/login", {
+      await fetch("http://localhost:5001/api/users/login", {
         method: "post",
         headers: {
           "Content-Type": "application/json",

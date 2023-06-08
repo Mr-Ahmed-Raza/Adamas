@@ -1,20 +1,22 @@
 import React from "react";
 import { Button } from "@chakra-ui/button";
 import { InputGroup, InputRightElement } from "@chakra-ui/input";
-import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useHistory } from 'react-router-dom';
 import { Container } from "react-bootstrap";
-
+import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
+import Dashboard from "./Dashboard";
 function Login() {
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [errors, setErrors] = useState({});
   const history = useHistory();
+  const IsAuth = localStorage.getItem("token")
 
   // setting up show button
   const handleClick = () => {
+    
     setShow(!show);
   };
   // set the value of email and password in state
@@ -86,6 +88,7 @@ function Login() {
               setEmail("")
               setPassword("")
               localStorage.setItem('userData', JSON.stringify(data))
+              localStorage.setItem("token", data.token);
               history.push("/admin/dashboard")
             })
           
@@ -98,7 +101,13 @@ function Login() {
 
   return (
     <>
-      <div className="main-page">
+      {
+        IsAuth ? 
+          (
+            <Redirect  to="/admin/dashboard" />
+
+          ) : (
+            <div className="main-page">
         <Container>
           <div>
             <h1>Adamas</h1>
@@ -151,6 +160,12 @@ function Login() {
           </form>
         </Container>
       </div>
+
+          )
+        
+        
+      }
+      
     </>
   );
 }

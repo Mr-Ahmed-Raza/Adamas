@@ -5,11 +5,12 @@ const categories = require("../models/CategoriesModel")
 // POST /api/admin/category/add-category
 const addCategories = asyncHandler(async (req, res) => {
     const { title, description } = req.body
-    // const image  = req.file
+     const picture = req.file.filename
     console.log(req.body);
+    console.log(req.file);
 
     // Validation checks if the user is not entering required field data
-    if (!title && ! description) {
+    if (!title && ! description && !picture) {
         res.status(400)
         throw new Error ("Please fill all the required field")
     }
@@ -23,7 +24,7 @@ const addCategories = asyncHandler(async (req, res) => {
     const Category = await categories.create({
         title, 
         description,
-        // image,
+        picture
     })
     if (Category) {
         res.status(201).json(Category)
@@ -59,15 +60,27 @@ const deleteCategory = asyncHandler(async (req, res) => {
 })
 // Update category  
 // PUT /api/admin/category/:categoryId
-const updateCategory = asyncHandler(async(req, res) => {
-    const { categoryId } = req.params 
-    const { title, description } = req.body
-    // const image  = req.file
-    const category = await categories.findByIdAndUpdate(categoryId, {title , description }, { new: true })
-    res.status(200).json({message: "Successfully update the category",category})
-
-
-})
+const updateCategory = asyncHandler(async (req, res) => {
+    const { categoryId } = req.params;
+    const { title, description } = req.body;
+    const picture = req.file;
+    let picturePath = null;
+  
+    if (picture) {
+      // If a new picture is provided, update the picturePath
+      picturePath = picture.path;
+    }
+  
+    const category = await categories.findByIdAndUpdate(
+      categoryId,
+      { title, description, picturePath },
+      { new: true }
+    );
+  
+    res.status(200).json({ message: "Successfully updated the category", category });
+    console.log(category);
+  });
+  
 // Get the selected category  
 // GET /api/admin/category/:categoryId
 const singleCategory = asyncHandler(async (req, res) => {

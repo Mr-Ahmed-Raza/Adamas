@@ -1,37 +1,39 @@
 import { Button } from "@chakra-ui/button";
 // import { FormControl, FormLabel } from "@chakra-ui/form-control";
-import {  InputGroup, InputRightElement } from "@chakra-ui/input";
+import { InputGroup, InputRightElement } from "@chakra-ui/input";
 // import { VStack } from "@chakra-ui/layout";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import "../../App.css"
-import { useNavigate } from 'react-router-dom'
+import "../../App.css";
+import { useNavigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
 function Login() {
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [errors, setErrors] = useState({});
-  const navigate = useNavigate()
+  const [err, seterr] = useState();
+
+  const navigate = useNavigate();
 
   const handleClick = () => {
     setShow(!show);
   };
 
   const onChnageEmail = (event) => {
-    setEmail(event.target.value)
-    clearError("email")
-  }
+    setEmail(event.target.value);
+    clearError("email");
+  };
   const onChnagePassword = (event) => {
-    setPassword(event.target.value)
-    clearError("password")
-  }
+    setPassword(event.target.value);
+    clearError("password");
+  };
   // to clear validation error when user enter anything to particular field
   const clearError = (fieldName) => {
     setErrors((prevErrors) => {
       return {
         ...prevErrors,
-        [fieldName]: '',
+        [fieldName]: ""
       };
     });
   };
@@ -39,16 +41,22 @@ function Login() {
   const validationChecks = () => {
     let formIsValid = true;
     const errors = {};
-    
+
     if (!email) {
       formIsValid = false;
-      errors.email = 'Email is required';
-      
-    } 
+      errors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      formIsValid = false;
+      errors.email = "Invalid email address";
+    }
     if (!password) {
       formIsValid = false;
-      errors.password = 'Password is required';
-    } 
+      errors.password = "Password is required";
+    } else if (password.length < 8) {
+      formIsValid = false;
+      errors.password = "Password must be at least 8 characters long";
+    }
+
     //  else
     //  {
     //    formIsValid = false;
@@ -62,14 +70,15 @@ function Login() {
   const submitHandler = async (event) => {
     try {
       event.preventDefault();
-      // send data to the backend api 
+      // send data to the backend api
       const data = {
         email,
-        password
-      }
+        password,
+      };
 
       if (!validationChecks()) {
-        return
+        
+        return;
       }
       // make api call by fetch method
 
@@ -77,20 +86,22 @@ function Login() {
         method: "post",
         headers: {
           "Content-Type": "application/json",
-        }, body:JSON.stringify(data)
-      }).then(response => response.json())
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
         .then((data) => {
           console.log(data.message);
-          setEmail("")
-          setPassword("")
-          localStorage.setItem('userData', JSON.stringify(data))
-          navigate("/")
-        })
-      
+          setEmail("");
+          setPassword("");
+          localStorage.setItem("userData", JSON.stringify(data));
+          navigate("/");
+        });
     } catch (error) {
-      console.error("Error." , error);
+      console.log("Invalid email or password", error);
+      errors.err = "Invalid email or password";
+      setErrors(errors);
     }
-    
   };
 
   return (
@@ -105,8 +116,7 @@ function Login() {
             <div className="text">
               <h3>Login</h3>
             </div>
-            
-              
+
             <div className="input-group">
               <label>Enter Email</label>
               <div className="input-field">
@@ -141,13 +151,16 @@ function Login() {
               </div>
               <div className="error">{<span>{errors.password}</span>}</div>
             </div>
+            <div className="error" name="err">
+              <span>{errors.err} </span>
+            </div>
             <div className="button">
               <button className="button1" onClick={submitHandler}>
                 Login
               </button>
             </div>
-            <br>
-            </br>
+
+            <br></br>
             <Link to="/register">
               <Button className="button1">Signup</Button>
             </Link>
@@ -166,7 +179,7 @@ function Login() {
     //       onChange={onChnageEmail}
     //     />
     //     <div className="errors">
-    //     {<span>{errors.email}</span>} 
+    //     {<span>{errors.email}</span>}
     //     </div>
     //   </FormControl>
 
@@ -178,16 +191,16 @@ function Login() {
     //         placeholder="Enter Password"
     //         onChange={onChnagePassword}
     //       />
-          
+
     //       <InputRightElement width="4.5rem">
     //         <Button h="1.75rem" size="sm" onClick={handleClick}>
     //           {show ? "Hide" : "Show"}
     //         </Button>
     //       </InputRightElement>
-          
+
     //     </InputGroup>
     //     <div className="errors">
-    //     {<span >{errors.password}</span>} 
+    //     {<span >{errors.password}</span>}
     //     </div>
     //   </FormControl>
 

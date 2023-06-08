@@ -74,12 +74,7 @@ const dashboardRoutes = [
     component: Notifications,
     layout: "/admin"
   },
-  {
-    path: "/login",
-    name: "Login",
-    component: Login,
-    layout: "/admin"
-  }
+
 ];
 
 export default dashboardRoutes;

@@ -9,7 +9,7 @@ const productSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  Image: {
+  picture: {
     type: String,
     required: false,
   },
@@ -19,13 +19,13 @@ const productSchema = mongoose.Schema({
   },
   featured: {
     type: Boolean,
-    default: true,
+    default: false,
   },
-  categories: 
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "categories._id",
-    },
+  selectedCategoryId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "categories._id",
+    require: true,
+  },
 });
 
 const product = mongoose.model("product", productSchema);

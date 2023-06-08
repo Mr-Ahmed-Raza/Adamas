@@ -65,7 +65,7 @@ function Signup() {
       errors.password = "Password is required";
     } else if (password.length < 8) {
       formIsValid = false;
-      errors.password = "Password must be at least 6 characters long";
+      errors.password = "Password must be at least 8 characters long";
     }
 
     setErrors(errors);

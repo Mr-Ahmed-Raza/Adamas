@@ -10,11 +10,11 @@ const categoriesSchema = mongoose.Schema({
         type: String,
         required: true,
     }
-    // ,
-    // Image: {
-    //     type: String, 
+     ,
+    picture: {
+        type: String, 
         
-    // }
+    }
     
 })
 const categories = mongoose.model("categories", categoriesSchema)

@@ -9,7 +9,8 @@ import { Routes,Route } from "react-router-dom";
 import ProductDetails from './pages/Product_details';
 import Catagorey from './pages/Catagorey';
 import Category from "./components/Category"
-
+import Product from './components/Product';
+import AddProduct from './components/AddProduct';
 // User name changed
 function App() {
   return (
@@ -23,7 +24,10 @@ function App() {
         <Route path="/register" element={<Signup />} />
         <Route path="/user-list" element={<Userlist />} />
         <Route path="/category-list" element={<Category />} />
-        <Route path="/add-category" element={<AddCategory/>} />
+        <Route path="/add-category" element={<AddCategory />} />
+        <Route path="/product-list" element={<Product/>} />
+        <Route path="/add-product" element={<AddProduct/>} />
+
 
 
 

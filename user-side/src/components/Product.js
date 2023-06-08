@@ -2,31 +2,35 @@ import React, { useEffect, useState } from "react";
 import "./todoList.css";
 import { Link } from "react-router-dom";
 
-function Category() {
-  const [category, setcategory] = useState([]);
+function Product() {
+  const [Product, setProduct] = useState([]);
+  const [categories, setcategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('')
 
-    const [selectedCategory, setselectedCategory] = useState();
+
+    const [selectedProduct, setselectedProduct] = useState();
    const [editformdata, seteditformdata] = useState({
     title: "",
      description: "",
+     price: "",
+   selectedCategoryId: "",
     picture: ""
   });
 
   // handle edit to enter the value while form is open
-  const handleEdit = (user) => {
-    //  getselectedCategory(user._id)
-    setselectedCategory(user);
+  const handleEdit = (product) => {
+    //  getselectedProduct(user._id)
+    setselectedProduct(product);
     seteditformdata({
-      title: user.title,
-      description: user.description,
-      picture: user.picture.file
+      title: product.title,
+      description: product.description,
+      price: product.price,
+     selectedCategoryId:product.selectedCategoryId,
+      picture: product.picture.files
     });
   };
   const handlePictureChange =(event) => {
-    seteditformdata({
-      ...editformdata,
-      [event.target.name]: event.target.file,
-    });
+    seteditformdata({ ...editformdata, [event.target.name]: event.target.files[0] });
   };
   // handle onchange to when user enter any value to the field value are being get
   const handleonChangeEdit = (event) => {
@@ -49,10 +53,11 @@ function Category() {
       var formData = new FormData();
       formData.append("title" , editformdata.title)
       formData.append("description", editformdata.description)
-      formData.append("picture",editformdata.picture)
-      // make api calling to update the user
+      formData.append("price", editformdata.price)
+       formData.append("selectedCategoryId", editformdata.selectedCategoryId)
+       formData.append("picture", editformdata.picture);      // make api calling to update the user
       await fetch(
-        `http://localhost:5000/api/admin/Category/${selectedCategory._id}`,
+        `http://localhost:5000/api/admin/Product/${selectedProduct._id}`,
         {
           method: "PUT",
           // headers: {
@@ -64,26 +69,29 @@ function Category() {
       )
         .then((response) => response.json())
         .then((data) => {
-          console.log("Updated User:", data); // Updated user data
+          console.log("Updated Product:", data); // Updated user data
           // Update the user in the state
 
-          setcategory((prevcategory) =>
-            prevcategory.map((category) => {
-              if (category.id === selectedCategory.id) {
+          setProduct((prevProduct) =>
+            prevProduct.map((Product) => {
+              if (Product.id === selectedProduct.id) {
                 return {
-                  ...category,
+                  ...Product,
                   title: data.title,
                   description: data.description,
-                  picture: data.picture
+                  price:data.price,
+                  picture: data.picture,
+                 selectedCategoryId:data.selectedCategoryId,
+
                 };
               }
-              return category;
+              return Product;
             })
           );
-          getAllcategory();
+          getAllProduct();
         });
       // Reset the selected user and edit form data
-      setselectedCategory(null);
+      setselectedProduct(null);
       seteditformdata({
         title: "",
         description: "",
@@ -97,18 +105,18 @@ function Category() {
   // Handle delete  to delete the user
   const handleDelete = async (userId) => {
     try {
-      await fetch(`http://localhost:5000/api/admin/Category/${userId}`, {
+      await fetch(`http://localhost:5000/api/admin/Product/${userId}`, {
         method: "DELETE",
       })
         .then((response) => response.json())
         .then((data) => {
           console.log(data); // Success message
           // Remove the deleted user from the state
-          setcategory((prevcategory) =>
-            prevcategory.filter((user) => user.id !== userId)
+          setProduct((prevProduct) =>
+            prevProduct.filter((user) => user.id !== userId)
           );
           // call the all user api to fetch all the user and update the state
-          getAllcategory();
+          getAllProduct();
         });
     } catch (error) {
       console.error("Error occured while delete user ; ", error);
@@ -116,38 +124,54 @@ function Category() {
   };
 
   useEffect(() => {
-    getAllcategory();
+    getAllProduct();
   }, []);
+
+  const getAllProduct = () => {
+    fetch("http://localhost:5000/api/admin/Product")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setProduct(data.product);
+      })
+      .catch((error) => console.log("Error fetching Product:", error));
+  };
 
   const getAllcategory = () => {
     fetch("http://localhost:5000/api/admin/category/all-category")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        setcategory(data.category);
+        setcategories(data.category);
       })
       .catch((error) => console.log("Error fetching category:", error));
   };
 
-  const getselectedCategory = (userId) => {
-    fetch(`http://localhost:5000/api/admin/category/${userId}`)
+
+  const getselectedProduct = (userId) => {
+    fetch(`http://localhost:5000/api/admin/Product/${userId}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        handleEdit(data.selectedcategory);
+        handleEdit(data.selectedProduct);
+        getAllcategory()
       });
     };
-    
+    const onchangeselectedcategory = (event) => {
+      const categoryId = event.target.value;
+      setSelectedCategory(categoryId);
+        console.log(event.target.value);
+    };
     
 
   return (
     <div className="todo-list">
       <div className="list-head">
-        <h1>Category list</h1>
+        <h1>Product list</h1>
       </div>
       <div className="list-data">
-        {category.length === 0 ? (
-          <p>No category found</p>
+        {Product.length === 0 ? (
+          <p>No Product found</p>
         ) : (
           <div className="table-responsive">
             <table>
@@ -156,25 +180,30 @@ function Category() {
                   <th>#</th>
                   <th>Title</th>
                     <th>Description</th>
+                    <th>Price</th>
                     <th>Picture</th>
+                    <th>Category</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {Array.isArray(category) ? (
-                  category.map((user, index) => (
-                    <tr key={user._id}>
+                {Array.isArray(Product) ? (
+                  Product.map((product, index) => (
+                    <tr key={product._id}>
                       <td>{index + 1}</td>
-                      <td>{user.title}</td>
-                      <td>{user.description}</td>
-                      <td>{user.picture}</td>
+                      <td>{product.title}</td>
+                      <td>{product.description}</td>
+                      <td>{product.price}</td>
+                      <td>{product.picture}</td>
+                      <td>{product.categoryTitle}</td>
+
 
                       <td>
-                        <button onClick={() => getselectedCategory(user._id)}>
+                        <button onClick={() => getselectedProduct(product._id)}>
                           Edit
                         </button>
 
-                        <button onClick={() => handleDelete(user._id)}>
+                        <button onClick={() => handleDelete(product._id)}>
                           Delete
                         </button>
                       </td>
@@ -183,7 +212,7 @@ function Category() {
                 ) : (
                   <tr>
                     <td colSpan={3}>
-                      <span className="no-data-found">Invalid user data</span>
+                      <span className="no-data-found">Invalid Product data</span>
                     </td>
                   </tr>
                 )}
@@ -192,7 +221,7 @@ function Category() {
           </div>
         )}
 
-        {selectedCategory && (
+        {selectedProduct && (
           <div>
             <h2>Edit User</h2>
             <form onSubmit={(e) => handleEdditSubmit(e)}>
@@ -215,6 +244,16 @@ function Category() {
                   onChange={handleonChangeEdit}
                 />
               </label>
+              <label>
+                Price:
+                <input
+                  type="number"
+                  name="price"
+                  value={editformdata.price}
+                  onChange={handleonChangeEdit}
+                />
+              </label>
+
               <br />
               <label>
                 picture:
@@ -225,6 +264,28 @@ function Category() {
                   onChange={handlePictureChange}
                 />
               </label>
+              {/* <label>
+                Category:
+                <input
+                  type="text"
+                  name="category"
+                  value={editformdata.categoryTitle}
+                  onChange={handleonChangeEdit}
+                />
+              </label> */}
+              <div className="input-group">
+              <label>Select category</label>
+              <select name="selectedCategoryId" required className="input-field" onChange={handleonChangeEdit}>
+                <option value={editformdata.selectedCategoryId}>Select Category</option>
+                {Array.isArray(categories)
+                  ? categories.map((category) => (
+                      <option key={category._id} value={category._id} name="selectedCategoryId">
+                        {category.title}
+                      </option>
+                    ))
+                  : ""}
+              </select>
+            </div>
               <br />
               <button type="submit">Update</button>
             </form>
@@ -233,8 +294,8 @@ function Category() {
           </div>
           <br></br>
           <div>
-          <Link to="/add-category">
-              <button className="button1">Add-Category</button>
+          <Link to="/add-Product">
+              <button className="button1">Add-Product</button>
               </Link>
           </div>
           
@@ -244,4 +305,4 @@ function Category() {
   );
 }
 
-export default Category;
+export default Product;

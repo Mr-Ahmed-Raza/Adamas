@@ -14,7 +14,7 @@ const addCategories = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error ("Please fill all the required field")
     }
-   // to check the enter product is already exists 
+   // to check the enter category is already exists 
     const existingcategorey = await categories.findOne({ title })
     if (existingcategorey) {
         res.status(400)
@@ -58,28 +58,54 @@ const deleteCategory = asyncHandler(async (req, res) => {
         
         res.status(500).json({ error: 'Failed to delete category'});    }
 })
-// Update category  
+// Update category
 // PUT /api/admin/category/:categoryId
+// const updateCategory = asyncHandler(async (req, res) => {
+//     const { categoryId } = req.params;
+//     const { title, description } = req.body;
+//     const picture = req.file;
+//     let picturePath = null;
+  
+//     if (picture) {
+//       // If a new picture is provided, update the picturePath
+//       picturePath = picture.path;
+//     }
+  
+//     const category = await categories.findByIdAndUpdate(
+//       categoryId,
+//       { title, description, picturePath },
+//       { new: true }
+//     );
+  
+//     res.status(200).json({ message: "Successfully updated the category", category });
+//     console.log(category);
+//   });
+
 const updateCategory = asyncHandler(async (req, res) => {
-    const { categoryId } = req.params;
-    const { title, description } = req.body;
-    const picture = req.file;
-    let picturePath = null;
-  
-    if (picture) {
-      // If a new picture is provided, update the picturePath
-      picturePath = picture.path;
+  const { title, description} = req.body;
+  const picture = req.file ? req.file.filename : undefined;
+  const { categoryId } = req.params
+
+  try {
+      const category = await categories.findByIdAndUpdate(categoryId, { new: true });
+    if (!category) {
+      res.status(404);
+      throw new Error("category not found");
     }
-  
-    const category = await categories.findByIdAndUpdate(
-      categoryId,
-      { title, description, picturePath },
-      { new: true }
-    );
-  
-    res.status(200).json({ message: "Successfully updated the category", category });
-    console.log(category);
-  });
+
+    category.title = title;
+    category.description = description;
+    if (picture) {
+      category.picture = picture;
+    }
+
+    const updatedcategory = await category.save();
+    res.status(200).json({ message: "category updated successfully", category: updatedcategory });
+  } catch (error) {
+    res.status(400);
+    throw new Error("category not updated", error);
+  }
+});
   
 // Get the selected category  
 // GET /api/admin/category/:categoryId

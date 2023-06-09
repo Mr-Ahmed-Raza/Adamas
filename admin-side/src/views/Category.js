@@ -1,6 +1,5 @@
-import React from "react";
-import { useEffect, useState } from "react";
-
+import React, { useEffect, useState } from "react";
+// import "./todoList.css";
 // react-bootstrap components
 import {
   Badge,
@@ -13,25 +12,31 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 function Category() {
-  const [users, setUsers] = useState([]);
-  const [selectedUser, setselectedUser] = useState();
-  const [editformdata, seteditformdata] = useState({
-    firstName: "",
-    email: "",
+  const [category, setcategory] = useState([]);
+
+    const [selectedCategory, setselectedCategory] = useState();
+   const [editformdata, seteditformdata] = useState({
+    title: "",
+     description: "",
+    picture: ""
   });
 
   // handle edit to enter the value while form is open
-  const handleEdit = (user) => {
-    //  getselectedUser(user._id)
-    setselectedUser(user);
+  const handleEdit = (category) => {
+    //  getselectedCategory(user._id)
+    setselectedCategory(category);
     seteditformdata({
-      firstName: user.firstName,
-      email: user.email,
+      title: category.title,
+      description: category.description,
+      picture: category.picture.file
     });
   };
-
+  const handlePictureChange = (event) => {
+    seteditformdata({ ...editformdata, picture: event.target.files[0] });
+  };
   // handle onchange to when user enter any value to the field value are being get
   const handleonChangeEdit = (event) => {
     seteditformdata({
@@ -42,45 +47,60 @@ function Category() {
 
   // Handle edit submit to edit the user
   const handleEdditSubmit = async (e) => {
+    
     e.preventDefault();
     try {
-      const updatedUser = {
-        firstName: editformdata.firstName,
-        email: editformdata.email,
-      };
-      console.log("Updated User:", updatedUser);
+      // const updatedUser = {
+      //   title: editformdata.title,
+      //   description: editformdata.description,
+      //   picture: editformdata.picture
+      // };
+      var formData = new FormData();
+      formData.append("title" , editformdata.title)
+      formData.append("description", editformdata.description)
+        // Check if a new picture file is selected
+    if (editformdata.picture) {
+      formData.append("picture", editformdata.picture);
+    }
+
       // make api calling to update the user
-      await fetch(`http://localhost:5000/api/users/${selectedUser._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedUser),
-      })
+      await fetch(
+        `http://localhost:5000/api/admin/Category/${selectedCategory._id}`,
+        {
+          method: "PUT",
+          // headers: {
+          //   "Content-Type": "application/json",
+          // },
+          // body: JSON.stringify(formData),
+          body: formData,
+        }
+      )
         .then((response) => response.json())
         .then((data) => {
           console.log("Updated User:", data); // Updated user data
           // Update the user in the state
 
-          setUsers((prevUsers) =>
-            prevUsers.map((user) => {
-              if (user.id === selectedUser.id) {
+          setcategory((prevcategory) =>
+            prevcategory.map((category) => {
+              if (category.id === selectedCategory.id) {
                 return {
-                  ...user,
-                  firstName: data.firstName,
-                  email: data.email,
+                  ...category,
+                  title: data.title,
+                  description: data.description,
+                  picture: data.picture
                 };
               }
-              return user;
+              return category;
             })
           );
-          getAllUsers();
+          getAllcategory();
         });
       // Reset the selected user and edit form data
-      setselectedUser(null);
+      setselectedCategory(null);
       seteditformdata({
-        firstName: "",
-        email: "",
+        title: "",
+        description: "",
+        picture: ""
       });
     } catch (error) {
       console.error("Error occured while updating user ; ", error);
@@ -90,126 +110,141 @@ function Category() {
   // Handle delete  to delete the user
   const handleDelete = async (userId) => {
     try {
-      await fetch(`http://localhost:5000/api/users/${userId}`, {
+      await fetch(`http://localhost:5000/api/admin/Category/${userId}`, {
         method: "DELETE",
       })
         .then((response) => response.json())
         .then((data) => {
           console.log(data); // Success message
           // Remove the deleted user from the state
-          setUsers((prevUsers) =>
-            prevUsers.filter((user) => user.id !== userId)
+          setcategory((prevcategory) =>
+            prevcategory.filter((user) => user.id !== userId)
           );
           // call the all user api to fetch all the user and update the state
-          getAllUsers();
+          getAllcategory();
         });
     } catch (error) {
       console.error("Error occured while delete user ; ", error);
     }
   };
 
-  // fetching all user while refreshing
   useEffect(() => {
-    getAllUsers();
+    getAllcategory();
   }, []);
 
-  // fetching all users
-
-  const getAllUsers = () => {
-    fetch("http://localhost:5000/api/Users/all-users")
+  const getAllcategory = () => {
+    fetch("http://localhost:5000/api/admin/category/all-category")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        setUsers(data.users);
+        setcategory(data.category);
       })
-      .catch((error) => console.log("Error fetching users:", error));
+      .catch((error) => console.log("Error fetching category:", error));
   };
 
-  // fetch selected user
-  const getselectedUser = (userId) => {
-    fetch(`http://localhost:5000/api/users/${userId}`)
+  const getselectedCategory = (userId) => {
+    fetch(`http://localhost:5000/api/admin/category/${userId}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        handleEdit(data.selectedUser);
+        handleEdit(data.selectedcategory);
       });
-  };
+    };
+    
+    
 
   return (
-    <>
-      <Container fluid>
-        <Row>
-          <Col md="5">
-            <Card className="strpied-tabled-with-hover">
-              <Card.Header>
-                <Card.Title as="h4">Users</Card.Title>
-              </Card.Header>
-              <Card.Body className="table-full-width table-responsive px-0">
-                {users.length === 0 ? (
-                  <p>No users found</p>
-                ) : (
-                  <Table className="table-hover table-striped">
-                    <thead>
-                      <tr>
-                        <th className="border-0">#</th>
-                        <th className="border-0">Name</th>
-                          <th className="border-0">Email</th>
-                          <th className="border-0">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tbody>
-                        {Array.isArray(users) ? (
-                          users.map((user, index) => (
-                            <tr key={user._id}>
-                              <td>{index + 1}</td>
-                              <td>{user.firstName}</td>
-                              <td>{user.email}</td>
-                              <td>
-                                <button
-                                  onClick={() => getselectedUser(user._id)}
-                                >
-                                  Edit
-                                </button>
-
-                                <button onClick={() => handleDelete(user._id)}>
-                                  Delete
-                                </button>
-                              </td>
-                            </tr>
-                          ))
+    <div className="todo-list">
+      <div className="list-head">
+        <h1>Category list</h1>
+      </div>
+      <div className="list-data">
+        {category.length === 0 ? (
+          <p>No category found</p>
+        ) : (
+          <div className="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Title</th>
+                    <th>Description</th>
+                    <th>Picture</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array.isArray(category) ? (
+                  category.map((category, index) => (
+                    <tr key={category._id}>
+                      <td>{index + 1}</td>
+                      <td>{category.title}</td>
+                      <td>{category.description}</td>
+                      <td>
+                        {category.picture ? (
+                          <img
+                            className="product-image"
+                            src={`http://localhost:5000/public/images/${category.picture}`}
+                            alt={category.title}
+                          />
                         ) : (
-                          <tr>
-                            <td colSpan={3}>
-                              <span>Invalid user data</span>
-                            </td>
-                          </tr>
+                          "No Image"
                         )}
-                      </tbody>
-                    </tbody>
-                  </Table>
+                      </td>
+
+                      <td>
+                        <button onClick={() => getselectedCategory(category._id)}>
+                          Edit
+                        </button>
+
+                        <button onClick={() => handleDelete(category._id)}>
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={3}>
+                      <span className="no-data-found">Invalid category data</span>
+                    </td>
+                  </tr>
                 )}
-                {selectedUser && (
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {selectedCategory && (
           <div>
-            <h2>Edit User</h2>
+            <h2>Edit Category</h2>
             <form onSubmit={(e) => handleEdditSubmit(e)}>
               <label>
-                First Name:
+                Title:
                 <input
                   type="text"
-                  name="firstName"
-                  value={editformdata.firstName}
+                  name="title"
+                  value={editformdata.title}
                   onChange={handleonChangeEdit}
                 />
               </label>
               <br />
               <label>
-                Email:
+                description:
                 <input
-                  type="email"
-                  name="email"
-                  value={editformdata.email}
+                  type="text"
+                  name="description"
+                  value={editformdata.description}
                   onChange={handleonChangeEdit}
+                />
+              </label>
+              <br />
+              <label>
+                picture:
+                <input
+                  type="file"
+                  name="picture"
+                  onChange={handlePictureChange}
                 />
               </label>
               <br />
@@ -217,80 +252,17 @@ function Category() {
             </form>
           </div>
         )}
-              </Card.Body>
-            </Card>
-          </Col>
+          </div>
+          <br></br>
+          <div>
+          <Link to="/add-category">
+              <button className="button1">Add-Category</button>
+              </Link>
+          </div>
+          
 
-          {/* <Col md="12">
-            <Card className="card-plain table-plain-bg">
-              <Card.Header>
-                <Card.Title as="h4">Table on Plain Background</Card.Title>
-                <p className="card-category">
-                  Here is a subtitle for this table
-                </p>
-              </Card.Header>
-              <Card.Body className="table-full-width table-responsive px-0">
-                <Table className="table-hover">
-                  <thead>
-                    <tr>
-                      <th className="border-0">ID</th>
-                      <th className="border-0">Name</th>
-                      <th className="border-0">Salary</th>
-                      <th className="border-0">Country</th>
-                      <th className="border-0">City</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>Dakota Rice</td>
-                      <td>$36,738</td>
-                      <td>Niger</td>
-                      <td>Oud-Turnhout</td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>Minerva Hooper</td>
-                      <td>$23,789</td>
-                      <td>Curaçao</td>
-                      <td>Sinaai-Waas</td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>Sage Rodriguez</td>
-                      <td>$56,142</td>
-                      <td>Netherlands</td>
-                      <td>Baileux</td>
-                    </tr>
-                    <tr>
-                      <td>4</td>
-                      <td>Philip Chaney</td>
-                      <td>$38,735</td>
-                      <td>Korea, South</td>
-                      <td>Overland Park</td>
-                    </tr>
-                    <tr>
-                      <td>5</td>
-                      <td>Doris Greene</td>
-                      <td>$63,542</td>
-                      <td>Malawi</td>
-                      <td>Feldkirchen in Kärnten</td>
-                    </tr>
-                    <tr>
-                      <td>6</td>
-                      <td>Mason Porter</td>
-                      <td>$78,615</td>
-                      <td>Chile</td>
-                      <td>Gloucester</td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </Card.Body>
-            </Card>
-          </Col> */}
-        </Row>
-      </Container>
-    </>
+         
+    </div>
   );
 }
 

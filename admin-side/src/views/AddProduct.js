@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 // import { VStack } from "@chakra-ui/react";
-import "./todo.css";
+// import "./todo.css";
 // import "../../App.css";
-import { useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Container } from "react-bootstrap";
 
 function AddProduct() {
@@ -14,7 +14,7 @@ function AddProduct() {
   const [picture, setPicture] = useState([]);
   const [errors, setErrors] = useState({});
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
-  const navigate = useNavigate();
+  const history = useHistory();
 
   const onchangetitle = (event) => {
     settitle(event.target.value);
@@ -117,7 +117,7 @@ function AddProduct() {
           setprice("");
           setPicture("");
           setSelectedCategoryId("");
-          navigate("/product-list");
+          history.push("/product-list");
         });
     } catch (error) {
       console.error("Error ; ", error);

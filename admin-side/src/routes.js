@@ -18,11 +18,14 @@
 import Dashboard from "views/Dashboard.js";
 import UserProfile from "views/UserProfile.js";
 import Users from "views/Users.js";
+import Product from "views/Product";
+import AddProduct from "views/AddProduct";
+import Category from "views/Category";
+import AddCategory from "views/AddCategory";
 import Typography from "views/Typography.js";
 import Icons from "views/Icons.js";
 import Maps from "views/Maps.js";
 import Notifications from "views/Notifications.js";
-import Login from "views/Login.js";
 const dashboardRoutes = [
   
   {
@@ -47,26 +50,34 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/typography",
-    name: "Typography",
-    icon: "nc-icon nc-paper-2",
-    component: Typography,
+    path: "/category-list",
+    name: "Category",
+    icon: "nc-icon nc-notes",
+    component: Category,
     layout: "/admin"
   },
   {
-    path: "/icons",
-    name: "Icons",
-    icon: "nc-icon nc-atom",
-    component: Icons,
+    path: "/add-category",
+    name: "AddCategory",
+    icon: "nc-icon nc-notes",
+    component: AddCategory,
     layout: "/admin"
   },
   {
-    path: "/maps",
-    name: "Maps",
-    icon: "nc-icon nc-pin-3",
-    component: Maps,
+    path: "/product-list",
+    name: "Product",
+    icon: "nc-icon nc-notes",
+    component: Product,
     layout: "/admin"
   },
+  {
+    path: "/add-product",
+    name: "AddProduct",
+    icon: "nc-icon nc-notes",
+    component: AddProduct,
+    layout: "/admin"
+  },
+  
   {
     path: "/notifications",
     name: "Notifications",

@@ -153,8 +153,8 @@ function TableList() {
                       <tr>
                         <th className="border-0">#</th>
                         <th className="border-0">Name</th>
-                          <th className="border-0">Email</th>
-                          <th className="border-0">Actions</th>
+                        <th className="border-0">Email</th>
+                        <th className="border-0">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -190,33 +190,33 @@ function TableList() {
                   </Table>
                 )}
                 {selectedUser && (
-          <div>
-            <h2>Edit User</h2>
-            <form onSubmit={(e) => handleEdditSubmit(e)}>
-              <label>
-                First Name:
-                <input
-                  type="text"
-                  name="firstName"
-                  value={editformdata.firstName}
-                  onChange={handleonChangeEdit}
-                />
-              </label>
-              <br />
-              <label>
-                Email:
-                <input
-                  type="email"
-                  name="email"
-                  value={editformdata.email}
-                  onChange={handleonChangeEdit}
-                />
-              </label>
-              <br />
-              <button type="submit">Update</button>
-            </form>
-          </div>
-        )}
+                  <div>
+                    <h2>Edit User</h2>
+                    <form onSubmit={(e) => handleEdditSubmit(e)}>
+                      <label>
+                        First Name:
+                        <input
+                          type="text"
+                          name="firstName"
+                          value={editformdata.firstName}
+                          onChange={handleonChangeEdit}
+                        />
+                      </label>
+                      <br />
+                      <label>
+                        Email:
+                        <input
+                          type="email"
+                          name="email"
+                          value={editformdata.email}
+                          onChange={handleonChangeEdit}
+                        />
+                      </label>
+                      <br />
+                      <button type="submit">Update</button>
+                    </form>
+                  </div>
+                )}
               </Card.Body>
             </Card>
           </Col>

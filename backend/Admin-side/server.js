@@ -1,4 +1,5 @@
 const express = require("express")
+const path = require('path');
 const dotenv = require("dotenv");
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -14,7 +15,7 @@ app.use(cors());
 app.use(express.json()); // to access json data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(express.static(__dirname + 'public/images/'));
 // const storage = multer.diskStorage({
 //   destination: function (req, file, cb) {
 //     cb(null, '/')
@@ -25,7 +26,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //   }
 // })
 // const upload = multer({ storage: storage })
-
+// const rootDirectory = path.resolve(__dirname);
+// console.log('Root Directory:', rootDirectory);
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {

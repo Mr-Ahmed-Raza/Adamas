@@ -13,20 +13,17 @@ function Category() {
   });
 
   // handle edit to enter the value while form is open
-  const handleEdit = (user) => {
+  const handleEdit = (category) => {
     //  getselectedCategory(user._id)
-    setselectedCategory(user);
+    setselectedCategory(category);
     seteditformdata({
-      title: user.title,
-      description: user.description,
-      picture: user.picture.file
+      title: category.title,
+      description: category.description,
+      picture: category.picture.file
     });
   };
-  const handlePictureChange =(event) => {
-    seteditformdata({
-      ...editformdata,
-      [event.target.name]: event.target.file,
-    });
+  const handlePictureChange = (event) => {
+    seteditformdata({ ...editformdata, picture: event.target.files[0] });
   };
   // handle onchange to when user enter any value to the field value are being get
   const handleonChangeEdit = (event) => {
@@ -49,7 +46,11 @@ function Category() {
       var formData = new FormData();
       formData.append("title" , editformdata.title)
       formData.append("description", editformdata.description)
-      formData.append("picture",editformdata.picture)
+        // Check if a new picture file is selected
+    if (editformdata.picture) {
+      formData.append("picture", editformdata.picture);
+    }
+
       // make api calling to update the user
       await fetch(
         `http://localhost:5000/api/admin/Category/${selectedCategory._id}`,
@@ -162,19 +163,29 @@ function Category() {
               </thead>
               <tbody>
                 {Array.isArray(category) ? (
-                  category.map((user, index) => (
-                    <tr key={user._id}>
+                  category.map((category, index) => (
+                    <tr key={category._id}>
                       <td>{index + 1}</td>
-                      <td>{user.title}</td>
-                      <td>{user.description}</td>
-                      <td>{user.picture}</td>
+                      <td>{category.title}</td>
+                      <td>{category.description}</td>
+                      <td>
+                        {category.picture ? (
+                          <img
+                            className="product-image"
+                            src={`http://localhost:5000/public/images/${category.picture}`}
+                            alt={category.title}
+                          />
+                        ) : (
+                          "No Image"
+                        )}
+                      </td>
 
                       <td>
-                        <button onClick={() => getselectedCategory(user._id)}>
+                        <button onClick={() => getselectedCategory(category._id)}>
                           Edit
                         </button>
 
-                        <button onClick={() => handleDelete(user._id)}>
+                        <button onClick={() => handleDelete(category._id)}>
                           Delete
                         </button>
                       </td>
@@ -183,7 +194,7 @@ function Category() {
                 ) : (
                   <tr>
                     <td colSpan={3}>
-                      <span className="no-data-found">Invalid user data</span>
+                      <span className="no-data-found">Invalid category data</span>
                     </td>
                   </tr>
                 )}
@@ -194,7 +205,7 @@ function Category() {
 
         {selectedCategory && (
           <div>
-            <h2>Edit User</h2>
+            <h2>Edit Category</h2>
             <form onSubmit={(e) => handleEdditSubmit(e)}>
               <label>
                 Title:
@@ -221,7 +232,6 @@ function Category() {
                 <input
                   type="file"
                   name="picture"
-                  value={editformdata.picture}
                   onChange={handlePictureChange}
                 />
               </label>

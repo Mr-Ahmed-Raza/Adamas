@@ -27,7 +27,7 @@ function NavBar({}) {
               <ul className="ul-left">
                 <li className="">
                   <a href="#">
-                    <i className="fa fa-mobile"></i>+92-3026589335
+                    <i className="fa fa-mobile"></i>+92-123456789
                   </a>
                 </li>
                 <li className="">

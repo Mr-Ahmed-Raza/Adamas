@@ -186,8 +186,8 @@ function Product() {
                       <td>
                         {product.picture ? (
                           <img
-                            className="product-image"
-                            src={`http://localhost:5000/public/images/${product.picture}`}
+                            className="category-image"
+                            src={`http://localhost:5000/img/${product.picture}`}
                             alt={product.title}
                           />
                         ) : (

@@ -1,0 +1,80 @@
+body, html {
+    box-sizing: border-box;
+  }
+  
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
+  .switch__input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 90px;
+    height: 50px;
+    opacity: 0;
+    z-index: 0;
+  }
+  .switch__label:before {
+    content: '';
+    text-align: center;
+    position: absolute;
+    color: red;
+    top: 5px;
+    left: 0;
+    width: 90px;
+    height: 35px;
+    background-color: rgba(0, 0, 0, 0.26);
+    border-radius: 100px;
+    z-index: 0;
+    -webkit-transition: background-color 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: background-color 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .switch__label:after {
+    content: '';
+    color: white;
+    position: absolute;
+    text-align: center;
+    font-size: 24px;
+    padding: 4.4px 0;
+    top: -2px;
+    left: 0;
+    width: 50px;
+    height: 50px;
+    background-color: #2d95e5;
+    border-radius: 100px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    z-index: 0;
+    -webkit-transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-transition-property: left, background-color;
+    transition-property: left, background-color;
+  }
+  .switch__input:checked + .switch__label:before {
+    background-color: rgba(225, 225, 225, 0.5);
+  }
+  .switch__input:checked + .switch__label:after {
+    left: 40px;
+    content: '';
+    color: white;
+    background-color: #BFBFBF;
+  }
+  .yesnocontainer {
+    font-family: sans-serif;
+    display: flex;
+    width: 70px;
+    justify-content: space-evenly;
+    align-content: center;
+  }
+  .yes, .no {
+    font-size: 24px;
+  }
+  .yes {
+    position: relative;
+    color: black !important;
+    z-index: 999 !important;
+  }
+  .no {
+    position: relative;
+    color: black !important;
+    z-index: 999 !important;
+  }

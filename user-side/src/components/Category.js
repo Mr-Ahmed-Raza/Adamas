@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 function Category() {
   const [category, setcategory] = useState([]);
 
-    const [selectedCategory, setselectedCategory] = useState();
+  const [selectedCategory, setselectedCategory] = useState();
    const [editformdata, seteditformdata] = useState({
     title: "",
      description: "",
@@ -126,6 +126,7 @@ function Category() {
       .then((data) => {
         console.log(data);
         setcategory(data.category);
+
       })
       .catch((error) => console.log("Error fetching category:", error));
   };
@@ -169,11 +170,15 @@ function Category() {
                       <td>{category.title}</td>
                       <td>{category.description}</td>
                       <td>
+                        {console.log(category.picture)}
                         {category.picture ? (
                           <img
-                            className="product-image"
-                            src={`http://localhost:5000/public/images/${category.picture}`}
-                            alt={category.title}
+                            className="category-image"
+                            // src={`assets/images/slider-content-img.jpg`}
+                            // src={`/public/images/${category.picture}`}
+                            src={`http://localhost:5000/img/${category.picture}`}
+
+                             alt={category.title}
                           />
                         ) : (
                           "No Image"

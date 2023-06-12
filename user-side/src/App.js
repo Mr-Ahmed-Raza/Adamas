@@ -6,7 +6,7 @@ import Home from './pages/Home';
 import Userlist from './components/Userlist';
 import AddCategory from './components/AddCategory';
 import { Routes,Route } from "react-router-dom";
-import ProductDetails from './pages/Product_details';
+import ProductDetails from './pages/ProductDetails';
 import Catagorey from './pages/Catagorey';
 import Category from "./components/Category"
 import Product from './components/Product';

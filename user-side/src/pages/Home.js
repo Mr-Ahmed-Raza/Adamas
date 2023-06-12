@@ -1,8 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
 
+
+
 function Home() {
+  const [category, setcategory] = useState([]);
+
+
+  useEffect(() => {
+    getAllcategory();
+  }, []);
+  const getAllcategory = () => {
+    fetch("http://localhost:5000/api/admin/category/all-category")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setcategory(data.category);
+
+      })
+      .catch((error) => console.log("Error fetching category:", error));
+  };
+
+  
+  
   return (
     <>
       <wrapper>
@@ -115,39 +136,26 @@ function Home() {
           <section className="cards-section">
             <div className="container">
               <div className="row justify-content-lg-between ">
-                <div className="col-sm-10 col-md-4 center">
-                  <div className="car-img-div">
-                    <img src="assets/images/card1.jpg" alt="" />
+                {category.length === 0 ? (
+                  <p>No category found</p>
+                ) : (
+                    category.map((category) => (
+
+                      <div className="col-sm-10 col-md-4 center">
+                    <div className="car-img-div">
+                          <img
+                            src={`http://localhost:5000/img/${category.picture}`}
+                            alt={category.title} />
+                    </div>
+                        <h2>{category.title}</h2>
+                    <p>
+                      {category.description}
+                    </p>
+                    <a href="#">Visit Store</a>
                   </div>
-                  <h2>Check our Ring Collection</h2>
-                  <p>
-                    Lorem ipsum dolor sit amet, consecte adipiscing elit. Fusce
-                    at justo eget lorem port titor tincidunt.
-                  </p>
-                  <a href="#">Visit Store</a>
-                </div>
-                <div className="col-sm-10 col-md-4 center">
-                  <div className="car-img-div">
-                    <img src="assets/images/card2.jpg" alt="" />
-                  </div>
-                  <h2>Summer Hat Collection</h2>
-                  <p>
-                    Lorem ipsum dolor sit amet, consecte adipiscing elit. Fusce
-                    at justo eget lorem port titor tincidunt.
-                  </p>
-                  <a href="#">Visit Store</a>
-                </div>
-                <div className="col-sm-10 col-md-4 center">
-                  <div className="car-img-div">
-                    <img src="assets/images/card3.jpg" alt="" />
-                  </div>
-                  <h2>Veils on Slae</h2>
-                  <p>
-                    Lorem ipsum dolor sit amet, consecte adipiscing elit. Fusce
-                    at justo eget lorem port titor tincidunt.
-                  </p>
-                  <a href="#">Visit Store</a>
-                </div>
+                    ))
+                  
+                )}
               </div>
             </div>
           </section>

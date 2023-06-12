@@ -15,7 +15,7 @@ app.use(cors());
 app.use(express.json()); // to access json data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(__dirname + 'public/images/'));
+app.use("/img", express.static(path.join(__dirname, "../images")));
 // const storage = multer.diskStorage({
 //   destination: function (req, file, cb) {
 //     cb(null, '/')
@@ -32,7 +32,7 @@ app.use(express.static(__dirname + 'public/images/'));
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     // Specify the destination directory for uploaded files
-    cb(null, './public/images');
+    cb(null, '../images');
   },
   filename: function (req, file, cb) {
     // Generate a unique filename for the uploaded file

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 // import { VStack } from "@chakra-ui/react";
 import "./todo.css";
+import "./toggle.css"
 // import "../../App.css";
 import { useNavigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
@@ -9,11 +10,11 @@ function AddProduct() {
   const [title, settitle] = useState();
   const [description, setdescription] = useState();
   const [price, setprice] = useState();
-//const [featured, setfeatured] = useState(true);
+  //const [featured, setfeatured] = useState(true);
   const [categories, setcategories] = useState([]);
   const [picture, setPicture] = useState([]);
   const [errors, setErrors] = useState({});
-  const [selectedCategoryId, setSelectedCategoryId] = useState('');
+  const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const navigate = useNavigate();
 
   const onchangetitle = (event) => {
@@ -36,13 +37,13 @@ function AddProduct() {
   const onchangeselectedcategory = (event) => {
     const categoryId = event.target.value;
     setSelectedCategoryId(categoryId);
-      console.log(event.target.value);
+    console.log(event.target.value);
     clearError("selectedCategoryId");
   };
-//   const handleFeaturedSwitch = (event) => {
-//    setfeatured(event.target.value);
-//       clearError("featured");
-//   };
+  //   const handleFeaturedSwitch = (event) => {
+  //    setfeatured(event.target.value);
+  //       clearError("featured");
+  //   };
 
   // to clear validation error when user enter anything to particular field
   const clearError = (fieldName) => {
@@ -73,7 +74,7 @@ function AddProduct() {
     }
     if (!selectedCategoryId) {
       formIsValid = false;
-      errors.selectedCategoryId = "category is required"
+      errors.selectedCategoryId = "category is required";
     }
     if (!picture) {
       formIsValid = false;
@@ -96,7 +97,6 @@ function AddProduct() {
       formData.append("price", price);
       formData.append("selectedCategoryId", selectedCategoryId);
       formData.append("picture", picture, picture.name);
-
 
       if (!validationChecks()) {
         return;
@@ -204,19 +204,49 @@ function AddProduct() {
               </div>
               <div className="error">{<span>{errors.picture}</span>}</div>
             </div>
+
+            
+            <div className="input-field">
+              <div class="switch">
+                <input
+                  type="checkbox"
+                  id="switch1"
+                  class="switch__input"
+                  checked
+                />
+                <label for="switch1" class="switch__label"></label>
+                <span class="yesnocontainer">
+                  <span class="yes">Y</span>
+                  <span class="no">N</span>
+                </span>
+              </div>
+            </div>
+
+            
             <div className="input-group">
               <label>Select category</label>
-              <select name="selectedCategoryId" required className="input-field" onChange={onchangeselectedcategory}>
+              <select
+                name="selectedCategoryId"
+                required
+                className="input-field"
+                onChange={onchangeselectedcategory}
+              >
                 <option value="">Select Category</option>
                 {Array.isArray(categories)
                   ? categories.map((category) => (
-                      <option key={category._id} value={category._id} name="selectedCategoryId">
+                      <option
+                        key={category._id}
+                        value={category._id}
+                        name="selectedCategoryId"
+                      >
                         {category.title}
                       </option>
                     ))
                   : ""}
               </select>
-              <div className="error">{<span>{errors.selectedCategoryId}</span>}</div>
+              <div className="error">
+                {<span>{errors.selectedCategoryId}</span>}
+              </div>
             </div>
 
             {/* <div className="input-group">

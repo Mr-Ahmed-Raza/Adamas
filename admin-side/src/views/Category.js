@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import "./todoList.css";
+
 // import "./todoList.css";
 // react-bootstrap components
 import {
@@ -183,8 +185,8 @@ function Category() {
                       <td>
                         {category.picture ? (
                           <img
-                            className="product-image"
-                            src={`http://localhost:5000/public/images/${category.picture}`}
+                            className="category-image"
+                            src={`http://localhost:5000/img/${category.picture}`}
                             alt={category.title}
                           />
                         ) : (

@@ -45,6 +45,19 @@ const showCategories = asyncHandler(async (req, res) => {
         throw new Error("Error occured... Categories chould not reterived...")
     }
 })
+// Show only 6 in reverse order category  
+// GET /api/admin/category/reverse-categories
+const showCategoriesReverse = asyncHandler(async (req, res) => {
+    
+    try {
+        const category = await categories.find().sort({createdAt: -1}).limit(6)
+        res.status(201).json({ message: "Category list", category })
+        
+    } catch (error) {
+        res.status(400)
+        throw new Error("Error occured... Categories chould not reterived...")
+    }
+})
 // Delate category  
 // DELETE /api/admin/category/:categoryId
 const deleteCategory = asyncHandler(async (req, res) => {
@@ -121,4 +134,4 @@ const singleCategory = asyncHandler(async (req, res) => {
   });
   
 
-module.exports = {addCategories, showCategories ,deleteCategory ,updateCategory,singleCategory}
+module.exports = {addCategories, showCategories, showCategoriesReverse ,deleteCategory ,updateCategory,singleCategory, }

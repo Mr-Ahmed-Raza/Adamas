@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 function Product() {
   const [Product, setProduct] = useState([]);
   const [categories, setcategories] = useState([]);
-
   const [selectedProduct, setselectedProduct] = useState();
   const [editformdata, seteditformdata] = useState({
     title: "",
@@ -13,6 +12,7 @@ function Product() {
     price: "",
     selectedCategoryId: "",
     picture: "",
+    featured: "",
   });
 
   // handle edit to enter the value while form is open
@@ -25,6 +25,7 @@ function Product() {
       price: product.price,
       selectedCategoryId: product.selectedCategoryId,
       picture: product.picture.file,
+      
     });
   };
   const handlePictureChange = (event) => {
@@ -51,6 +52,7 @@ function Product() {
       formData.append("title", editformdata.title);
       formData.append("description", editformdata.description);
       formData.append("price", editformdata.price);
+      formData.append("featured", editformdata.featured);
       formData.append("selectedCategoryId", editformdata.selectedCategoryId);
       formData.append("picture", editformdata.picture); // make api calling to update the user
       await fetch(
@@ -78,6 +80,7 @@ function Product() {
                   description: data.description,
                   price: data.price,
                   picture: data.picture,
+                  featured: data.featured,
                   selectedCategoryId: data.selectedCategoryId,
                 };
               }
@@ -92,6 +95,9 @@ function Product() {
         title: "",
         description: "",
         picture: "",
+        price: "",
+        featured: "",
+        selectedCategoryId: ""
       });
     } catch (error) {
       console.error("Error occured while updating user ; ", error);
@@ -171,6 +177,7 @@ function Product() {
                   <th>Description</th>
                   <th>Price</th>
                   <th>Picture</th>
+                  <th>Featured</th>
                   <th>Category</th>
                   <th>Actions</th>
                 </tr>
@@ -194,6 +201,7 @@ function Product() {
                           "No Image"
                         )}
                       </td>
+                      <td>{product.featured}</td>
                       <td>{product.categoryTitle}</td>
 
                       <td>
@@ -263,6 +271,39 @@ function Product() {
                   onChange={handlePictureChange}
                 />
               </label>
+
+              <div className="input-group">
+                <label>Featured</label>
+                <div className="radio-group">
+                  <label>
+                    <input
+                      type="radio"
+                      value="Yes"
+                      name="featured"
+                      checked={editformdata.featured === "Yes"} // Update the checked condition
+                      onChange={() =>
+                        seteditformdata({ ...editformdata, featured: "Yes" })
+                      } // Set the featured value to "Yes"
+                      required
+                    />
+                    Yes
+                  </label>
+
+                  <label>
+                    <input
+                      type="radio"
+                      value="No"
+                      name="featured"
+                      checked={editformdata.featured === "No"} // Update the checked condition
+                      onChange={() =>
+                        seteditformdata({ ...editformdata, featured: "No" })
+                      } // Set the featured value to "No"
+                      required
+                    />
+                    No
+                  </label>
+                </div>
+              </div>
               {/* <label>
                 Category:
                 <input

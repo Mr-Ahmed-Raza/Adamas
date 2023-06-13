@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const categoriesSchema = mongoose.Schema({
     title: {
-        type: String, 
+        type: String,
         required: true,
        
     },
@@ -10,12 +10,13 @@ const categoriesSchema = mongoose.Schema({
         type: String,
         required: true,
     }
-     ,
+    ,
     picture: {
-        type: String, 
-        
-    }
-    
-})
+        type: String,   
+    },
+   
+  },
+    { timestamps: true }
+)
 const categories = mongoose.model("categories", categoriesSchema)
 module.exports = categories

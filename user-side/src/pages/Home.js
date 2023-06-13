@@ -1,34 +1,46 @@
 import React, { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
-
-
+import "../components/todoList.css";
+import { Link } from "react-router-dom";
 
 function Home() {
   const [category, setcategory] = useState([]);
-
+  const [Product, setProduct] = useState([]);
 
   useEffect(() => {
     getAllcategory();
+    getAllProduct();
+
   }, []);
+  
+
+  // Fetch all the categories 
   const getAllcategory = () => {
-    fetch("http://localhost:5000/api/admin/category/all-category")
+    fetch("http://localhost:5000/api/admin/category/reverse-category")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
         setcategory(data.category);
-
       })
       .catch((error) => console.log("Error fetching category:", error));
   };
+  // Fetch all the products
+  const getAllProduct = () => {
+    fetch("http://localhost:5000/api/admin/Product")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setProduct(data.product);
+      })
+      .catch((error) => console.log("Error fetching Product:", error));
+  };
 
-  
-  
   return (
     <>
       <wrapper>
         <header className="header">
-          <NavBar/>
+          <NavBar />
           <section className="navbar-section">
             <nav className="navbar navbar-expand-lg navbar-light">
               <div className="container">
@@ -140,25 +152,30 @@ function Home() {
                   <p>No category found</p>
                 ) : (
                     category.map((category) => (
-
                       <div className="col-sm-10 col-md-4 center">
-                    <div className="car-img-div">
+                        <div className="car-img-div">
                           <img
+                            className="category-image-modify"
                             src={`http://localhost:5000/img/${category.picture}`}
-                            alt={category.title} />
-                    </div>
+                            alt={category.title}
+                          />
+                        </div>
                         <h2>{category.title}</h2>
-                    <p>
-                      {category.description}
-                    </p>
-                    <a href="#">Visit Store</a>
-                  </div>
+                        <p>{category.description}</p>
+                      </div>
                     ))
-                  
                 )}
+              </div>
+              <div>
+                <Link to="/all-categories">
+                  <a href="#">Visit the Store</a>
+                </Link>
               </div>
             </div>
           </section>
+          {/* List Ctaegory finish. */}
+
+          {/* Latest Arrival start. */}
           <section className="latus-arrival">
             <div className="container">
               <div className="row justify-content-lg-center align-items-center text-center">
@@ -175,10 +192,56 @@ function Home() {
                 </div>
               </div>
             </div>
+
+            
             <div className="container">
               <div className="row lazy justify-content-md-between justify-content-sm-between">
-                <div className="card" style={{ width: "18rem" }}>
-                  <div className="catagory-imgs">
+                 {Product.length === 0 ? (
+                   <p>No product found</p>
+                   ) : (
+                    Product.map((product) => (
+                   <div className="card" style={{ width: "18rem" }}>
+                    <div className="catagory-imgs">
+                    <img
+                      src={`http://localhost:5000/img/${product.picture}`}
+                      className="category-image-modify"
+                       alt={product.title}
+                    />
+                  </div>
+                  <div className="card-body">
+                    <h5 className="card-title">
+                      {product.title}
+                    </h5>
+                    <p className="card-text">
+                      {product.description}
+                    </p>
+                    <b>${product.price}</b>
+                    <a href="#" className="btn btn-primary">
+                      Buy Now
+                    </a>
+                  </div>
+                  <div className="catagory-icons">
+                    <p>
+                      {product.categoryTitle}
+                    </p>
+                    <ul>
+                      <li>
+                        <i className="fa fa-star"></i>{" "}
+                        <i className="fa fa-star"></i>
+                        <i className="fa fa-star"></i>
+                        <i className="fa fa-star"></i>
+                        <i className="fa fa-star"></i>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                    ))
+                )} 
+
+
+
+
+                  {/* <div className="catagory-imgs">
                     <img
                       src="assets/images/latus-arival-1.png"
                       className="card-img-top"
@@ -186,12 +249,11 @@ function Home() {
                     />
                   </div>
                   <div className="card-body">
-                    <h5 className="card-title">Set Of Wedding Rings</h5>
+                    <h5 className="card-title">title</h5>
                     <p className="card-text">
-                      Lorem ipsum dolor sit amet, cocteru adipiscing elit. Lorem
-                      ipsum dolor adipiscing elit edam itis.{" "}
+                      description.{" "}
                     </p>
-                    <b>$25.89</b>
+                    <b>$price</b>
                     <a href="#" className="btn btn-primary">
                       Buy Now
                     </a>
@@ -210,8 +272,11 @@ function Home() {
                       </li>
                     </ul>
                   </div>
-                </div>
-                <div className="card" style={{ width: "18rem" }}>
+                </div>  
+
+
+
+                {/* <div className="card" style={{ width: "18rem" }}>
                   <div className="catagory-imgs">
                     <img
                       src="assets/images/latus-arival-2.png"
@@ -245,7 +310,9 @@ function Home() {
                     </ul>
                   </div>
                 </div>
-                <div className="card" style={{ width: "18rem" }}>
+
+
+                {/* <div className="card" style={{ width: "18rem" }}>
                   <div className="catagory-imgs">
                     <img
                       src="assets/images/latus-arival-3.png"
@@ -278,46 +345,15 @@ function Home() {
                       </li>
                     </ul>
                   </div>
-                </div>
-                <div className="card" style={{ width: "18rem" }}>
-                  <div className="catagory-imgs">
-                    <img
-                      src="assets/images/latus-arival-4.png"
-                      className="card-img-top"
-                      alt="..."
-                    />
-                  </div>
-                  <div className="card-body">
-                    <h5 className="card-title">
-                      Silver Ring with Blue diamond
-                    </h5>
-                    <p className="card-text">
-                      Lorem ipsum dolor sit amet, cocteru adipiscing elit. Lorem
-                      ipsum dolor adipiscing elit edam itis.{" "}
-                    </p>
-                    <b>$25.89</b>
-                    <a href="#" className="btn btn-primary">
-                      Buy Now
-                    </a>
-                  </div>
-                  <div className="catagory-icons">
-                    <p>
-                      <i className="fa fa-sliders"></i>Catagory
-                    </p>
-                    <ul>
-                      <li>
-                        <i className="fa fa-star"></i>{" "}
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+                </div> */}
+
+
+                
               </div>
             </div>
           </section>
+        {/* Latest Arrival finish. */}
+
           <section className="featured-products">
             <div className="container">
               <div className="row justify-content-lg-center align-items-center text-center">
@@ -529,9 +565,8 @@ function Home() {
             </div>
           </section>
         </main>
-       
-              
-        <Footer/>
+
+        <Footer />
       </wrapper>
 
       {/* <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

@@ -11,6 +11,7 @@ import Catagorey from './pages/Catagorey';
 import Category from "./components/Category"
 import Product from './components/Product';
 import AddProduct from './components/AddProduct';
+import AllCategories from './pages/AllCategories';
 // User name changed
 function App() {
   return (
@@ -26,7 +27,8 @@ function App() {
         <Route path="/category-list" element={<Category />} />
         <Route path="/add-category" element={<AddCategory />} />
         <Route path="/product-list" element={<Product/>} />
-        <Route path="/add-product" element={<AddProduct/>} />
+        <Route path="/add-product" element={<AddProduct />} />
+        <Route path="/all-categories" element={<AllCategories />} />
 
 
 

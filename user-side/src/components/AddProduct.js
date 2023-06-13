@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 // import { VStack } from "@chakra-ui/react";
 import "./todo.css";
-import "./toggle.css"
+import "./toggle.css";
 // import "../../App.css";
 import { useNavigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
@@ -10,7 +10,7 @@ function AddProduct() {
   const [title, settitle] = useState();
   const [description, setdescription] = useState();
   const [price, setprice] = useState();
-  //const [featured, setfeatured] = useState(true);
+  const [featured, setFeatured] = useState("No");
   const [categories, setcategories] = useState([]);
   const [picture, setPicture] = useState([]);
   const [errors, setErrors] = useState({});
@@ -40,10 +40,7 @@ function AddProduct() {
     console.log(event.target.value);
     clearError("selectedCategoryId");
   };
-  //   const handleFeaturedSwitch = (event) => {
-  //    setfeatured(event.target.value);
-  //       clearError("featured");
-  //   };
+ 
 
   // to clear validation error when user enter anything to particular field
   const clearError = (fieldName) => {
@@ -95,8 +92,10 @@ function AddProduct() {
       formData.append("title", title);
       formData.append("description", description);
       formData.append("price", price);
-      formData.append("selectedCategoryId", selectedCategoryId);
       formData.append("picture", picture, picture.name);
+      formData.append("featured", featured );
+      formData.append("selectedCategoryId", selectedCategoryId);
+      
 
       if (!validationChecks()) {
         return;
@@ -116,6 +115,7 @@ function AddProduct() {
           setdescription("");
           setprice("");
           setPicture("");
+          setFeatured("")
           setSelectedCategoryId("");
           navigate("/product-list");
         });
@@ -205,30 +205,41 @@ function AddProduct() {
               <div className="error">{<span>{errors.picture}</span>}</div>
             </div>
 
-            
-            <div className="input-field">
-              <div class="switch">
-                <input
-                  type="checkbox"
-                  id="switch1"
-                  class="switch__input"
-                  checked
-                />
-                <label for="switch1" class="switch__label"></label>
-                <span class="yesnocontainer">
-                  <span class="yes">Y</span>
-                  <span class="no">N</span>
-                </span>
+            <div className="input-group">
+              <label>Featured</label>
+              <div className="radio-group">
+                <label>
+                  <input
+                    type="radio"
+                    value="Yes"
+                    name="featured"
+                    checked={featured === "Yes"}
+                    onChange={() => setFeatured("Yes")}
+                    required
+                  />
+                  Yes
+                </label>
+
+                <label>
+                  <input
+                    type="radio"
+                    value="No"
+                    name="featured"
+                    checked={featured === "No"}
+                    onChange={() => setFeatured("No")}
+                    required
+                  />
+                  No
+                </label>
               </div>
             </div>
 
-            
             <div className="input-group">
               <label>Select category</label>
               <select
                 name="selectedCategoryId"
                 required
-                className="input-field"
+                className="input-field form-control"
                 onChange={onchangeselectedcategory}
               >
                 <option value="">Select Category</option>

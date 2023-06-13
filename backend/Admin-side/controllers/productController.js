@@ -1,15 +1,16 @@
 const asyncHandler = require("express-async-handler");
-const Product = require("../models/ProductsModel")
+const Product = require("../models/ProductsModel");
+const product = require("../models/ProductsModel");
 
 // Add Product 
 // GET /api/admin/product/add-product
 const addProducts = asyncHandler(async(req, res) => {
     try {
-        const { title, description, price , selectedCategoryId } = req.body
+        const { title, description, price , selectedCategoryId,featured } = req.body
         const picture = req.file.filename
         console.log(req.body);
         console.log(req.file.filename);
-    const product_Details = await Product.create({ title, description, price , selectedCategoryId,picture })
+    const product_Details = await Product.create({ title, description, price ,picture,featured,selectedCategoryId })
     res.status(200).json({message:"Product Add successfully" , product_Details})
      
     } catch (error) {
@@ -46,7 +47,8 @@ const showProducts = asyncHandler(async (req, res) => {
             categoryTitle: "$category.title",
           },
         },
-      ]);
+      ])
+      .sort({createdAt: -1}).limit(10);
   
       res.status(200).json({ message: "Product list", product });
     } catch (error) {
@@ -55,6 +57,8 @@ const showProducts = asyncHandler(async (req, res) => {
     }
   });
 
+  // Delete Product 
+// GET /api/admin/product/:productId
 const deleteProducts = asyncHandler(async (req, res) => {
     try {
         const {productId} = req.params
@@ -70,9 +74,39 @@ const deleteProducts = asyncHandler(async (req, res) => {
     
 })
 
+// Fetch featured products
+// GET /api/admin/product/featured-products
+const getFeaturedProducts =asyncHandler(async (req, res) => {
+  try {
+    const product = await Product.aggregate([
+      {
+        $match: { featured: 'Yes' },
+      },
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'category',
+          foreignField: '_id',
+          as: 'category',
+        },
+      },
+      {
+        $unwind: '$category',
+      },
+    ]);
+
+    res.json({ message: "Featured Products ", product });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Update product 
+// PUT /api/admin/product/:productId
 const updateProducts = asyncHandler(async (req, res) => {
-    const { title, description, price , selectedCategoryId } = req.body;
-    const picture = req.file ? req.file.filename : undefined;
+  const { title, description, price , selectedCategoryId,featured } = req.body
+  const picture = req.file ? req.file.filename : undefined;
     const { productId } = req.params
   
     try {
@@ -85,6 +119,7 @@ const updateProducts = asyncHandler(async (req, res) => {
       product.title = title;
       product.description = description;
       product.price = price;
+      product.featured = featured;
       product.selectedCategoryId = selectedCategoryId;
       if (picture) {
         product.picture = picture;
@@ -125,4 +160,4 @@ const singleProduct = asyncHandler(async (req, res) => {
     
 // })
 
-module.exports= {addProducts ,showProducts ,deleteProducts,updateProducts,singleProduct }
+module.exports= {addProducts ,showProducts ,getFeaturedProducts, deleteProducts,updateProducts,singleProduct }

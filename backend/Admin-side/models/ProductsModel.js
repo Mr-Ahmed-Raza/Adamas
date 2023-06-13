@@ -18,15 +18,18 @@ const productSchema = mongoose.Schema({
     required: true,
   },
   featured: {
-    type: Boolean,
-    default: false,
+    type: String,
+    enum: ['Yes', 'No'],
+    required: true,
   },
   selectedCategoryId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "categories._id",
     require: true,
   },
-});
+}
+,{ timestamps: true }
+);
 
 const product = mongoose.model("product", productSchema);
 module.exports = product;

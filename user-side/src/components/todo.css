@@ -175,3 +175,40 @@
     transform: rotate(45deg);
   }
   
+
+  /*
+  Radio button */
+
+  .radio-group {
+    display: flex;
+  }
+  
+  .radio-group label {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+  }
+  
+  .radio-group input[type="radio"] {
+    margin-right: 5px;
+  }
+  
+  .radio-group input[type="radio"]:checked::before {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #2196F3;
+  }
+  
+  .radio-group input[type="radio"]:not(:checked)::before {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid #2196F3;
+    border-radius: 50%;
+    background-color: transparent;
+  }
+  

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import "./todoList.css";
+import "./todoList.css";
 import { Link } from "react-router-dom";
 
 function Product() {
@@ -186,8 +186,8 @@ function Product() {
                       <td>
                         {product.picture ? (
                           <img
-                            className="product-image"
-                            src={`http://localhost:5000/public/images/${product.picture}`}
+                            className="category-image"
+                            src={`http://localhost:5000/img/${product.picture}`}
                             alt={product.title}
                           />
                         ) : (

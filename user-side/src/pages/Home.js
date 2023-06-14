@@ -3,19 +3,23 @@ import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
 import "../components/todoList.css";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
   const [category, setcategory] = useState([]);
-  const [Product, setProduct] = useState([]);
+  // const [Product, setProduct] = useState([]);
+  const [LatestProduct, setLatestProduct] = useState([]);
+  const [FeatureProduct, setFeatureProduct] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState([]);
+  const navigate = useNavigate()
 
   useEffect(() => {
     getAllcategory();
-    getAllProduct();
-
+    getLatestProduct();
+    getAllFeaturedProduct();
   }, []);
-  
 
-  // Fetch all the categories 
+  // Fetch all the categories
   const getAllcategory = () => {
     fetch("http://localhost:5000/api/admin/category/reverse-category")
       .then((response) => response.json())
@@ -26,14 +30,36 @@ function Home() {
       .catch((error) => console.log("Error fetching category:", error));
   };
   // Fetch all the products
-  const getAllProduct = () => {
-    fetch("http://localhost:5000/api/admin/Product")
+  const getLatestProduct = () => {
+    fetch("http://localhost:5000/api/admin/Product/latest-arrivals")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        setProduct(data.product);
+        setLatestProduct(data.product);
       })
       .catch((error) => console.log("Error fetching Product:", error));
+  };
+  // Fetch all the products
+  const getAllFeaturedProduct = () => {
+    fetch("http://localhost:5000/api/admin/product/feature-products")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setFeatureProduct(data.product);
+      })
+      .catch((error) => console.log("Error fetching Product:", error));
+  };
+  // Set the selected product 
+  const getselectedProduct = (productId) => {
+    fetch(`http://localhost:5000/api/admin/Product/${productId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setSelectedProduct(data.selectedProduct);
+        getAllcategory();
+        // Redirect to productDetail page with selected product ID
+        navigate(`/product-details/${productId}`)
+      });
   };
 
   return (
@@ -147,23 +173,39 @@ function Home() {
         <main>
           <section className="cards-section">
             <div className="container">
+              <div className="row justify-content-lg-center align-items-center text-center">
+                <div className="col-sm-10 col-md-6">
+                  <h3>OUR CATEGORIES</h3>
+                  <span></span>
+                  <small></small>
+                  <span></span>
+                  <p>
+                    Check our latest offers that just arrived to the store. New{" "}
+                    <span style={{ color: "#3bbdfb" }}>Nonummy</span> for you to
+                    wear.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="container">
               <div className="row justify-content-lg-between ">
                 {category.length === 0 ? (
                   <p>No category found</p>
                 ) : (
-                    category.map((category) => (
-                      <div className="col-sm-10 col-md-4 center">
-                        <div className="car-img-div">
-                          <img
-                            className="category-image-modify"
-                            src={`http://localhost:5000/img/${category.picture}`}
-                            alt={category.title}
-                          />
-                        </div>
-                        <h2>{category.title}</h2>
-                        <p>{category.description}</p>
+                  category.map((category) => (
+                    <div className="col-sm-10 col-md-4 center">
+                      <div className="car-img-div">
+                        <img
+                          className="category-image-modify"
+                          src={`http://localhost:5000/img/${category.picture}`}
+                          alt={category.title}
+                        />
                       </div>
-                    ))
+                      <h2>{category.title}</h2>
+                      <p>{category.description}</p>
+                    </div>
+                  ))
                 )}
               </div>
               <div>
@@ -193,167 +235,53 @@ function Home() {
               </div>
             </div>
 
-            
             <div className="container">
               <div className="row lazy justify-content-md-between justify-content-sm-between">
-                 {Product.length === 0 ? (
-                   <p>No product found</p>
-                   ) : (
-                    Product.map((product) => (
-                   <div className="card" style={{ width: "18rem" }}>
-                    <div className="catagory-imgs">
-                    <img
-                      src={`http://localhost:5000/img/${product.picture}`}
-                      className="category-image-modify"
-                       alt={product.title}
-                    />
-                  </div>
-                  <div className="card-body">
-                    <h5 className="card-title">
-                      {product.title}
-                    </h5>
-                    <p className="card-text">
-                      {product.description}
-                    </p>
-                    <b>${product.price}</b>
-                    <a href="#" className="btn btn-primary">
-                      Buy Now
-                    </a>
-                  </div>
-                  <div className="catagory-icons">
-                    <p>
-                      {product.categoryTitle}
-                    </p>
-                    <ul>
-                      <li>
-                        <i className="fa fa-star"></i>{" "}
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                    ))
-                )} 
-
-
-
-
-                  {/* <div className="catagory-imgs">
-                    <img
-                      src="assets/images/latus-arival-1.png"
-                      className="card-img-top"
-                      alt="..."
-                    />
-                  </div>
-                  <div className="card-body">
-                    <h5 className="card-title">title</h5>
-                    <p className="card-text">
-                      description.{" "}
-                    </p>
-                    <b>$price</b>
-                    <a href="#" className="btn btn-primary">
-                      Buy Now
-                    </a>
-                  </div>
-                  <div className="catagory-icons">
-                    <p>
-                      <i className="fa fa-sliders"></i>Catagory
-                    </p>
-                    <ul>
-                      <li>
-                        <i className="fa fa-star"></i>{" "}
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                      </li>
-                    </ul>
-                  </div>
-                </div>  
-
-
-
-                {/* <div className="card" style={{ width: "18rem" }}>
-                  <div className="catagory-imgs">
-                    <img
-                      src="assets/images/latus-arival-2.png"
-                      className="card-img-top"
-                      alt="..."
-                    />
-                  </div>
-                  <div className="card-body">
-                    <h5 className="card-title">Blue Sky Diamond</h5>
-                    <p className="card-text">
-                      Lorem ipsum dolor sit amet, cocteru adipiscing elit. Lorem
-                      ipsum dolor adipiscing elit edam itis.{" "}
-                    </p>
-                    <b>$25.89</b>
-                    <a href="#" className="btn btn-primary">
-                      Buy Now
-                    </a>
-                  </div>
-                  <div className="catagory-icons">
-                    <p>
-                      <i className="fa fa-sliders"></i>Catagory
-                    </p>
-                    <ul>
-                      <li>
-                        <i className="fa fa-star"></i>{" "}
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-
-
-                {/* <div className="card" style={{ width: "18rem" }}>
-                  <div className="catagory-imgs">
-                    <img
-                      src="assets/images/latus-arival-3.png"
-                      className="card-img-top"
-                      alt="..."
-                    />
-                  </div>
-                  <div className="card-body">
-                    <h5 className="card-title">A Black Leather Purse</h5>
-                    <p className="card-text">
-                      Lorem ipsum dolor sit amet, cocteru adipiscing elit. Lorem
-                      ipsum dolor adipiscing elit edam itis.{" "}
-                    </p>
-                    <b>$25.89</b>
-                    <a href="#" className="btn btn-primary">
-                      Buy Now
-                    </a>
-                  </div>
-                  <div className="catagory-icons">
-                    <p>
-                      <i className="fa fa-sliders"></i>Catagory
-                    </p>
-                    <ul>
-                      <li>
-                        <i className="fa fa-star"></i>{" "}
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                      </li>
-                    </ul>
-                  </div>
-                </div> */}
-
-
-                
+                {LatestProduct.length === 0 ? (
+                  <p>No product found</p>
+                ) : (
+                  LatestProduct.map((product) => (
+                    <div className="card" style={{ width: "18rem" }}>
+                      <div className="catagory-imgs">
+                        <img
+                          src={`http://localhost:5000/img/${product.picture}`}
+                          className="category-image-modify"
+                          alt={product.title}
+                        />
+                      </div>
+                      <div className="card-body">
+                        <h5 className="card-title">{product.title}</h5>
+                        <p className="card-text">{product.description}</p>
+                        <b>${product.price}</b>
+                        <div>
+                          
+                            <a href="#" className="btn btn-primary" onClick={()=>getselectedProduct(product._id)}>
+                              Buy Now
+                            </a>
+                          
+                        </div>
+                      </div>
+                      <div className="catagory-icons">
+                        <p>{product.categoryTitle}</p>
+                        <ul>
+                          <li>
+                            <i className="fa fa-star"></i>{" "}
+                            <i className="fa fa-star"></i>
+                            <i className="fa fa-star"></i>
+                            <i className="fa fa-star"></i>
+                            <i className="fa fa-star"></i>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </section>
-        {/* Latest Arrival finish. */}
+          {/* Latest Arrival finish. */}
 
+          {/* Featured Product Start. */}
           <section className="featured-products">
             <div className="container">
               <div className="row justify-content-lg-center align-items-center text-center">
@@ -370,146 +298,49 @@ function Home() {
                 </div>
               </div>
             </div>
+
             <div className="container">
               <div className="row lazy justify-content-md-between justify-content-sm-between">
-                <div className="card" style={{ width: "18rem" }}>
-                  <div className="catagory-imgs">
-                    <img
-                      src="assets/images/latus-arival-1.png"
-                      className="card-img-top"
-                      alt="..."
-                    />
-                  </div>
-                  <div className="card-body">
-                    <h5 className="card-title">Set Of Wedding Rings</h5>
-                    <p className="card-text">
-                      Lorem ipsum dolor sit amet, cocteru adipiscing elit. Lorem
-                      ipsum dolor adipiscing elit edam itis.{" "}
-                    </p>
-                    <b>$25.89</b>
-                    <a href="#" className="btn btn-primary">
-                      Buy Now
-                    </a>
-                  </div>
-                  <div className="catagory-icons">
-                    <p>
-                      <i className="fa fa-sliders"></i>Catagory
-                    </p>
-                    <ul>
-                      <li>
-                        <i className="fa fa-star"></i>{" "}
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="card" style={{ width: "18rem" }}>
-                  <div className="catagory-imgs">
-                    <img
-                      src="assets/images/latus-arival-2.png"
-                      className="card-img-top"
-                      alt="..."
-                    />
-                  </div>
-                  <div className="card-body">
-                    <h5 className="card-title">Blue Sky Diamond</h5>
-                    <p className="card-text">
-                      Lorem ipsum dolor sit amet, cocteru adipiscing elit. Lorem
-                      ipsum dolor adipiscing elit edam itis.{" "}
-                    </p>
-                    <b>$25.89</b>
-                    <a href="#" className="btn btn-primary">
-                      Buy Now
-                    </a>
-                  </div>
-                  <div className="catagory-icons">
-                    <p>
-                      <i className="fa fa-sliders"></i>Catagory
-                    </p>
-                    <ul>
-                      <li>
-                        <i className="fa fa-star"></i>{" "}
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="card" style={{ width: "18rem" }}>
-                  <div className="catagory-imgs">
-                    <img
-                      src="assets/images/latus-arival-3.png"
-                      className="card-img-top"
-                      alt="..."
-                    />
-                  </div>
-                  <div className="card-body">
-                    <h5 className="card-title">A Black Leather Purse</h5>
-                    <p className="card-text">
-                      Lorem ipsum dolor sit amet, cocteru adipiscing elit. Lorem
-                      ipsum dolor adipiscing elit edam itis.{" "}
-                    </p>
-                    <b>$25.89</b>
-                    <a href="#" className="btn btn-primary">
-                      Buy Now
-                    </a>
-                  </div>
-                  <div className="catagory-icons">
-                    <p>
-                      <i className="fa fa-sliders"></i>Catagory
-                    </p>
-                    <ul>
-                      <li>
-                        <i className="fa fa-star"></i>{" "}
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="card" style={{ width: "18rem" }}>
-                  <div className="catagory-imgs">
-                    <img
-                      src="assets/images/latus-arival-4.png"
-                      className="card-img-top"
-                      alt="..."
-                    />
-                  </div>
-                  <div className="card-body">
-                    <h5 className="card-title">
-                      Silver Ring with Blue diamond
-                    </h5>
-                    <p className="card-text">
-                      Lorem ipsum dolor sit amet, cocteru adipiscing elit. Lorem
-                      ipsum dolor adipiscing elit edam itis.{" "}
-                    </p>
-                    <b>$25.89</b>
-                    <a href="#" className="btn btn-primary">
-                      Buy Now
-                    </a>
-                  </div>
-                  <div className="catagory-icons">
-                    <p>
-                      <i className="fa fa-sliders"></i>Catagory
-                    </p>
-                    <ul>
-                      <li>
-                        <i className="fa fa-star"></i>{" "}
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+                <Link to="/product-details">
+                  <a href="#"></a>
+                </Link>
+                {FeatureProduct.length === 0 ? (
+                  <p>No product found</p>
+                ) : (
+                    FeatureProduct.map((product) => (
+                    <div className="card" style={{ width: "18rem" }}>
+                      <div className="catagory-imgs">
+                        <img
+                          src={`http://localhost:5000/img/${product.picture}`}
+                          className="category-image-modify"
+                          alt={product.title}
+                        />
+                      </div>
+                      <div className="card-body">
+                        <h5 className="card-title">{product.title}</h5>
+                        <p className="card-text">{product.description}</p>
+                        <b>${product.price}</b>
+                        <a href="#" className="btn btn-primary" >
+                          Buy Now
+                        </a>
+                      </div>
+                      <div className="catagory-icons">
+                        <p>{product.categoryTitle}</p>
+                        <ul>
+                          <li>
+                            <i className="fa fa-star"></i>{" "}
+                            <i className="fa fa-star"></i>
+                            <i className="fa fa-star"></i>
+                            <i className="fa fa-star"></i>
+                            <i className="fa fa-star"></i>
+                          </li>
+                        </ul>
+                        </div>
+                        
+                    </div>
+                        
+                  ))
+                )}
               </div>
             </div>
           </section>
@@ -518,7 +349,7 @@ function Home() {
               <div className="row d-flex align-items-center ">
                 <div className="col-sm-10 col-md-6 social-icons-left">
                   <span>
-                    {" "}
+                    {""}
                     <i className="fa fa-twitter"></i>
                   </span>
                   <p>

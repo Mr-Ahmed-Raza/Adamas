@@ -1,8 +1,25 @@
-import React from "react";
+
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
-
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import "../components/todoList.css";
 function Product_details() {
+
+  const { productId } = useParams();
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+
+  useEffect(() => {
+    console.log(productId);
+    fetch(`http://localhost:5000/api/admin/Product/${productId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setSelectedProduct(data.selectedProduct);
+      });
+  }, [productId]);
+
+
   return (
     <>
       <wrapper>
@@ -88,10 +105,14 @@ function Product_details() {
             </nav>
           </section>
           <section className="slide-bar">
+           
+                
+              
+
             <div className="container">
               <div className="row justify-content-lg-between align-items-center">
                 <div className="col-sm- col-md-6">
-                  <h1>Silver Ring With a blue diamond</h1>
+                      <h1>{selectedProduct? selectedProduct.title :""}</h1>
                   <div className="slide-bar-heading">
                     <ul>
                       <li>
@@ -123,7 +144,8 @@ function Product_details() {
                   </div>
                 </div>
               </div>
-            </div>
+                </div>
+               
           </section>
         </header>
         <main>
@@ -131,24 +153,35 @@ function Product_details() {
             <div className="container ">
               <div className="row d-flex justify-content-md-between">
                 <div className="colo-sm-10 col-md-8">
-                  <div className="slider slider-for details-pic-div">
-                    <div>
-                      <img src="assets/images/details-pic-main.jpg" alt="" />
-                    </div>
-                    <div>
-                      <img src="assets/images/details-pic-main.jpg" alt="" />
-                    </div>
-                    <div>
-                      <img src="assets/images/details-pic-main.jpg" alt="" />
-                    </div>
-                    <div>
-                      <img src="assets/images/details-pic-main.jpg" alt="" />
-                    </div>
-                    <div>
-                      <img src="assets/images/details-pic-main.jpg" alt="" />
-                    </div>
+                
+                <div className="catagory-imgs">
+                        <img
+                          src={selectedProduct? `http://localhost:5000/img/${selectedProduct.picture}` : ""}
+                          className="category-image-modify-product"
+                          alt={selectedProduct? selectedProduct.title :""}
+                        />
                   </div>
-                  <div className="slider slider-nav">
+                  
+
+
+                  {/* <div className="slider slider-for details-pic-div">
+                    <div>
+                      <img src="assets/images/details-pic-main.jpg" alt="" />
+                    </div>
+                    <div>
+                      <img src="assets/images/details-pic-main.jpg" alt="" />
+                    </div>
+                    <div>
+                      <img src="assets/images/details-pic-main.jpg" alt="" />
+                    </div>
+                    <div>
+                      <img src="assets/images/details-pic-main.jpg" alt="" />
+                    </div>
+                    <div>
+                      <img src="assets/images/details-pic-main.jpg" alt="" />
+                    </div>
+                  </div> */}
+                  {/* <div className="slider slider-nav">
                     <div className="slick-slide slik-cloned">
                       <img src="assets/images/details-nav-1.jpg" alt="" />
                     </div>
@@ -164,8 +197,8 @@ function Product_details() {
                     <div className="slick-slide slik-cloned">
                       <img src="assets/images/details-nav-5.jpg" alt="" />
                     </div>
-                  </div>
-                  <div className="links">
+                  </div> */}
+                  {/* <div className="links">
                     <ul>
                       <li>
                         <a href="#">DESCRIPTION</a>
@@ -177,11 +210,11 @@ function Product_details() {
                         <a href="#">REVIEWS (2)</a>
                       </li>
                     </ul>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="col-sm-10 col-md-4">
                   <div className="ring-rating-div">
-                    <h5>Silver Ring with a Blue Diamond</h5>
+                    <h5>{selectedProduct? selectedProduct.title :""}</h5>
                     <ul>
                       <li>
                         <a href="#">
@@ -204,13 +237,7 @@ function Product_details() {
                   </div>
                   <div className="rating-div-text">
                     <p>
-                      Duis autem vel eum iriure dolor in hendrerit in vulputate
-                      velit esse molestie consequat, vel illum dolore eu feugiat
-                      nulla facilisis at vero eros et accumsan et iusto odio
-                      dignissim qui. Duis autem vel eum iriure dolor in
-                      hendrerit in vulputate. Accumsan et iusto odio dignissim
-                      qui. Duis autem vel eum iriure dolor in hendrerit in
-                      vulputate.{" "}
+                    {selectedProduct? selectedProduct.description :""}
                     </p>
                   </div>
                   <div className="size-color-div">
@@ -240,7 +267,7 @@ function Product_details() {
                         </div>
                       </li>
                       <li>
-                        <small>$489.90</small>
+                        <small>${selectedProduct? selectedProduct.price :""}</small>
                       </li>
                       <li>
                         <a href="#">Add TO CART</a>
@@ -290,6 +317,10 @@ function Product_details() {
                 </p>
               </div>
             </div>
+
+            
+
+
           </section>
           <section className="like-products">
             <div className="container">

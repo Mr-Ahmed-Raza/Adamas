@@ -21,3 +21,9 @@
     object-fit: cover;
     border-radius: 15%;
   }
+  .category-image-modify-product {
+    width: 800px;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 5%;
+  }

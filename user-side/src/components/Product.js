@@ -6,6 +6,8 @@ function Product() {
   const [Product, setProduct] = useState([]);
   const [categories, setcategories] = useState([]);
   const [selectedProduct, setselectedProduct] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
   const [editformdata, seteditformdata] = useState({
     title: "",
     description: "",
@@ -149,8 +151,8 @@ function Product() {
       .catch((error) => console.log("Error fetching category:", error));
   };
 
-  const getselectedProduct = (userId) => {
-    fetch(`http://localhost:5000/api/admin/Product/${userId}`)
+  const getselectedProduct = (productId) => {
+    fetch(`http://localhost:5000/api/admin/Product/${productId}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -158,6 +160,12 @@ function Product() {
         getAllcategory();
       });
   };
+
+// Pagination logic
+const indexOfLastItem = currentPage * itemsPerPage;
+const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+const currentItems = Product.slice(indexOfFirstItem, indexOfLastItem);
+const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="todo-list">
@@ -183,13 +191,13 @@ function Product() {
                 </tr>
               </thead>
               <tbody>
-                {Array.isArray(Product) ? (
-                  Product.map((product, index) => (
+                {Array.isArray(currentItems) ? (
+                  currentItems.map((product, index) => (
                     <tr key={product._id}>
-                      <td>{index + 1}</td>
+                      <td>{indexOfFirstItem + index + 1}</td>
                       <td>{product.title}</td>
                       <td>{product.description}</td>
-                      <td>{product.price}</td>
+                      <td>${product.price}</td>
                       <td>
                         {product.picture ? (
                           <img
@@ -349,7 +357,19 @@ function Product() {
           <button className="button1">Add-Product</button>
         </Link>
       </div>
+      <div>
+          <ul className="pagination">
+            {Array.from({ length: Math.ceil(Product.length / itemsPerPage) }).map((_, index) => (
+              <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                <button className="page-link" onClick={() => paginate(index + 1)}>
+                  {index + 1}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
     </div>
+    
   );
 }
 

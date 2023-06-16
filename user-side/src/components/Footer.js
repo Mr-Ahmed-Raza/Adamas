@@ -1,9 +1,44 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
+import "../components/todoList.css";
+import { useNavigate } from "react-router-dom";
 
 function Footer() {
-  return (
+  const [recentProducts, setrecentProducts] = useState([]);
+  // const [category, setcategory] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    getRecentProduct();
+    getselectedProduct();
+  
+  }, []);
+  // // get the recent products
+  const getRecentProduct = () => {
+    fetch("http://localhost:5000/api/admin/Product/recent-products")
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log(data);
+        setrecentProducts(data.product);
+      })
+      .catch((error) => console.log("Error fetching Product:", error));
+  };
+  // get the selected product
+  const getselectedProduct = (productId) => {
+    fetch(`http://localhost:5000/api/admin/Product/${productId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        // setSelectedProduct(data.selectedProduct);
+        // getAllcategory();
+        // Redirect to productDetail page with selected product ID
+        navigate(`/product-details/${productId}`);
+      });
+     };
+   
+
+    return (
       <>
-           <footer className="footer bg-light">
+        <footer className="footer bg-light">
           <div className="container">
             <div className="row">
               <div className="colo-sm-10 col-md-3">
@@ -24,44 +59,37 @@ function Footer() {
                 <div>
                   <h6>Recent Products</h6>
                 </div>
-                <ul>
-                  <li>
-                    <a href="#">
-                      <div className="">
-                        <img src="assets/images/ring.jpg" alt="" />
-                      </div>
-                      <div className="footer-text">
-                        <p>Blue Sky Diamond</p>
-                        <span>
-                          <i className="fa fa-star"></i>
-                          <i className="fa fa-star"></i>
-                          <i className="fa fa-star"></i>
-                          <i className="fa fa-star"></i>
-                        </span>
-                        <b>$1520.0</b>
-                      </div>
-                    </a>
-                  </li>
-                </ul>
-                <ul>
-                  <li>
-                    <a href="#">
-                      <div className="">
-                        <img src="assets/images/red-ring.jpg" alt="" />
-                      </div>
-                      <div className="footer-text">
-                        <p>Fiery red Ring</p>
-                        <span>
-                          <i className="fa fa-star"></i>
-                          <i className="fa fa-star"></i>
-                          <i className="fa fa-star"></i>
-                          <i className="fa fa-star"></i>
-                        </span>
-                        <b>$1520.0</b>
-                      </div>
-                    </a>
-                  </li>
-                </ul>
+
+                {recentProducts.length === 0 ? (
+                  <p>no product found</p>
+                ) : (
+                  recentProducts.map((product) => (
+                    <ul>
+                      <li>
+                        <a href="#">
+                          <div className="" key={product._id}>
+                            <img
+                              className="category-image-modify-recent"
+                              src={`http://localhost:5000/img/${product.picture}`}
+                              onClick={() => getselectedProduct(product._id)}
+                              alt={product.title}
+                            />
+                          </div>
+                          <div className="footer-text">
+                            <p>{product.title}</p>
+                            <span>
+                              <i className="fa fa-star"></i>
+                              <i className="fa fa-star"></i>
+                              <i className="fa fa-star"></i>
+                              <i className="fa fa-star"></i>
+                            </span>
+                            <b>${product.price}</b>
+                          </div>
+                        </a>
+                      </li>
+                    </ul>
+                  ))
+                )}
               </div>
               <div className="col-sm-10 col-md-3">
                 <div>
@@ -120,9 +148,8 @@ function Footer() {
               </div>
             </div>
           </div>
-          </footer>
+        </footer>
 
-                
         <div className="footer-bottom">
           <div className="container align-items-center">
             <div className="row justify-content-sm-between justify-content-md-between align-items-center">
@@ -148,9 +175,9 @@ function Footer() {
             </div>
           </div>
         </div>
-          
-    </>
-  )
-}
+      </>
+    )
+  }
+
 
 export default Footer

@@ -165,6 +165,49 @@ const latestProducts = asyncHandler(async (req, res) => {
   }
 });
 
+// Fetch Recent products
+// GET  /api/admin/product/recent-products
+const recentProducts = asyncHandler(async (req, res) => {
+  try {
+    const product = await Product.aggregate([
+      {
+        $lookup: {
+          from: "categories",
+          localField: "selectedCategoryId",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      {
+        $unwind: "$category",
+      },
+      {
+        $project: {
+          _id: 1,
+          title: 1,
+          description: 1,
+          picture: 1,
+          price: 1,
+          featured: 1,
+          categoryTitle: "$category.title",
+          createdAt: 1,
+        },
+      },
+      {
+        $sort: { createdAt: -1 }, // Sort by createdAt field in descending order
+      },
+      {
+        $limit: 2, // Limit the result to 2 documents
+      },
+    ]);
+
+    res.status(200).json({ message: "Recent Products ", product });
+  } catch (error) {
+    res.status(400);
+    throw new Error("Error occurred... products could not be retrieved.");
+  }
+});
+
 // Update product
 // PUT /api/admin/product/:productId
 const updateProducts = asyncHandler(async (req, res) => {
@@ -214,14 +257,70 @@ const singleProduct = asyncHandler(async (req, res) => {
   }
 });
 
+// Get Recommended Products
+// GET /api/admin/product/recommended/:ProductId
+const getRecommendedProducts = asyncHandler(async (req, res) => {
+  try {
+    const { ProductId } = req.params;
+
+    // Fetch the selected product to get its category
+    const selectedProduct = await Product.findById(ProductId);
+    if (!selectedProduct) {
+      res.status(404);
+      throw new Error('Product not found');
+    }
+
+    // Fetch recommended products based on the selected product's category
+    const recommendedProducts = await Product.aggregate([
+      {
+        $match: { selectedCategoryId: selectedProduct.selectedCategoryId, _id: { $ne: selectedProduct._id } },
+      },
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'selectedCategoryId',
+          foreignField: '_id',
+          as: 'category',
+        },
+      },
+      {
+        $unwind: '$category',
+      },
+      {
+        $project: {
+          _id: 1,
+          title: 1,
+          description: 1,
+          picture: 1,
+          price: 1,
+          featured: 1,
+          categoryTitle: '$category.title',
+          createdAt: 1,
+        },
+      },
+      {
+        $limit: 4, // Adjust the number of recommended products as per your requirement
+      },
+    ]);
+
+    res.status(200).json({ message: 'Recommended Products', recommendedProducts });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
 
 module.exports = {
   addProducts,
   showAllProducts,
   getFeaturedProducts,
   latestProducts,
+  recentProducts,
   deleteProducts,
   updateProducts,
   singleProduct,
-  
+  getRecommendedProducts
 };
+

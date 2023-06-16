@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 // import { VStack } from "@chakra-ui/react";
 import "./todo.css";
 import "./toggle.css";
 // import "../../App.css";
 import { useNavigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 function AddProduct() {
   const [title, settitle] = useState();
@@ -16,13 +18,27 @@ function AddProduct() {
   const [errors, setErrors] = useState({});
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const navigate = useNavigate();
+  const editorRef = useRef();
+
+  useEffect(() => {
+    if (editorRef.current) {
+      editorRef.current.editor.editing.view.change((writer) => {
+        writer.setStyle(
+          "height",
+          "200px",
+          editorRef.current.editor.editing.view.document.getRoot()
+        );
+      });
+    }
+  }, []);
 
   const onchangetitle = (event) => {
     settitle(event.target.value);
     clearError("title");
   };
-  const onchangedescription = (event) => {
-    setdescription(event.target.value);
+  const onchangedescription = (event, editor) => {
+    const data = editor.getData();
+    setdescription(data);
     clearError("description");
   };
   const onchangepicture = (event) => {
@@ -151,7 +167,7 @@ function AddProduct() {
               <h3>Add-Product</h3>
             </div>
             <div className="input-group">
-              <label for="title">Enter Title</label>
+            <label for="title" className="text-label">Enter Title <span className="require-field">*</span> </label>
               <div className="input-field">
                 <input
                   className="form-control"
@@ -164,22 +180,50 @@ function AddProduct() {
               </div>
               <div className="error">{<span>{errors.title}</span>}</div>
             </div>
-            <div className="input-group">
-              <label>Enter description</label>
+             
+             <div className="input-group">
+              <label className="text-label">Enter description <span className="require-field">*</span></label>
+             </div>
               <div className="input-field">
-                <input
-                  className="form-control"
-                  type="text"
-                  placeholder="Enter product description"
-                  name="description"
-                  value={description}
-                  onChange={onchangedescription}
-                />
-              </div>
-              <div className="error">{<span>{errors.description}</span>}</div>
+              <CKEditor
+                editor={ClassicEditor}
+                data={description}
+                placeholder="Enter Your First Name"
+                onChange={onchangedescription}
+                ref={editorRef}
+                config={{
+                  toolbar: {
+                    items: [
+                      "heading",
+                      "|",
+                      "bold",
+                      "italic",
+                      "link",
+                      "bulletedList",
+                      "numberedList",
+                      "|",
+                      "indent",
+                      "outdent",
+                      "|",
+                      "undo",
+                      "redo",
+                      "|",
+                      "fontColor", // Add the "fontColor" option to the toolbar
+                    ],
+                  },
+                  language: "en",
+                  // Add the "fontColor" configuration option
+                 
+                }}
+              />
             </div>
             <div className="input-group">
-              <label>Enter Price</label>
+            <div className="error">{<span>{errors.description}</span>}</div>
+            </div>
+              
+            
+            <div className="input-group">
+            <label for="title" className="text-label">Enter Price <span className="require-field">*</span> </label>
               <div className="input-field">
                 <input
                   className="form-control"
@@ -193,7 +237,7 @@ function AddProduct() {
               <div className="error">{<span>{errors.price}</span>}</div>
             </div>
             <div className="input-group">
-              <label>Picture</label>
+            <label className="text-label">Picture <span className="require-field">*</span></label>
               <div className="input-field">
                 <input
                   className="form-control"
@@ -206,7 +250,7 @@ function AddProduct() {
             </div>
 
             <div className="input-group">
-              <label>Featured</label>
+            <label for="title" className="text-label">Featured <span className="require-field">*</span> </label>
               <div className="radio-group">
                 <label>
                   <input
@@ -235,7 +279,7 @@ function AddProduct() {
             </div>
 
             <div className="input-group">
-              <label>Select category</label>
+            <label for="title" className="text-label">Select Category <span className="require-field">*</span> </label>
               <select
                 name="selectedCategoryId"
                 required

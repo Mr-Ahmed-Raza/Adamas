@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 
 function Category() {
   const [category, setcategory] = useState([]);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
   const [selectedCategory, setselectedCategory] = useState();
-   const [editformdata, seteditformdata] = useState({
+  const [editformdata, seteditformdata] = useState({
     title: "",
-     description: "",
-    picture: ""
+    description: "",
+    picture: "",
   });
 
   // handle edit to enter the value while form is open
@@ -19,7 +20,7 @@ function Category() {
     seteditformdata({
       title: category.title,
       description: category.description,
-      picture: category.picture.file
+      picture: category.picture.file,
     });
   };
   const handlePictureChange = (event) => {
@@ -35,31 +36,23 @@ function Category() {
 
   // Handle edit submit to edit the user
   const handleEdditSubmit = async (e) => {
-    
     e.preventDefault();
     try {
-      // const updatedUser = {
-      //   title: editformdata.title,
-      //   description: editformdata.description,
-      //   picture: editformdata.picture
-      // };
+      
       var formData = new FormData();
-      formData.append("title" , editformdata.title)
-      formData.append("description", editformdata.description)
-        // Check if a new picture file is selected
-    if (editformdata.picture) {
-      formData.append("picture", editformdata.picture);
-    }
+      formData.append("title", editformdata.title);
+      formData.append("description", editformdata.description);
+      // Check if a new picture file is selected
+      if (editformdata.picture) {
+        formData.append("picture", editformdata.picture);
+      }
 
       // make api calling to update the user
       await fetch(
         `http://localhost:5000/api/admin/Category/${selectedCategory._id}`,
         {
           method: "PUT",
-          // headers: {
-          //   "Content-Type": "application/json",
-          // },
-          // body: JSON.stringify(formData),
+         
           body: formData,
         }
       )
@@ -75,7 +68,7 @@ function Category() {
                   ...category,
                   title: data.title,
                   description: data.description,
-                  picture: data.picture
+                  picture: data.picture,
                 };
               }
               return category;
@@ -88,7 +81,7 @@ function Category() {
       seteditformdata({
         title: "",
         description: "",
-        picture: ""
+        picture: "",
       });
     } catch (error) {
       console.error("Error occured while updating user ; ", error);
@@ -126,7 +119,6 @@ function Category() {
       .then((data) => {
         console.log(data);
         setcategory(data.category);
-
       })
       .catch((error) => console.log("Error fetching category:", error));
   };
@@ -138,11 +130,17 @@ function Category() {
         console.log(data);
         handleEdit(data.selectedcategory);
       });
-    };
-    
-    
+  };
+
+  // Pagination logic
+const indexOfLastItem = currentPage * itemsPerPage;
+const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+const currentItems = category.slice(indexOfFirstItem, indexOfLastItem);
+const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
 
   return (
+    <>
     <div className="todo-list">
       <div className="list-head">
         <h1>Category list</h1>
@@ -150,23 +148,23 @@ function Category() {
       <div className="list-data">
         {category.length === 0 ? (
           <p>No category found</p>
-        ) : (
+         ) : (
           <div className="table-responsive">
             <table>
               <thead>
                 <tr>
                   <th>#</th>
                   <th>Title</th>
-                    <th>Description</th>
-                    <th>Picture</th>
+                  <th>Description</th>
+                  <th>Picture</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {Array.isArray(category) ? (
-                  category.map((category, index) => (
+                {Array.isArray(currentItems) ? (
+                  currentItems.map((category, index) => (
                     <tr key={category._id}>
-                      <td>{index + 1}</td>
+                      <td>{indexOfFirstItem + index + 1}</td>
                       <td>{category.title}</td>
                       <td>{category.description}</td>
                       <td>
@@ -177,8 +175,7 @@ function Category() {
                             // src={`assets/images/slider-content-img.jpg`}
                             // src={`/public/images/${category.picture}`}
                             src={`http://localhost:5000/img/${category.picture}`}
-
-                             alt={category.title}
+                            alt={category.title}
                           />
                         ) : (
                           "No Image"
@@ -186,7 +183,9 @@ function Category() {
                       </td>
 
                       <td>
-                        <button onClick={() => getselectedCategory(category._id)}>
+                        <button
+                          onClick={() => getselectedCategory(category._id)}
+                        >
                           Edit
                         </button>
 
@@ -196,10 +195,12 @@ function Category() {
                       </td>
                     </tr>
                   ))
-                ) : (
+                 ) : (
                   <tr>
                     <td colSpan={3}>
-                      <span className="no-data-found">Invalid category data</span>
+                      <span className="no-data-found">
+                        Invalid category data
+                      </span>
                     </td>
                   </tr>
                 )}
@@ -245,17 +246,30 @@ function Category() {
             </form>
           </div>
         )}
-          </div>
-          <br></br>
-          <div>
-          <Link to="/add-category">
-              <button className="button1">Add-Category</button>
-              </Link>
-          </div>
-          
-
-         
-    </div>
+        
+      </div>
+      <br></br>
+       
+       <div>
+        <Link to="/add-category">
+          <button className="button1">Add-Category</button>
+        </Link>
+      </div>
+      
+      </div>
+      <div>
+          <ul className="pagination">
+            {Array.from({ length: Math.ceil(category.length / itemsPerPage) }).map((_, index) => (
+              <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                <button className="page-link" onClick={() => paginate(index + 1)}>
+                  {index + 1}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      <br />
+    </>
   );
 }
 

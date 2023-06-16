@@ -1,32 +1,48 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 // import { VStack } from "@chakra-ui/react";
 import "./todo.css";
 // import "../../App.css";
 import { useNavigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 function AddCategory() {
   const [title, settitle] = useState();
   const [description, setdescription] = useState();
-  const [picture , setPicture] = useState([])
+  const [picture, setPicture] = useState([]);
   const [errors, setErrors] = useState({});
+  const [editing, setEditing] = useState(false); // Added editing state
   const navigate = useNavigate();
+  const editorRef = useRef();
 
-  
+  useEffect(() => {
+    if (editorRef.current) {
+      editorRef.current.editor.editing.view.change((writer) => {
+        writer.setStyle(
+          "height",
+          "200px",
+          editorRef.current.editor.editing.view.document.getRoot()
+        );
+      });
+    }
+  }, []);
+
   const onchangetitle = (event) => {
     settitle(event.target.value);
     clearError("title");
   };
-  const onchangedescription = (event) => {
-    setdescription(event.target.value);
+  const onchangedescription = (event, editor) => {
+    const data = editor.getData();
+    setdescription(data);
     clearError("description");
   };
   const onchangepicture = (event) => {
-    setPicture(event.target.files[0])
+    setPicture(event.target.files[0]);
     console.log(event.target.files[0]);
-    clearError("picture")
-  }
-  
+    clearError("picture");
+  };
+
   // to clear validation error when user enter anything to particular field
   const clearError = (fieldName) => {
     setErrors((prevErrors) => {
@@ -66,11 +82,10 @@ function AddCategory() {
       event.preventDefault();
       // Send data front to api backend
       var formData = new FormData();
-      formData.append("title", title)
-      formData.append("description", description)
-      formData.append("picture", picture)
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("picture", picture);
 
-      
       if (!validationChecks()) {
         return;
       }
@@ -88,7 +103,6 @@ function AddCategory() {
           settitle("");
           setdescription("");
           navigate("/category-list");
-
         });
     } catch (error) {
       console.error("Error ; ", error);
@@ -108,7 +122,9 @@ function AddCategory() {
               <h3>Add-Category</h3>
             </div>
             <div className="input-group">
-              <label for="title">Enter Title</label>
+              <label for="title" className="text-label">
+                Enter Title <span className="require-field">*</span>{" "}
+              </label>
               <div className="input-field">
                 <input
                   className="form-control"
@@ -121,22 +137,12 @@ function AddCategory() {
               </div>
               <div className="error">{<span>{errors.title}</span>}</div>
             </div>
+            
             <div className="input-group">
-              <label>Enter description</label>
-              <div className="input-field">
-                <input
-                  className="form-control"
-                  type="text"
-                  placeholder="Enter Your description"
-                  name="description"
-                  value={description}
-                  onChange={onchangedescription}
-                />
-              </div>
-              <div className="error">{<span>{errors.description}</span>}</div>
-            </div>
-            <div className="input-group">
-              <label>Picture</label>
+            <br />
+              <label className="text-label">
+                Picture <span className="require-field">*</span>
+              </label>
               <div className="input-field">
                 <input
                   className="form-control"
@@ -147,14 +153,61 @@ function AddCategory() {
               </div>
               <div className="error">{<span>{errors.picture}</span>}</div>
             </div>
-            
+            <div className="input-group">
+              <label className="text-label">
+                Enter description <span className="require-field">*</span>
+              </label>
+            </div>
+            <div className="input-field">
+              <CKEditor
+                editor={ClassicEditor}
+                data={description}
+                placeholder="Enter Your First Name"
+                onChange={onchangedescription}
+                ref={editorRef}
+                config={{
+                  toolbar: {
+                    items: [
+                      "heading",
+                      "|",
+                      "bold",
+                      "italic",
+                      "link",
+                      "bulletedList",
+                      "numberedList",
+                      "|",
+                      "indent",
+                      "outdent",
+                      "|",
+                      "undo",
+                      "redo",
+                    ],
+                  },
+                  language: "en",
+                  // Add the "fontColor" configuration option
+                  fontColor: {
+                    colors: [
+                      // Define custom color options
+
+                      {
+                        color: "rgb(255, 0, 0)", // Red
+                        label: "Red",
+                      },
+                      // Add more color options as needed
+                    ],
+                  },
+                }}
+              />
+             <br></br>
+              <div className="error">{<span>{errors.description}</span>}</div>
+            </div>
+
             <div className="button">
               <button className="button1" onClick={submitHandle}>
                 Add
               </button>
             </div>
             <br></br>
-           
           </form>
         </Container>
       </div>

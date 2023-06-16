@@ -1,6 +1,6 @@
 .main-page {
   width: 100%;
-  color: #fff;
+  /* color: #fff; */
   padding: 60px 0px;
   margin: 0 0 30px;
 }
@@ -46,11 +46,13 @@
 .main-page form .input-group input {
   width: 100%;
   height: 45px;
+  
 }
 .main-page form .input-group textarea {
   width: 100%;
   height: 150px;
   resize: none;
+  
 }
 .button1 {
   font-size: 20px;
@@ -211,4 +213,36 @@
     border-radius: 50%;
     background-color: transparent;
   }
-  
+  /* Ck-editor */
+  .ckeditor-container .ck.ck-editor {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    background: #ffffff;
+    color: #000;
+  }
+
+  .ckeditor-container .ck.ck-editor .ck-editor__editable {
+    min-height: 200px;
+    padding: 10px;
+    font-size: 16px;
+    color: #000000;
+  }
+
+  @media (max-width: 768px) {
+    .ckeditor-container .ck.ck-editor .ck-editor__editable {
+      min-height: 150px;
+      font-size: 14px;
+    }
+  }
+
+  /* label text */
+  .text-label{
+    color: #ffffff;
+  }
+/* Require-field*/
+.require-field{
+color: red;
+}

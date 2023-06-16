@@ -27,3 +27,40 @@
     object-fit: cover;
     border-radius: 5%;
   }
+  .category-image-modify-recent {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 25%;
+  }
+/* Pagination */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin-top: 20px;
+  }
+  
+  .pagination .page-item {
+    margin: 0 5px;
+  }
+  
+  .pagination .page-item .page-link {
+    display: block;
+    padding: 8px 12px;
+    text-decoration: none;
+    background-color: #ddd;
+    color: #333;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .pagination .page-item .page-link:hover {
+    background-color: #ddd;
+  }
+  
+  .pagination .page-item.active .page-link {
+    background-color: #04abf8;
+    color: #fff;
+  }
+  

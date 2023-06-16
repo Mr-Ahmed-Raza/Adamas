@@ -10,8 +10,8 @@ function Home() {
   // const [Product, setProduct] = useState([]);
   const [LatestProduct, setLatestProduct] = useState([]);
   const [FeatureProduct, setFeatureProduct] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState([]);
-  const navigate = useNavigate()
+   const [selectedProduct, setSelectedProduct] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getAllcategory();
@@ -24,7 +24,7 @@ function Home() {
     fetch("http://localhost:5000/api/admin/category/reverse-category")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         setcategory(data.category);
       })
       .catch((error) => console.log("Error fetching category:", error));
@@ -34,31 +34,31 @@ function Home() {
     fetch("http://localhost:5000/api/admin/Product/latest-arrivals")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         setLatestProduct(data.product);
       })
       .catch((error) => console.log("Error fetching Product:", error));
   };
-  // Fetch all the products
+  // Fetch all the featured products
   const getAllFeaturedProduct = () => {
     fetch("http://localhost:5000/api/admin/product/feature-products")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         setFeatureProduct(data.product);
       })
       .catch((error) => console.log("Error fetching Product:", error));
   };
-  // Set the selected product 
+  // get the selected product
   const getselectedProduct = (productId) => {
     fetch(`http://localhost:5000/api/admin/Product/${productId}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
-        setSelectedProduct(data.selectedProduct);
-        getAllcategory();
+        // console.log(data);
+          setSelectedProduct(data.selectedProduct);
+        // getAllcategory();
         // Redirect to productDetail page with selected product ID
-        navigate(`/product-details/${productId}`)
+        navigate(`/product-details/${productId}`);
       });
   };
 
@@ -91,16 +91,20 @@ function Home() {
                   id="navbarSupportedContent"
                 >
                   <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+                  <Link to="/">
                     <li className="nav-item">
                       <a
                         className="nav-link active"
                         aria-current="page"
-                        href="#"
+                        
+                          
                       >
                         Home
                         <i className="fa fa-angle-double-right"></i>
                       </a>
                     </li>
+                   
+                      </Link>
                     <li className="nav-item">
                       <a
                         className="nav-link active"
@@ -194,7 +198,7 @@ function Home() {
                   <p>No category found</p>
                 ) : (
                   category.map((category) => (
-                    <div className="col-sm-10 col-md-4 center">
+                    <div className="col-sm-10 col-md-4 center" key={category._id}>
                       <div className="car-img-div">
                         <img
                           className="category-image-modify"
@@ -241,24 +245,31 @@ function Home() {
                   <p>No product found</p>
                 ) : (
                   LatestProduct.map((product) => (
-                    <div className="card" style={{ width: "18rem" }}>
+                    <div className="card" style={{ width: "18rem" }} key={product._id}>
                       <div className="catagory-imgs">
+                        <a href="#">
+
+                        
                         <img
                           src={`http://localhost:5000/img/${product.picture}`}
                           className="category-image-modify"
                           alt={product.title}
-                        />
+                           onClick={() => getselectedProduct(product._id)}
+
+                          />
+                          </a>
                       </div>
                       <div className="card-body">
                         <h5 className="card-title">{product.title}</h5>
                         <p className="card-text">{product.description}</p>
                         <b>${product.price}</b>
                         <div>
-                          
-                            <a href="#" className="btn btn-primary" onClick={()=>getselectedProduct(product._id)}>
-                              Buy Now
-                            </a>
-                          
+                          <a
+                            href="#"
+                            className="btn btn-primary"
+                          >
+                            Buy Now
+                          </a>
                         </div>
                       </div>
                       <div className="catagory-icons">
@@ -306,21 +317,25 @@ function Home() {
                 </Link>
                 {FeatureProduct.length === 0 ? (
                   <p>No product found</p>
-                ) : (
-                    FeatureProduct.map((product) => (
-                    <div className="card" style={{ width: "18rem" }}>
+                 ) : (
+                  FeatureProduct.map((product) => (
+                    <div className="card" style={{ width: "18rem" }} key={product._id}>
                       <div className="catagory-imgs">
                         <img
                           src={`http://localhost:5000/img/${product.picture}`}
                           className="category-image-modify"
                           alt={product.title}
+                          href="#"
+                         onClick={() => getselectedProduct(product._id)}
                         />
                       </div>
                       <div className="card-body">
                         <h5 className="card-title">{product.title}</h5>
                         <p className="card-text">{product.description}</p>
                         <b>${product.price}</b>
-                        <a href="#" className="btn btn-primary" >
+                        <a
+                          className="btn btn-primary"
+                        >
                           Buy Now
                         </a>
                       </div>
@@ -328,17 +343,16 @@ function Home() {
                         <p>{product.categoryTitle}</p>
                         <ul>
                           <li>
-                            <i className="fa fa-star"></i>{" "}
+                            <i className="fa fa-star"></i>
+                            {""}
                             <i className="fa fa-star"></i>
                             <i className="fa fa-star"></i>
                             <i className="fa fa-star"></i>
                             <i className="fa fa-star"></i>
                           </li>
                         </ul>
-                        </div>
-                        
+                      </div>
                     </div>
-                        
                   ))
                 )}
               </div>
@@ -362,25 +376,25 @@ function Home() {
                 <div className="col-sm-10 col-md-6 social-icons-right">
                   <p>Check the latest news on our Social Networks:</p>
                   <ul>
-                    <li>
+                    {/* <li>
                       <a href="#">
                         <i className="fa fa-wifi"></i>
                       </a>
-                    </li>
+                    </li> */}
                     <li>
-                      <a href="#">
+                      <a href="https://help.pinterest.com">
                         {" "}
                         <i className="fa fa-pinterest-square"></i>
                       </a>
                     </li>
                     <li>
-                      <a href="#">
+                      <a href="https://www.facebook.com/">
                         {" "}
                         <i className="fa fa-facebook-f"></i>
                       </a>
                     </li>
                     <li>
-                      <a href="#">
+                      <a href="https://twitter.com/">
                         {" "}
                         <i className="fa fa-twitter"></i>
                       </a>
@@ -397,7 +411,7 @@ function Home() {
           </section>
         </main>
 
-        <Footer />
+        <Footer/>
       </wrapper>
 
       {/* <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

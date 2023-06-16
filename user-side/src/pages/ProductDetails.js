@@ -1,30 +1,65 @@
-
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "../components/todoList.css";
-function Product_details() {
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
+function Product_details() {
   const { productId } = useParams();
   const [selectedProduct, setSelectedProduct] = useState(null);
-
+  const [sameCategoryProducts, setsameCategoryProduct] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(productId);
+    // console.log(productId);
     fetch(`http://localhost:5000/api/admin/Product/${productId}`)
       .then((response) => response.json())
       .then((data) => {
         setSelectedProduct(data.selectedProduct);
       });
   }, [productId]);
+  useEffect(() => {
+    getallthesameCategoryProducts(productId);
+  }, []);
+
+
+  // Fetch all the same category products
+  const getallthesameCategoryProducts = (productId) => {
+    // console.log(productId);
+    fetch(`http://localhost:5000/api/admin/Product/recommended/${productId}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Request failed with status: " + response.status);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // console.log(data);
+        setsameCategoryProduct(data.recommendedProducts);
+      })
+      .catch((error) => console.log("Error fetching Product:", error));
+  };
+  // get the selected product
+  const getselectedProduct = (productId) => {
+    fetch(`http://localhost:5000/api/admin/Product/${productId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log(data);
+          setSelectedProduct(data.selectedProduct);
+        // getAllcategory();
+        // Redirect to productDetail page with selected product ID
+        navigate(`/product-details/${productId}`);
+      });
+  };
 
 
   return (
     <>
       <wrapper>
         <header>
-          <NavBar/>
+          <NavBar />
           <section className="navbar-section">
             <nav className="navbar navbar-expand-lg navbar-light">
               <div className="container">
@@ -49,16 +84,18 @@ function Product_details() {
                   id="navbarSupportedContent"
                 >
                   <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li className="nav-item">
-                      <a
-                        className="nav-link active"
-                        aria-current="page"
-                        href="#"
-                      >
-                        Home
-                        <i className="fa fa-angle-double-right"></i>
-                      </a>
-                    </li>
+                    <Link to="/">
+                      <li className="nav-item">
+                        <a
+                          className="nav-link active"
+                          aria-current="page"
+                          href="#"
+                        >
+                          Home
+                          <i className="fa fa-angle-double-right"></i>
+                        </a>
+                      </li>
+                    </Link>
                     <li className="nav-item">
                       <a
                         className="nav-link active"
@@ -105,14 +142,10 @@ function Product_details() {
             </nav>
           </section>
           <section className="slide-bar">
-           
-                
-              
-
             <div className="container">
               <div className="row justify-content-lg-between align-items-center">
                 <div className="col-sm- col-md-6">
-                      <h1>{selectedProduct? selectedProduct.title :""}</h1>
+                  <h1>{selectedProduct ? selectedProduct.title : ""}</h1>
                   <div className="slide-bar-heading">
                     <ul>
                       <li>
@@ -144,8 +177,7 @@ function Product_details() {
                   </div>
                 </div>
               </div>
-                </div>
-               
+            </div>
           </section>
         </header>
         <main>
@@ -153,16 +185,17 @@ function Product_details() {
             <div className="container ">
               <div className="row d-flex justify-content-md-between">
                 <div className="colo-sm-10 col-md-8">
-                
-                <div className="catagory-imgs">
-                        <img
-                          src={selectedProduct? `http://localhost:5000/img/${selectedProduct.picture}` : ""}
-                          className="category-image-modify-product"
-                          alt={selectedProduct? selectedProduct.title :""}
-                        />
+                  <div className="catagory-imgs">
+                    <img
+                      src={
+                        selectedProduct
+                          ? `http://localhost:5000/img/${selectedProduct.picture}`
+                          : ""
+                      }
+                      className="category-image-modify-product"
+                      alt={selectedProduct ? selectedProduct.title : ""}
+                    />
                   </div>
-                  
-
 
                   {/* <div className="slider slider-for details-pic-div">
                     <div>
@@ -214,7 +247,7 @@ function Product_details() {
                 </div>
                 <div className="col-sm-10 col-md-4">
                   <div className="ring-rating-div">
-                    <h5>{selectedProduct? selectedProduct.title :""}</h5>
+                    <h5>{selectedProduct ? selectedProduct.title : ""}</h5>
                     <ul>
                       <li>
                         <a href="#">
@@ -236,9 +269,7 @@ function Product_details() {
                     </ul>
                   </div>
                   <div className="rating-div-text">
-                    <p>
-                    {selectedProduct? selectedProduct.description :""}
-                    </p>
+                    <p>{selectedProduct ? selectedProduct.description : ""}</p>
                   </div>
                   <div className="size-color-div">
                     <div>
@@ -267,7 +298,9 @@ function Product_details() {
                         </div>
                       </li>
                       <li>
-                        <small>${selectedProduct? selectedProduct.price :""}</small>
+                        <small>
+                          ${selectedProduct ? selectedProduct.price : ""}
+                        </small>
                       </li>
                       <li>
                         <a href="#">Add TO CART</a>
@@ -277,24 +310,19 @@ function Product_details() {
                   <div className="rating-social-icons">
                     <ul>
                       <li>
-                        <a href="#">
-                          <i className="fa fa-wifi"></i>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
+                        <a href="https://help.pinterest.com">
                           {" "}
                           <i className="fa fa-pinterest-square"></i>
                         </a>
                       </li>
                       <li>
-                        <a href="#">
+                        <a href="https://www.facebook.com/">
                           {" "}
                           <i className="fa fa-facebook-f"></i>
                         </a>
                       </li>
                       <li>
-                        <a href="#">
+                        <a href="https://twitter.com/">
                           {" "}
                           <i className="fa fa-twitter"></i>
                         </a>
@@ -317,136 +345,49 @@ function Product_details() {
                 </p>
               </div>
             </div>
-
-            
-
-
           </section>
+          <h1>Recomended Products</h1>
           <section className="like-products">
             <div className="container">
               <div className="row lazy justify-content-md-between justify-content-sm-between">
-                <div className="card" style={{ width: "18rem" }}>
-                  <div className="catagory-imgs">
-                    <img
-                      src="assets/images/latus-arival-1.png"
-                      className="card-img-top"
-                      alt="..."
-                    />
+                {Array.isArray(sameCategoryProducts) ? (
+                  
+                  sameCategoryProducts.map((product, index) => (
+                  
+                  <div className="card" style={{ width: "18rem" }} key={index}>
+                    <div className="category-imgs">
+                      <img
+                       src={`http://localhost:5000/img/${product.picture}`}
+                        className="card-img-top"
+                        alt={product.title}
+                        onClick={() => getselectedProduct(product._id)}
+                      />
+                    </div>
+                    <div className="card-body">
+                      <h5 className="card-title">{product.title}</h5>
+                      <p className="card-text">{product.description}</p>
+                    </div>
+                    <div className="category-icons">
+                      <p>
+                        <i className="fa fa-sliders"></i>
+                        {product.categoryTitle}
+                      </p>
+                      <ul>
+                        <li>
+                          <i className="fa fa-star"></i>{" "}
+                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star"></i>
+                          <i className="fa fa-star"></i>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
-                  <div className="card-body">
-                    <h5 className="card-title">Set Of Wedding Rings</h5>
-                    <p className="card-text">
-                      Lorem ipsum dolor sit amet, cocteru adipiscing elit. Lorem
-                      ipsum dolor adipiscing elit edam itis.{" "}
-                    </p>
-                  </div>
-                  <div className="catagory-icons">
-                    <p>
-                      <i className="fa fa-sliders"></i>Catagory
-                    </p>
-                    <ul>
-                      <li>
-                        <i className="fa fa-star"></i>{" "}
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="card" style={{ width: "18rem" }}>
-                  <div className="catagory-imgs">
-                    <img
-                      src="assets/images/latus-arival-2.png"
-                      className="card-img-top"
-                      alt="..."
-                    />
-                  </div>
-                  <div className="card-body">
-                    <h5 className="card-title">Blue Sky Diamond</h5>
-                    <p className="card-text">
-                      Lorem ipsum dolor sit amet, cocteru adipiscing elit. Lorem
-                      ipsum dolor adipiscing elit edam itis.{" "}
-                    </p>
-                  </div>
-                  <div className="catagory-icons">
-                    <p>
-                      <i className="fa fa-sliders"></i>Catagory
-                    </p>
-                    <ul>
-                      <li>
-                        <i className="fa fa-star"></i>{" "}
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="card" style={{ width: "18rem" }}>
-                  <div className="catagory-imgs">
-                    <img
-                      src="assets/images/latus-arival-3.png"
-                      className="card-img-top"
-                      alt="..."
-                    />
-                  </div>
-                  <div className="card-body">
-                    <h5 className="card-title">A Black Leather Purse</h5>
-                    <p className="card-text">
-                      Lorem ipsum dolor sit amet, cocteru adipiscing elit. Lorem
-                      ipsum dolor adipiscing elit edam itis.{" "}
-                    </p>
-                  </div>
-                  <div className="catagory-icons">
-                    <p>
-                      <i className="fa fa-sliders"></i>Catagory
-                    </p>
-                    <ul>
-                      <li>
-                        <i className="fa fa-star"></i>{" "}
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="card" style={{ width: "18rem" }}>
-                  <div className="catagory-imgs">
-                    <img
-                      src="assets/images/latus-arival-4.png"
-                      className="card-img-top"
-                      alt="..."
-                    />
-                  </div>
-                  <div className="card-body">
-                    <h5 className="card-title">
-                      Silver Ring with Blue diamond
-                    </h5>
-                    <p className="card-text">
-                      Lorem ipsum dolor sit amet, cocteru adipiscing elit. Lorem
-                      ipsum dolor adipiscing elit edam itis.{" "}
-                    </p>
-                  </div>
-                  <div className="catagory-icons">
-                    <p>
-                      <i className="fa fa-sliders"></i>Catagory
-                    </p>
-                    <ul>
-                      <li>
-                        <i className="fa fa-star"></i>{" "}
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                        <i className="fa fa-star"></i>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+                ))
+                  
+                  ) : (
+                  <p>no product found</p>
+                )}
               </div>
             </div>
           </section>
@@ -503,8 +444,8 @@ function Product_details() {
             </div>
           </section>
         </main>
-        
-        <Footer/>
+
+        <Footer />
       </wrapper>
       {/* <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>

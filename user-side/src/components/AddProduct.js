@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import DOMPurify from "dompurify";
 
 function AddProduct() {
   const [title, settitle] = useState();
@@ -20,8 +21,13 @@ function AddProduct() {
   const navigate = useNavigate();
   const editorRef = useRef();
 
+  
   useEffect(() => {
-    if (editorRef.current) {
+    if (
+      editorRef.current &&
+      editorRef.current.editor &&
+      editorRef.current.editor.editing
+    ) {
       editorRef.current.editor.editing.view.change((writer) => {
         writer.setStyle(
           "height",
@@ -39,7 +45,7 @@ function AddProduct() {
   const onchangedescription = (event, editor) => {
     const data = editor.getData();
     setdescription(data);
-    clearError("description");
+    clearError('description');
   };
   const onchangepicture = (event) => {
     setPicture(event.target.files[0]);
@@ -56,7 +62,6 @@ function AddProduct() {
     console.log(event.target.value);
     clearError("selectedCategoryId");
   };
- 
 
   // to clear validation error when user enter anything to particular field
   const clearError = (fieldName) => {
@@ -109,9 +114,8 @@ function AddProduct() {
       formData.append("description", description);
       formData.append("price", price);
       formData.append("picture", picture, picture.name);
-      formData.append("featured", featured );
+      formData.append("featured", featured);
       formData.append("selectedCategoryId", selectedCategoryId);
-      
 
       if (!validationChecks()) {
         return;
@@ -131,7 +135,7 @@ function AddProduct() {
           setdescription("");
           setprice("");
           setPicture("");
-          setFeatured("")
+          setFeatured("");
           setSelectedCategoryId("");
           navigate("/product-list");
         });
@@ -153,7 +157,6 @@ function AddProduct() {
       })
       .catch((error) => console.log("Error fetching category:", error));
   };
-
   return (
     <>
       <div className="main-page">
@@ -167,7 +170,9 @@ function AddProduct() {
               <h3>Add-Product</h3>
             </div>
             <div className="input-group">
-            <label for="title" className="text-label">Enter Title <span className="require-field">*</span> </label>
+              <label for="title" className="text-label">
+                Enter Title <span className="require-field">*</span>{" "}
+              </label>
               <div className="input-field">
                 <input
                   className="form-control"
@@ -180,15 +185,16 @@ function AddProduct() {
               </div>
               <div className="error">{<span>{errors.title}</span>}</div>
             </div>
-             
-             <div className="input-group">
-              <label className="text-label">Enter description <span className="require-field">*</span></label>
-             </div>
-              <div className="input-field">
+
+            <div className="input-group">
+              <label className="text-label">
+                Enter description <span className="require-field">*</span>
+              </label>
+            </div>
+            <div className="input-field">
               <CKEditor
                 editor={ClassicEditor}
                 data={description}
-                placeholder="Enter Your First Name"
                 onChange={onchangedescription}
                 ref={editorRef}
                 config={{
@@ -213,17 +219,21 @@ function AddProduct() {
                   },
                   language: "en",
                   // Add the "fontColor" configuration option
-                 
                 }}
               />
-            </div>
-            <div className="input-group">
-            <div className="error">{<span>{errors.description}</span>}</div>
-            </div>
+              <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(description) }} />
               
+            </div>
             
+
             <div className="input-group">
-            <label for="title" className="text-label">Enter Price <span className="require-field">*</span> </label>
+              <div className="error">{<span>{errors.description}</span>}</div>
+            </div>
+
+            <div className="input-group">
+              <label for="title" className="text-label">
+                Enter Price <span className="require-field">*</span>{" "}
+              </label>
               <div className="input-field">
                 <input
                   className="form-control"
@@ -237,7 +247,9 @@ function AddProduct() {
               <div className="error">{<span>{errors.price}</span>}</div>
             </div>
             <div className="input-group">
-            <label className="text-label">Picture <span className="require-field">*</span></label>
+              <label className="text-label">
+                Picture <span className="require-field">*</span>
+              </label>
               <div className="input-field">
                 <input
                   className="form-control"
@@ -250,7 +262,9 @@ function AddProduct() {
             </div>
 
             <div className="input-group">
-            <label for="title" className="text-label">Featured <span className="require-field">*</span> </label>
+              <label for="title" className="text-label">
+                Featured <span className="require-field">*</span>{" "}
+              </label>
               <div className="radio-group">
                 <label>
                   <input
@@ -279,7 +293,9 @@ function AddProduct() {
             </div>
 
             <div className="input-group">
-            <label for="title" className="text-label">Select Category <span className="require-field">*</span> </label>
+              <label for="title" className="text-label">
+                Select Category <span className="require-field">*</span>{" "}
+              </label>
               <select
                 name="selectedCategoryId"
                 required

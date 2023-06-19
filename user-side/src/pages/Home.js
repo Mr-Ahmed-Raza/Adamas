@@ -213,7 +213,7 @@ function Home() {
                 )}
               </div>
               <div>
-                <Link to="/all-categories">
+                <Link to="/categories">
                   <a href="#">Visit the Store</a>
                 </Link>
               </div>

@@ -409,36 +409,26 @@ function Product_details() {
                 </div>
                 <div className="col-sm-10 col-md-6 social-icons-right">
                   <p>Check the latest news on our Social Networks:</p>
-                  <ul>
-                    <li>
-                      <a href="#">
-                        <i className="fa fa-wifi"></i>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        {" "}
-                        <i className="fa fa-pinterest-square"></i>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        {" "}
-                        <i className="fa fa-facebook-f"></i>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        {" "}
-                        <i className="fa fa-twitter"></i>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <i className="fa fa-futbol-o" aria-hidden="true"></i>
-                      </a>
-                    </li>
-                  </ul>
+                   <ul>
+                      <li>
+                        <a href="https://help.pinterest.com">
+                          {" "}
+                          <i className="fa fa-pinterest-square"></i>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="https://www.facebook.com/">
+                          {" "}
+                          <i className="fa fa-facebook-f"></i>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="https://twitter.com/">
+                          {" "}
+                          <i className="fa fa-twitter"></i>
+                        </a>
+                      </li>
+                    </ul>
                 </div>
               </div>
             </div>

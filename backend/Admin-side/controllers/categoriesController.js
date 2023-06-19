@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const categories = require("../models/CategoriesModel")
+const Product = require ("../models/ProductsModel")
 
 // Add category  
 // POST /api/admin/category/add-category
@@ -132,6 +133,30 @@ const singleCategory = asyncHandler(async (req, res) => {
       throw new Error("Error occured while Selecting category...", error);
     }
   });
-  
 
-module.exports = {addCategories, showCategories, showCategoriesReverse ,deleteCategory ,updateCategory,singleCategory, }
+// Get the Product by Ctaegory
+// GET /api/admin/categorized-products/categoryId
+const productsByCategory = asyncHandler(async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+
+    // Find the selected category
+    const selectedCategory = await categories.findOne({ _id: categoryId });
+
+    if (!selectedCategory) {
+      res.status(404);
+      throw new Error("Selected category not found.");
+    }
+
+    // Retrieve products belonging to the selected category
+    const products = await Product.find({ selectedCategoryId: categoryId });
+
+    res.status(200).json({ message: "Products by Category", products });
+  } catch (error) {
+    res.status(400);
+    throw new Error("Error occurred. Products could not be retrieved.");
+  }
+});
+
+
+module.exports = {addCategories, showCategories, showCategoriesReverse ,deleteCategory ,updateCategory,singleCategory,productsByCategory }

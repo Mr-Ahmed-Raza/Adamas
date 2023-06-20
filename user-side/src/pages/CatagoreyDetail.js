@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
+import SocialSection from "../components/SocialSection";
 import { Link } from "react-router-dom";
 import "../components/todoList.css";
+import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 
 function Catagorey() {
-  const [Product, setProduct] = useState([]);
-  const [category, setcategory] = useState([]);
+  const { categoryId } = useParams();
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategoryProducts , setSelectedCategoryProducts]=useState([])
   const [categoryProducts, setCategoryProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProduct, setSelectedProduct] = useState([]);
@@ -27,19 +29,21 @@ function Catagorey() {
     setCurrentPage(pageNumber);
   };
   useEffect(() => {
-    getAllcategory();
+    getAllselectedcategory();
   }, []);
-  // fetch all the categories
-  const getAllcategory = () => {
-    fetch("http://localhost:5000/api/admin/category/all-category")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setcategory(data.category);
-      })
-      .catch((error) => console.log("Error fetching category:", error));
-  };
 
+// fetch selected category
+const getAllselectedcategory = () => {
+  fetch(`http://localhost:5000/api/admin/category/${categoryId}`)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      setSelectedCategoryProducts(data.selectedcategory);
+    
+    })
+    .catch((error) => console.log("Error fetching category:", error));
+    handleCategorySelect(categoryId);
+};
   // Fetch products by category
   const getProductsByCategory = () => {
     fetch(
@@ -54,21 +58,22 @@ function Catagorey() {
   };
 
   // Handle category selection
-  const handleCategorySelect = (category) => {
-    setSelectedCategory(category);
+   const handleCategorySelect = (categoryId) => {
+
+     setSelectedCategory(categoryId);
   
-    if (category === "All") {
-      fetch("http://localhost:5000/api/admin/Product")
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          setProduct(data.product);
-        })
-        .catch((error) => console.log("Error fetching Product:", error));
-    } else {
-      getProductsByCategory(category);
-    }
-  };
+  //   // if (category === "All") {
+  //   //   fetch("http://localhost:5000/api/admin/Product")
+  //   //     .then((response) => response.json())
+  //   //     .then((data) => {
+  //   //       console.log(data);
+  //   //       setProduct(data.product);
+  //   //     })
+  //   //     .catch((error) => console.log("Error fetching Product:", error));
+  //   // } else {
+  //   //   getProductsByCategory(category);
+  //   // }
+   };
   useEffect(() => {
     if (selectedCategory !== "") {
       getProductsByCategory();
@@ -142,12 +147,18 @@ function Catagorey() {
                       </li>
                     </Link>
                   
-                  <li className="nav-item">
-                    <a className="nav-link active" aria-current="page" href="#">
-                      Apparel
-                      <i className="fa fa-angle-double-right"></i>
-                    </a>
-                  </li>
+                    <Link to="/store">
+                      <li className="nav-item">
+                        <a
+                          className="nav-link active"
+                          aria-current="page"
+                          href="#"
+                        >
+                          Visit Store
+                          <i className="fa fa-angle-double-right"></i>
+                        </a>
+                      </li>
+                    </Link>
                   <li className="nav-item">
                     <a className="nav-link active" aria-current="page" href="#">
                       fahion
@@ -217,34 +228,29 @@ function Catagorey() {
               <div className="col-sm-10 col-md-3">
                 <div className="top-sidebar-ul">
                   <h3>Catagories</h3>
-                  <ul>
+                  {/* <ul>
                     <li
                       className={!selectedCategory ? "active" : ""}
                       onClick={() => handleCategorySelect("All")}
                     >
                       <a href="#">All</a>
                     </li>
-                  </ul>
-                  {category.length === 0 ? (
-                    <p>No category found</p>
-                  ) : (
-                    category.map((category) => (
+                  </ul> */}
+                  
+                     
                       <ul>
                         <li
-                          key={category._id}
-                          onClick={() => handleCategorySelect(category._id)}
+                          key={selectedCategoryProducts?  selectedCategoryProducts._id : ""}
+                            // onClick={() => handleCategorySelect(category._id)}
                           style={{
-                            fontWeight:
-                              category._id === selectedCategory
-                                ? "bold"
-                                : "normal",
+                            fontWeight: "bold"
+                               
                           }}
                         >
-                          <a href="#">{category.title}</a>
+                          <a href="#">{selectedCategoryProducts? selectedCategoryProducts.title : ""}</a>
                         </li>
                       </ul>
-                    ))
-                  )}
+                    
                 </div>
 
                 {/* <div>
@@ -435,55 +441,7 @@ function Catagorey() {
             </div>
           </div>
         </section>
-        <section className="socail-section">
-          <div className="container">
-            <div className="row d-flex align-items-center ">
-              <div className="col-sm-10 col-md-6 social-icons-left">
-                <span>
-                  {" "}
-                  <i className="fa fa-twitter"></i>
-                </span>
-                <p>
-                  Revenant was just released on #themeforest{" "}
-                  <span style={{ color: "3bbdfb" }}>http://bit.ly/qoXj6m</span>
-                </p>
-              </div>
-              <div className="col-sm-10 col-md-6 social-icons-right">
-                <p>Check the latest news on our Social Networks:</p>
-                <ul>
-                    {/* <li>
-                      <a href="#">
-                        <i className="fa fa-wifi"></i>
-                      </a>
-                    </li> */}
-                    <li>
-                      <a href="https://help.pinterest.com">
-                        {" "}
-                        <i className="fa fa-pinterest-square"></i>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.facebook.com/">
-                        {" "}
-                        <i className="fa fa-facebook-f"></i>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://twitter.com/">
-                        {" "}
-                        <i className="fa fa-twitter"></i>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <i className="fa fa-futbol-o" aria-hidden="true"></i>
-                      </a>
-                    </li>
-                  </ul>
-              </div>
-            </div>
-          </div>
-        </section>
+        <SocialSection/>
       </main>
       <Footer />
     </>

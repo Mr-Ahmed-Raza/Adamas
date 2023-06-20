@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "../components/todoList.css";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 
 function Footer() {
   const [recentProducts, setrecentProducts] = useState([]);
@@ -142,7 +144,10 @@ function Footer() {
                         placeholder="Email"
                       />
                     </div>
-                    <button className="">Subscribe</button>
+                    <Link to="/">
+                    <button className="" >Subscribe </button>
+
+                    </Link>
                   </form>
                 </div>
               </div>
@@ -155,18 +160,23 @@ function Footer() {
             <div className="row justify-content-sm-between justify-content-md-between align-items-center">
               <div className="col-sm-10 col-md-6">
                 <ul>
+                <Link to="/">
                   <li>
                     <a href="#">Home</a>
-                  </li>
+                    </li>
+                    </Link>
+                    <Link to="/store">
                   <li>
-                    <a href="#">SiteMap</a>
-                  </li>
+                    <a href="#">Store</a>
+                    </li>
+                    </Link>
+                    <Link to="/contact-us">
                   <li>
-                    <a href="#">Portfolio</a>
-                  </li>
-                  <li>
-                    <a href="#">Contact</a>
-                  </li>
+                    <a href="#">Contact-Us</a>
+                    </li>
+                    </Link>
+                    
+                  
                 </ul>
               </div>
               <div className="col-sm-10 col-md-6">

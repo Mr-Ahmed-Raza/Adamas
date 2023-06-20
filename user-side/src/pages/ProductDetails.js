@@ -1,5 +1,6 @@
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
+import SocialSection from "../components/SocialSection";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "../components/todoList.css";
@@ -245,7 +246,7 @@ function Product_details() {
                     </ul>
                   </div> */}
                 </div>
-                <div className="col-sm-10 col-md-4">
+                <div className="col-sm-10 col-md-4" key={selectedProduct? selectedProduct._id : ""}>
                   <div className="ring-rating-div">
                     <h5>{selectedProduct ? selectedProduct.title : ""}</h5>
                     <ul>
@@ -268,7 +269,7 @@ function Product_details() {
                       </li>
                     </ul>
                   </div>
-                  <div className="rating-div-text">
+                  <div className="rating-div-text" >
                     <p>{selectedProduct ? selectedProduct.description : ""}</p>
                   </div>
                   <div className="size-color-div">
@@ -352,9 +353,9 @@ function Product_details() {
               <div className="row lazy justify-content-md-between justify-content-sm-between">
                 {Array.isArray(sameCategoryProducts) ? (
                   
-                  sameCategoryProducts.map((product, index) => (
+                  sameCategoryProducts.map((product) => (
                   
-                  <div className="card" style={{ width: "18rem" }} key={index}>
+                  <div className="card" style={{ width: "18rem" }} key={product._id}>
                     <div className="category-imgs">
                       <img
                        src={`http://localhost:5000/img/${product.picture}`}
@@ -392,47 +393,7 @@ function Product_details() {
             </div>
           </section>
 
-          <section className="socail-section">
-            <div className="container">
-              <div className="row d-flex align-items-center ">
-                <div className="col-sm-10 col-md-6 social-icons-left">
-                  <span>
-                    {" "}
-                    <i className="fa fa-twitter"></i>
-                  </span>
-                  <p>
-                    Revenant was just released on #themeforest{" "}
-                    <span style={{ color: "#3bbdfb" }}>
-                      http://bit.ly/qoXj6m
-                    </span>
-                  </p>
-                </div>
-                <div className="col-sm-10 col-md-6 social-icons-right">
-                  <p>Check the latest news on our Social Networks:</p>
-                   <ul>
-                      <li>
-                        <a href="https://help.pinterest.com">
-                          {" "}
-                          <i className="fa fa-pinterest-square"></i>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="https://www.facebook.com/">
-                          {" "}
-                          <i className="fa fa-facebook-f"></i>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="https://twitter.com/">
-                          {" "}
-                          <i className="fa fa-twitter"></i>
-                        </a>
-                      </li>
-                    </ul>
-                </div>
-              </div>
-            </div>
-          </section>
+          <SocialSection/>
         </main>
 
         <Footer />

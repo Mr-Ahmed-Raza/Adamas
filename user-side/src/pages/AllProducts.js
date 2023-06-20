@@ -2,45 +2,58 @@ import React, { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
 import SocialSection from "../components/SocialSection";
-import "../components/todoList.css"
+import "../components/todoList.css";
 import { Link } from "react-router-dom";
-function AllCategories() {
-  const [category, setcategory] = useState([]);
+import { useNavigate } from "react-router-dom";
+function AllProducts() {
+  const [Product, setProduct] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState([]);
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
-  const CategoryPerPage = 6;
-  const totalPages = Math.ceil(category.length / CategoryPerPage);
-  const indexOfLastCategory= currentPage * CategoryPerPage;
-  const indexOfFirstCategory = indexOfLastCategory - CategoryPerPage;
-  const currentCategory = category.slice(
-    indexOfFirstCategory,
-    indexOfLastCategory
+  const productsPerPage = 12;
+  const totalPages = Math.ceil(Product.length / productsPerPage);
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = Product.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
   );
 
-
   useEffect(() => {
-    getAllcategory();
+    getAllProduct();
   }, []);
-  // To handle the paginations clicks 
+    // To handle the paginations clicks 
   const handleClick = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-  // fetch all the categories
-  const getAllcategory = () => {
-    fetch("http://localhost:5000/api/admin/category/all-category")
+  // get all products
+  const getAllProduct = () => {
+    fetch("http://localhost:5000/api/admin/Product")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        setcategory(data.category);
-
+        setProduct(data.product);
       })
-      .catch((error) => console.log("Error fetching category:", error));
+      .catch((error) => console.log("Error fetching Product:", error));
   };
-    return (
-      <>
-            <wrapper>
-                <header className="header">
-                    <NavBar />
-                    <section className="navbar-section">
+  // get the selected product
+  const getselectedProduct = (productId) => {
+    fetch(`http://localhost:5000/api/admin/Product/${productId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log(data);
+        setSelectedProduct(data.selectedProduct);
+        // getAllcategory();
+        // Redirect to productDetail page with selected product ID
+        navigate(`/product-details/${productId}`);
+      });
+  };
+  return (
+    <>
+      <wrapper>
+        <header className="header">
+          <NavBar />
+          <section className="navbar-section">
             <nav className="navbar navbar-expand-lg navbar-light">
               <div className="container">
                 <strong>
@@ -64,21 +77,20 @@ function AllCategories() {
                   id="navbarSupportedContent"
                 >
                   <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                  <Link to="/">
-                    <li className="nav-item">
-                      <a
-                        className="nav-link active"
-                        aria-current="page"
-                        href="#"
-                      >
-                        Home
-                        <i className="fa fa-angle-double-right"></i>
-                      </a>
-                    </li>
-                   
+                    <Link to="/">
+                      <li className="nav-item">
+                        <a
+                          className="nav-link active"
+                          aria-current="page"
+                          href="#"
+                        >
+                          Home
+                          <i className="fa fa-angle-double-right"></i>
+                        </a>
+                      </li>
                     </Link>
-                    
-                      <Link to="/store">
+
+                    <Link to="/store">
                       <li className="nav-item">
                         <a
                           className="nav-link active"
@@ -91,7 +103,7 @@ function AllCategories() {
                       </li>
                     </Link>
 
-                   <Link to="/contact-us">
+                    <Link to="/contact-us">
                       <li className="nav-item">
                         <a
                           className="nav-link active"
@@ -117,7 +129,7 @@ function AllCategories() {
                       </li>
                     </Link>
 
-                   <Link to="/all-products">
+                    <Link to="/all-products">
                       <li className="nav-item">
                         <a
                           className="nav-link active"
@@ -134,30 +146,57 @@ function AllCategories() {
               </div>
             </nav>
           </section>
-                </header>
-                <main>
-                <section className="cards-section">
+        </header>
+        <main>
+          <section className="cards-section">
             <div className="container">
-                            <div className="row justify-content-lg-between ">
-                                <h1>ALL CATEGORIES</h1>
-                {currentCategory.length === 0 ? (
-                  <p>No category found</p>
+              <div className="row justify-content-lg-between ">
+                <h1>ALL Products</h1>
+                {currentProducts.length === 0 ? (
+                  <p>No product found</p>
                 ) : (
-                  currentCategory.map((category) => (
-
-                      <div className="col-sm-10 col-md-4 center">
-                    <div className="car-img-div">
-                          <img className="category-image-modify"
-                            src={`http://localhost:5000/img/${category.picture}`}
-                            alt={category.title} />
+                    currentProducts.map((product) => (
+                    <div
+                      className="card"
+                      style={{ width: "18rem" }}
+                      key={product._id}
+                    >
+                      <div className="catagory-imgs">
+                        <img
+                          src={`http://localhost:5000/img/${product.picture}`}
+                          className="category-image-modify"
+                          alt={product.title}
+                          onClick={() => getselectedProduct(product._id)}
+                        />
+                      </div>
+                      <div className="card-body">
+                        <h5 className="card-title">{product.title}</h5>
+                        <p className="card-text">{product.description}</p>
+                        <b>${product.price}</b>
+                        <div>
+                          <a href="#" className="btn btn-primary">
+                            Buy Now
+                          </a>
+                        </div>
+                      </div>
+                      <div className="catagory-icons">
+                        <p>{product.categoryTitle}</p>
+                        <ul>
+                          <li>
+                            <i className="fa fa-star"></i>{" "}
+                            <i className="fa fa-star"></i>
+                            <i className="fa fa-star"></i>
+                            <i className="fa fa-star"></i>
+                            <i className="fa fa-star"></i>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
-                        <h2>{category.title}</h2>
-                    <p>
-                      {category.description}
-                    </p>
-                  </div>
-                    ))
+                  ))
                 )}
+
+               
+
                 {/* Pagination start  */}
 
                 <div className="pagination-links">
@@ -205,15 +244,14 @@ function AllCategories() {
                 </div>
               </div>
             </div>
-            </section>
-            <SocialSection/>
-                </main>
+          </section>
+          <SocialSection />
+        </main>
 
-            <Footer/>
+        <Footer />
       </wrapper>
-
-      </>
-  )
+    </>
+  );
 }
 
-export default AllCategories
+export default AllProducts;

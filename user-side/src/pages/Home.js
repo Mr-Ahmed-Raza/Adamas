@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
+import SocialSection from "../components/SocialSection";
 import "../components/todoList.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -91,60 +92,71 @@ function Home() {
                   id="navbarSupportedContent"
                 >
                   <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                  <Link to="/">
+                   <Link to="/">
                     <li className="nav-item">
                       <a
                         className="nav-link active"
                         aria-current="page"
-                        
-                          
+                        href="#"
                       >
                         Home
                         <i className="fa fa-angle-double-right"></i>
                       </a>
                     </li>
                    
-                      </Link>
-                    <li className="nav-item">
-                      <a
-                        className="nav-link active"
-                        aria-current="page"
-                        href="#"
-                      >
-                        Apparel
-                        <i className="fa fa-angle-double-right"></i>
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a
-                        className="nav-link active"
-                        aria-current="page"
-                        href="#"
-                      >
-                        fahion
-                        <i className="fa fa-angle-double-right"></i>
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a
-                        className="nav-link active"
-                        aria-current="page"
-                        href="#"
-                      >
-                        News
-                        <i className="fa fa-angle-double-right"></i>
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a
-                        className="nav-link active"
-                        aria-current="page"
-                        href="#"
-                      >
-                        Portfolio
-                        <i className="fa fa-angle-double-right"></i>
-                      </a>
-                    </li>
+                    </Link>
+                    
+                      <Link to="/store">
+                      <li className="nav-item">
+                        <a
+                          className="nav-link active"
+                          aria-current="page"
+                          href="#"
+                        >
+                          Store
+                          <i className="fa fa-angle-double-right"></i>
+                        </a>
+                      </li>
+                    </Link>
+
+                   <Link to="/contact-us">
+                      <li className="nav-item">
+                        <a
+                          className="nav-link active"
+                          aria-current="page"
+                          href="#"
+                        >
+                          Contact-Us
+                          <i className="fa fa-angle-double-right"></i>
+                        </a>
+                      </li>
+                    </Link>
+
+                    <Link to="/all-categories">
+                      <li className="nav-item">
+                        <a
+                          className="nav-link active"
+                          aria-current="page"
+                          href="#"
+                        >
+                          Catagories
+                          <i className="fa fa-angle-double-right"></i>
+                        </a>
+                      </li>
+                    </Link>
+
+                   <Link to="/all-products">
+                      <li className="nav-item">
+                        <a
+                          className="nav-link active"
+                          aria-current="page"
+                          href="#"
+                        >
+                          Products
+                          <i className="fa fa-angle-double-right"></i>
+                        </a>
+                      </li>
+                    </Link>
                   </ul>
                 </div>
               </div>
@@ -213,7 +225,7 @@ function Home() {
                 )}
               </div>
               <div>
-                <Link to="/categories">
+                <Link to="/store">
                   <a href="#">Visit the Store</a>
                 </Link>
               </div>
@@ -358,58 +370,8 @@ function Home() {
               </div>
             </div>
           </section>
-          <section className="socail-section">
-            <div className="container">
-              <div className="row d-flex align-items-center ">
-                <div className="col-sm-10 col-md-6 social-icons-left">
-                  <span>
-                    {""}
-                    <i className="fa fa-twitter"></i>
-                  </span>
-                  <p>
-                    Revenant was just released on #themeforest{" "}
-                    <span style={{ color: "#3bbdfb" }}>
-                      http://bit.ly/qoXj6m
-                    </span>
-                  </p>
-                </div>
-                <div className="col-sm-10 col-md-6 social-icons-right">
-                  <p>Check the latest news on our Social Networks:</p>
-                  <ul>
-                    {/* <li>
-                      <a href="#">
-                        <i className="fa fa-wifi"></i>
-                      </a>
-                    </li> */}
-                    <li>
-                      <a href="https://help.pinterest.com">
-                        {" "}
-                        <i className="fa fa-pinterest-square"></i>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://www.facebook.com/">
-                        {" "}
-                        <i className="fa fa-facebook-f"></i>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://twitter.com/">
-                        {" "}
-                        <i className="fa fa-twitter"></i>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <i className="fa fa-futbol-o" aria-hidden="true"></i>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </section>
         </main>
+        <SocialSection/>
 
         <Footer/>
       </wrapper>

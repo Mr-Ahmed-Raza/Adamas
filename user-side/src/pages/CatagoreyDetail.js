@@ -110,78 +110,6 @@ const getAllselectedcategory = () => {
     <>
       <header>
         <NavBar />
-        <section className="navbar-section">
-          <nav className="navbar navbar-expand-lg navbar-light">
-            <div className="container">
-              <strong>
-                <a href="index.html">
-                  <img src="assets/images/logo.png" alt="logo" />
-                </a>
-              </strong>
-              <button
-                className="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-              >
-                <span className="navbar-toggler-icon"></span>
-              </button>
-              <div
-                className="collapse navbar-collapse"
-                id="navbarSupportedContent"
-              >
-                <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                <Link to="/">
-                      <li className="nav-item">
-                        <a
-                          className="nav-link active"
-                          aria-current="page"
-                          href="#"
-                        >
-                          Home
-                          <i className="fa fa-angle-double-right"></i>
-                        </a>
-                      </li>
-                    </Link>
-                  
-                    <Link to="/store">
-                      <li className="nav-item">
-                        <a
-                          className="nav-link active"
-                          aria-current="page"
-                          href="#"
-                        >
-                          Visit Store
-                          <i className="fa fa-angle-double-right"></i>
-                        </a>
-                      </li>
-                    </Link>
-                  <li className="nav-item">
-                    <a className="nav-link active" aria-current="page" href="#">
-                      fahion
-                      <i className="fa fa-angle-double-right"></i>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link active" aria-current="page" href="#">
-                      News
-                      <i className="fa fa-angle-double-right"></i>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link active" aria-current="page" href="#">
-                      Portfolio
-                      <i className="fa fa-angle-double-right"></i>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </nav>
-        </section>
         <section className="slide-bar">
           <div className="container">
             <div className="row justify-content-lg-between align-items-center">
@@ -227,7 +155,7 @@ const getAllselectedcategory = () => {
             <div className="row">
               <div className="col-sm-10 col-md-3">
                 <div className="top-sidebar-ul">
-                  <h3>Catagories</h3>
+                  <h3>Categorey</h3>
                   {/* <ul>
                     <li
                       className={!selectedCategory ? "active" : ""}
@@ -350,6 +278,7 @@ const getAllselectedcategory = () => {
               <div className="col-sm-10 col-md-9">
                 <div className="container">
                   <div className="row gy-4 justify-content-md-between justify-content-sm-between">
+                    <h2>Products</h2>
                     {currentProducts.length == 0 ? (
                       <p>No product found</p>
                     ) : (
@@ -394,6 +323,11 @@ const getAllselectedcategory = () => {
                         </div>
                       ))
                     )}
+                    <div >
+                  <Link to="/store">
+                    <a href="#" className="btn btn-primary">Go Back </a>
+                  </Link>
+                </div>
                   </div>
 
                   {/* Pagination start  */}
@@ -436,6 +370,7 @@ const getAllselectedcategory = () => {
                       )}
                     </ul>
                   </div>
+                  
                 </div>
               </div>
             </div>

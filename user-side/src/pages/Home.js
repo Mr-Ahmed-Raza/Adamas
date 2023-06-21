@@ -9,15 +9,17 @@ import { useNavigate } from "react-router-dom";
 function Home() {
   const [category, setcategory] = useState([]);
   // const [Product, setProduct] = useState([]);
+  const [sliderecentProduct, setsliderecentProduct] = useState([]);
   const [LatestProduct, setLatestProduct] = useState([]);
   const [FeatureProduct, setFeatureProduct] = useState([]);
-   const [selectedProduct, setSelectedProduct] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     getAllcategory();
     getLatestProduct();
     getAllFeaturedProduct();
+    getsliderecentProduct();
   }, []);
 
   // Fetch all the categories
@@ -32,7 +34,7 @@ function Home() {
   };
   // Fetch all the products
   const getLatestProduct = () => {
-    fetch("http://localhost:5000/api/admin/Product/latest-arrivals")
+    fetch("http://localhost:5000/api/admin/product/latest-arrivals")
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
@@ -52,15 +54,25 @@ function Home() {
   };
   // get the selected product
   const getselectedProduct = (productId) => {
-    fetch(`http://localhost:5000/api/admin/Product/${productId}`)
+    fetch(`http://localhost:5000/api/admin/product/${productId}`)
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
-          setSelectedProduct(data.selectedProduct);
+        setSelectedProduct(data.selectedProduct);
         // getAllcategory();
         // Redirect to productDetail page with selected product ID
         navigate(`/product-details/${productId}`);
       });
+  };
+  // Fetch sliderecent product
+  const getsliderecentProduct = () => {
+    fetch("http://localhost:5000/api/admin/product/sliderecent-product")
+      .then((response) => response.json())
+      .then((data) => {
+        //  console.log("sliderecent products" , data);
+        setsliderecentProduct(data.product);
+      })
+      .catch((error) => console.log("Error fetching Product:", error));
   };
 
   return (
@@ -68,120 +80,36 @@ function Home() {
       <wrapper>
         <header className="header">
           <NavBar />
-          <section className="navbar-section">
-            <nav className="navbar navbar-expand-lg navbar-light">
-              <div className="container">
-                <strong>
-                  <a href="index.html">
-                    <img src="assets/images/logo.png" alt="logo" />
-                  </a>
-                </strong>
-                <button
-                  className="navbar-toggler"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#navbarSupportedContent"
-                  aria-controls="navbarSupportedContent"
-                  aria-expanded="false"
-                  aria-label="Toggle navigation"
-                >
-                  <span className="navbar-toggler-icon"></span>
-                </button>
-                <div
-                  className="collapse navbar-collapse"
-                  id="navbarSupportedContent"
-                >
-                  <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                   <Link to="/">
-                    <li className="nav-item">
-                      <a
-                        className="nav-link active"
-                        aria-current="page"
-                        href="#"
-                      >
-                        Home
-                        <i className="fa fa-angle-double-right"></i>
-                      </a>
-                    </li>
-                   
-                    </Link>
-                    
-                      <Link to="/store">
-                      <li className="nav-item">
-                        <a
-                          className="nav-link active"
-                          aria-current="page"
-                          href="#"
-                        >
-                          Store
-                          <i className="fa fa-angle-double-right"></i>
-                        </a>
-                      </li>
-                    </Link>
-
-                   <Link to="/contact-us">
-                      <li className="nav-item">
-                        <a
-                          className="nav-link active"
-                          aria-current="page"
-                          href="#"
-                        >
-                          Contact-Us
-                          <i className="fa fa-angle-double-right"></i>
-                        </a>
-                      </li>
-                    </Link>
-
-                    <Link to="/all-categories">
-                      <li className="nav-item">
-                        <a
-                          className="nav-link active"
-                          aria-current="page"
-                          href="#"
-                        >
-                          Catagories
-                          <i className="fa fa-angle-double-right"></i>
-                        </a>
-                      </li>
-                    </Link>
-
-                   <Link to="/all-products">
-                      <li className="nav-item">
-                        <a
-                          className="nav-link active"
-                          aria-current="page"
-                          href="#"
-                        >
-                          Products
-                          <i className="fa fa-angle-double-right"></i>
-                        </a>
-                      </li>
-                    </Link>
-                  </ul>
-                </div>
-              </div>
-            </nav>
-          </section>
           <section className="slider-section">
             <div className="container">
               <div className="row d-flex justify-content-between align-items-center single-item-rtl ">
-                <div className="d-flex">
+              
+                {sliderecentProduct.map((product) => (
+                  <div className="d-flex">
                   <div className="carousel-img col-md-6 d-flex justify-content-center align-items-center">
-                    <img
-                      src="assets/images/slider-content-img.jpg"
-                      className="d-block w-100"
-                      alt="ring"
-                    />
-                  </div>
-                  <div className="carousel-text col-md-6 d-flex flex-column justify-content-center align-items-center">
-                    <h1>RINGS ON SALE</h1>
-                    <p className="text-center">
-                      Lorem ipsum dolor sit amet, consecte adipiscing elit.
-                      Fusce at justo eget lorem port titor tincidunt.
-                    </p>
-                    <a href="#">Visit Store</a>
-                  </div>
-                </div>
+                      <img
+                        src={`http://localhost:5000/img/${product.picture}`}
+                        className="d-block w-100"
+                        alt={product.title}
+                        onClick={() => getselectedProduct(product._id)}
+                      />
+                    </div>
+                    <div className="carousel-text col-md-6 d-flex flex-column justify-content-center align-items-center">
+                      <h1>{product.title}</h1>
+                      <p className="text-center">{product.description}</p>
+                      <div>
+                        <Link to="/store">
+                        <a href="#">Visit Store</a>
+
+                        </Link>
+
+                      </div>
+                    </div>
+                  
+                    </div>
+                  
+                ))}
+                
               </div>
             </div>
           </section>
@@ -210,7 +138,10 @@ function Home() {
                   <p>No category found</p>
                 ) : (
                   category.map((category) => (
-                    <div className="col-sm-10 col-md-4 center" key={category._id}>
+                    <div
+                      className="col-sm-10 col-md-4 center"
+                      key={category._id}
+                    >
                       <div className="car-img-div">
                         <img
                           className="category-image-modify"
@@ -257,29 +188,27 @@ function Home() {
                   <p>No product found</p>
                 ) : (
                   LatestProduct.map((product) => (
-                    <div className="card" style={{ width: "18rem" }} key={product._id}>
+                    <div
+                      className="card"
+                      style={{ width: "18rem" }}
+                      key={product._id}
+                    >
                       <div className="catagory-imgs">
                         <a href="#">
-
-                        
-                        <img
-                          src={`http://localhost:5000/img/${product.picture}`}
-                          className="category-image-modify"
-                          alt={product.title}
-                           onClick={() => getselectedProduct(product._id)}
-
+                          <img
+                            src={`http://localhost:5000/img/${product.picture}`}
+                            className="category-image-modify"
+                            alt={product.title}
+                            onClick={() => getselectedProduct(product._id)}
                           />
-                          </a>
+                        </a>
                       </div>
                       <div className="card-body">
                         <h5 className="card-title">{product.title}</h5>
                         <p className="card-text">{product.description}</p>
                         <b>${product.price}</b>
                         <div>
-                          <a
-                            href="#"
-                            className="btn btn-primary"
-                          >
+                          <a href="#" className="btn btn-primary">
                             Buy Now
                           </a>
                         </div>
@@ -329,27 +258,27 @@ function Home() {
                 </Link>
                 {FeatureProduct.length === 0 ? (
                   <p>No product found</p>
-                 ) : (
+                ) : (
                   FeatureProduct.map((product) => (
-                    <div className="card" style={{ width: "18rem" }} key={product._id}>
+                    <div
+                      className="card"
+                      style={{ width: "18rem" }}
+                      key={product._id}
+                    >
                       <div className="catagory-imgs">
                         <img
                           src={`http://localhost:5000/img/${product.picture}`}
                           className="category-image-modify"
                           alt={product.title}
                           href="#"
-                         onClick={() => getselectedProduct(product._id)}
+                          onClick={() => getselectedProduct(product._id)}
                         />
                       </div>
                       <div className="card-body">
                         <h5 className="card-title">{product.title}</h5>
                         <p className="card-text">{product.description}</p>
                         <b>${product.price}</b>
-                        <a
-                          className="btn btn-primary"
-                        >
-                          Buy Now
-                        </a>
+                        <a className="btn btn-primary">Buy Now</a>
                       </div>
                       <div className="catagory-icons">
                         <p>{product.categoryTitle}</p>
@@ -371,9 +300,9 @@ function Home() {
             </div>
           </section>
         </main>
-        <SocialSection/>
+        <SocialSection />
 
-        <Footer/>
+        <Footer />
       </wrapper>
 
       {/* <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

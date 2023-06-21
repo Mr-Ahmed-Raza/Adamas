@@ -31,7 +31,7 @@ const addToCart = async (req, res) => {
     }
 
     await cart.save();
-    res.status(200).json({ message: "Product added to cart successfully" });
+    res.status(200).json({ message: "Product added to cart successfully"});
   } catch (error) {
     res.status(500).json({ error: "Failed to add product to cart" });
   }
@@ -41,12 +41,52 @@ const addToCart = async (req, res) => {
 const getCartItems = async (req, res) => {
   try {
     const { userId } = req.body;
-    const cart = await Cart.findOne({ userId }).populate("items");
-    res.status(200).json(cart.items);
+
+    const cartItems = await Cart.aggregate([
+      { $match: { userId: mongoose.Types.ObjectId(userId) } },
+      { $unwind: "$items" },
+      {
+        $lookup: {
+          from: "cartitems",
+          localField: "items",
+          foreignField: "_id",
+          as: "cartItemDetails",
+        },
+      },
+      { $unwind: "$cartItemDetails" },
+      {
+        $lookup: {
+          from: "products",
+          localField: "cartItemDetails.productId",
+          foreignField: "_id",
+          as: "productDetails",
+        },
+      },
+      { $unwind: "$productDetails" },
+      {
+        $group: {
+          _id: "$_id",
+          items: {
+            $push: {
+              _id: "$cartItemDetails._id",
+              quantity: "$cartItemDetails.quantity",
+              product: "$productDetails",
+            },
+          },
+        },
+      },
+    ]);
+
+    if (cartItems.length > 0) {
+      res.status(200).json(cartItems[0].items);
+    } else {
+      res.status(404).json({ error: "Cart not found" });
+    }
   } catch (error) {
     res.status(500).json({ error: "Failed to retrieve cart items" });
   }
 };
+
 
 // Remove a product from the cart
 const removeFromCart = async (req, res) => {

@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/UserModel");
 const genrateToken = require("../database/genrateToken");
-
+const Cart = require("../models/CartModel");
 
 // Register a new user :
 // api: POST /api/user/register-user
@@ -12,22 +12,26 @@ console.log("Registeration Data: ",req.body);
     res.status(400);
     throw new Error("Please Enter all the Feilds");
   }
-
   const userExists = await User.findOne({ email });
-
   if (userExists) {
     res.status(400);
     throw new Error("User already exists");
   }
-
   const user = await User.create({
     firstName,
     email,
     password,
   });
+   // Create a cart for the user
+   const cart = new Cart({ userId: user._id });
+   await cart.save();
 
+   // Link the cart to the user
+   user.cart = cart._id;
+  await user.save();
+  
   if (user) {
-    res.status(201).json({
+    res.status(201).json({message:"User Registered",
       _id: user._id,
       firstName: user.firstName,
       email: user.email,
@@ -44,9 +48,7 @@ console.log("Registeration Data: ",req.body);
 
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  if (email) {
-    
-  }
+ 
   // Find to user already exists or not
   const user = await User.findOne({ email });
   // Condition to check the user email and password to give user login access

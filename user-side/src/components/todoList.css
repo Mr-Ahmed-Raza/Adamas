@@ -63,4 +63,8 @@
     background-color: #04abf8;
     color: #fff;
   }
-  
+  .borderremove{
+    border: none;
+    border-width: 0px;
+    background: none;
+  }

@@ -122,99 +122,6 @@ function Catagorey() {
     <>
       <header>
         <NavBar />
-        <section className="navbar-section">
-          <nav className="navbar navbar-expand-lg navbar-light">
-            <div className="container">
-              <strong>
-                <a href="index.html">
-                  <img src="assets/images/logo.png" alt="logo" />
-                </a>
-              </strong>
-              <button
-                className="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-              >
-                <span className="navbar-toggler-icon"></span>
-              </button>
-              <div
-                className="collapse navbar-collapse"
-                id="navbarSupportedContent"
-              >
-                <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                  <Link to="/">
-                    <li className="nav-item">
-                      <a
-                        className="nav-link active"
-                        aria-current="page"
-                        href="#"
-                      >
-                        Home
-                        <i className="fa fa-angle-double-right"></i>
-                      </a>
-                    </li>
-                  </Link>
-
-                  <Link to="/store">
-                    <li className="nav-item">
-                      <a
-                        className="nav-link active"
-                        aria-current="page"
-                        href="#"
-                      >
-                        Store
-                        <i className="fa fa-angle-double-right"></i>
-                      </a>
-                    </li>
-                  </Link>
-
-                  <Link to="/contact-us">
-                    <li className="nav-item">
-                      <a
-                        className="nav-link active"
-                        aria-current="page"
-                        href="#"
-                      >
-                        Contact-Us
-                        <i className="fa fa-angle-double-right"></i>
-                      </a>
-                    </li>
-                  </Link>
-
-                  <Link to="/all-categories">
-                    <li className="nav-item">
-                      <a
-                        className="nav-link active"
-                        aria-current="page"
-                        href="#"
-                      >
-                        Catagories
-                        <i className="fa fa-angle-double-right"></i>
-                      </a>
-                    </li>
-                  </Link>
-
-                  <Link to="/all-products">
-                    <li className="nav-item">
-                      <a
-                        className="nav-link active"
-                        aria-current="page"
-                        href="#"
-                      >
-                        Products
-                        <i className="fa fa-angle-double-right"></i>
-                      </a>
-                    </li>
-                  </Link>
-                </ul>
-              </div>
-            </div>
-          </nav>
-        </section>
         <section className="slide-bar">
           <div className="container">
             <div className="row justify-content-lg-between align-items-center">
@@ -390,6 +297,7 @@ function Catagorey() {
               <div className="col-sm-10 col-md-9">
                 <div className="container">
                   <div className="row gy-4 justify-content-md-between justify-content-sm-between">
+                    <h3>Products</h3>
                     {totalcurrentProducts.map((product) => (
                       <div
                         className="card"
@@ -470,9 +378,10 @@ function Catagorey() {
                     </ul>
                   </div>
 
+                    {/* <h3>Products</h3>
                     {currentProducts.length == 0 ? (
                       <p></p>
-                    ) : (
+                     ) : (
                       currentProducts.map((product) => (
                         <div
                           className="card"
@@ -512,12 +421,12 @@ function Catagorey() {
                           </div>
                         </div>
                       ))
-                    )}
+                    )} */}
                   </div>
 
                   {/* Pagination start  */}
 
-                  <div className="pagination-links">
+                  {/* <div className="pagination-links">
                     <ul>
                       {currentPage > 1 && (
                         <li>
@@ -554,7 +463,7 @@ function Catagorey() {
                         </li>
                       )}
                     </ul>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

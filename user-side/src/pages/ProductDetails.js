@@ -11,6 +11,7 @@ function Product_details() {
   const { productId } = useParams();
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [sameCategoryProducts, setsameCategoryProduct] = useState([]);
+  const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,8 +25,23 @@ function Product_details() {
   useEffect(() => {
     getallthesameCategoryProducts(productId);
   }, []);
+  // handle quantity change
+  const handleQuantityChange = (event) => {
+    const value = event.target.value;
+    setQuantity(parseInt(value, 10));
+  };
 
+  // handle quantity decrement
+  const handleQuantityDecrement = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
 
+  // handle quantity increment
+  const handleQuantityIncrement = () => {
+    setQuantity(quantity + 1);
+  };
   // Fetch all the same category products
   const getallthesameCategoryProducts = (productId) => {
     // console.log(productId);
@@ -48,100 +64,19 @@ function Product_details() {
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
-          setSelectedProduct(data.selectedProduct);
+        setSelectedProduct(data.selectedProduct);
         // getAllcategory();
         // Redirect to productDetail page with selected product ID
         navigate(`/product-details/${productId}`);
       });
   };
 
-
   return (
     <>
       <wrapper>
         <header>
           <NavBar />
-          <section className="navbar-section">
-            <nav className="navbar navbar-expand-lg navbar-light">
-              <div className="container">
-                <strong>
-                  <a href="index.html">
-                    <img src="assets/images/logo.png" alt="logo" />
-                  </a>
-                </strong>
-                <button
-                  className="navbar-toggler"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#navbarSupportedContent"
-                  aria-controls="navbarSupportedContent"
-                  aria-expanded="false"
-                  aria-label="Toggle navigation"
-                >
-                  <span className="navbar-toggler-icon"></span>
-                </button>
-                <div
-                  className="collapse navbar-collapse"
-                  id="navbarSupportedContent"
-                >
-                  <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <Link to="/">
-                      <li className="nav-item">
-                        <a
-                          className="nav-link active"
-                          aria-current="page"
-                          href="#"
-                        >
-                          Home
-                          <i className="fa fa-angle-double-right"></i>
-                        </a>
-                      </li>
-                    </Link>
-                    <li className="nav-item">
-                      <a
-                        className="nav-link active"
-                        aria-current="page"
-                        href="#"
-                      >
-                        Apparel
-                        <i className="fa fa-angle-double-right"></i>
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a
-                        className="nav-link active"
-                        aria-current="page"
-                        href="#"
-                      >
-                        fahion
-                        <i className="fa fa-angle-double-right"></i>
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a
-                        className="nav-link active"
-                        aria-current="page"
-                        href="#"
-                      >
-                        News
-                        <i className="fa fa-angle-double-right"></i>
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a
-                        className="nav-link active"
-                        aria-current="page"
-                        href="#"
-                      >
-                        Portfolio
-                        <i className="fa fa-angle-double-right"></i>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </nav>
-          </section>
+          
           <section className="slide-bar">
             <div className="container">
               <div className="row justify-content-lg-between align-items-center">
@@ -246,7 +181,10 @@ function Product_details() {
                     </ul>
                   </div> */}
                 </div>
-                <div className="col-sm-10 col-md-4" key={selectedProduct? selectedProduct._id : ""}>
+                <div
+                  className="col-sm-10 col-md-4"
+                  key={selectedProduct ? selectedProduct._id : ""}
+                 >
                   <div className="ring-rating-div">
                     <h5>{selectedProduct ? selectedProduct.title : ""}</h5>
                     <ul>
@@ -269,7 +207,7 @@ function Product_details() {
                       </li>
                     </ul>
                   </div>
-                  <div className="rating-div-text" >
+                  <div className="rating-div-text">
                     <p>{selectedProduct ? selectedProduct.description : ""}</p>
                   </div>
                   <div className="size-color-div">
@@ -288,13 +226,21 @@ function Product_details() {
                           <i
                             className="fa fa-angle-left"
                             aria-hidden="true"
+                            onClick={handleQuantityDecrement}
                           ></i>
                           <div className="qty-inp">
-                            <p>1</p>
+                            <div 
+                              
+                              type="number"
+                              value={quantity}
+                              onChange={handleQuantityChange}
+                            />
+                            {quantity}
                           </div>
                           <i
                             className="fa fa-angle-right"
                             aria-hidden="true"
+                            onClick={handleQuantityIncrement}
                           ></i>
                         </div>
                       </li>
@@ -352,48 +298,49 @@ function Product_details() {
             <div className="container">
               <div className="row lazy justify-content-md-between justify-content-sm-between">
                 {Array.isArray(sameCategoryProducts) ? (
-                  
                   sameCategoryProducts.map((product) => (
-                  
-                  <div className="card" style={{ width: "18rem" }} key={product._id}>
-                    <div className="category-imgs">
-                      <img
-                       src={`http://localhost:5000/img/${product.picture}`}
-                        className="card-img-top"
-                        alt={product.title}
-                        onClick={() => getselectedProduct(product._id)}
-                      />
+                    <div
+                      className="card"
+                      style={{ width: "18rem" }}
+                      key={product._id}
+                    >
+                      <div className="category-imgs">
+                        <img
+                          src={`http://localhost:5000/img/${product.picture}`}
+                          className="card-img-top"
+                          alt={product.title}
+                          onClick={() => getselectedProduct(product._id)}
+                        />
+                      </div>
+                      <div className="card-body">
+                        <h5 className="card-title">{product.title}</h5>
+                        <p className="card-text">{product.description}</p>
+                      </div>
+                      <div className="category-icons">
+                        <p>
+                          <i className="fa fa-sliders"></i>
+                          {product.categoryTitle}
+                        </p>
+                        <ul>
+                          <li>
+                            <i className="fa fa-star"></i>{" "}
+                            <i className="fa fa-star"></i>
+                            <i className="fa fa-star"></i>
+                            <i className="fa fa-star"></i>
+                            <i className="fa fa-star"></i>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
-                    <div className="card-body">
-                      <h5 className="card-title">{product.title}</h5>
-                      <p className="card-text">{product.description}</p>
-                    </div>
-                    <div className="category-icons">
-                      <p>
-                        <i className="fa fa-sliders"></i>
-                        {product.categoryTitle}
-                      </p>
-                      <ul>
-                        <li>
-                          <i className="fa fa-star"></i>{" "}
-                          <i className="fa fa-star"></i>
-                          <i className="fa fa-star"></i>
-                          <i className="fa fa-star"></i>
-                          <i className="fa fa-star"></i>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                ))
-                  
-                  ) : (
+                  ))
+                ) : (
                   <p>no product found</p>
                 )}
               </div>
             </div>
           </section>
 
-          <SocialSection/>
+          <SocialSection />
         </main>
 
         <Footer />

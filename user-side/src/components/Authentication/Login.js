@@ -7,6 +7,7 @@ import { useState } from "react";
 import "../../App.css";
 import { useNavigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
+import toast, { Toaster } from 'react-hot-toast';
 function Login() {
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState();
@@ -67,10 +68,11 @@ function Login() {
   };
 
   const submitHandler = async (event) => {
+    debugger
     try {
       event.preventDefault();
       // send data to the backend api
-      const data = {
+      const userdata = {
         email,
         password,
       };
@@ -86,7 +88,7 @@ function Login() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(userdata),
       })
         .then((response) => response.json())
         .then((data) => {
@@ -98,14 +100,17 @@ function Login() {
         });
     } catch (error) {
       console.log("Invalid email or password", error);
-      errors.err = "Invalid email or password";
+      // errors.err = "Invalid email or password";
+      toast.error("Invalid email or password")
       setErrors(errors);
     }
   };
 
   return (
     <>
+      
       <div className="main-page">
+        <Toaster/>
         <Container>
           <div>
             <h1>Adamas</h1>

@@ -68,6 +68,100 @@ function NavBar({}) {
           </div>
         </div>
       </section>
+      <section className="navbar-section">
+            <nav className="navbar navbar-expand-lg navbar-light">
+              <div className="container">
+                <strong>
+                  <a href="index.html">
+                    <img src="assets/images/logo.png" alt="logo" />
+                  </a>
+                </strong>
+                <button
+                  className="navbar-toggler"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#navbarSupportedContent"
+                  aria-controls="navbarSupportedContent"
+                  aria-expanded="false"
+                  aria-label="Toggle navigation"
+                >
+                  <span className="navbar-toggler-icon"></span>
+                </button>
+                <div
+                  className="collapse navbar-collapse"
+                  id="navbarSupportedContent"
+                >
+                  <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+                   <Link to="/">
+                    <li className="nav-item">
+                      <a
+                        className="nav-link active"
+                        aria-current="page"
+                        href="#"
+                      >
+                        Home
+                        <i className="fa fa-angle-double-right"></i>
+                      </a>
+                    </li>
+                   
+                    </Link>
+                    
+                      <Link to="/store">
+                      <li className="nav-item">
+                        <a
+                          className="nav-link active"
+                          aria-current="page"
+                          href="#"
+                        >
+                          Store
+                          <i className="fa fa-angle-double-right"></i>
+                        </a>
+                      </li>
+                    </Link>
+
+                   <Link to="/contact-us">
+                      <li className="nav-item">
+                        <a
+                          className="nav-link active"
+                          aria-current="page"
+                          href="#"
+                        >
+                          Contact-Us
+                          <i className="fa fa-angle-double-right"></i>
+                        </a>
+                      </li>
+                    </Link>
+
+                    <Link to="/all-categories">
+                      <li className="nav-item">
+                        <a
+                          className="nav-link active"
+                          aria-current="page"
+                          href="#"
+                        >
+                          Catagories
+                          <i className="fa fa-angle-double-right"></i>
+                        </a>
+                      </li>
+                    </Link>
+
+                   <Link to="/all-products">
+                      <li className="nav-item">
+                        <a
+                          className="nav-link active"
+                          aria-current="page"
+                          href="#"
+                        >
+                          Products
+                          <i className="fa fa-angle-double-right"></i>
+                        </a>
+                      </li>
+                    </Link>
+                  </ul>
+                </div>
+              </div>
+            </nav>
+          </section>
     </>
   );
 }

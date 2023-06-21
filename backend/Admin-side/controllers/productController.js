@@ -207,6 +207,48 @@ const recentProducts = asyncHandler(async (req, res) => {
     throw new Error("Error occurred... products could not be retrieved.");
   }
 });
+// Fetch Slide Recent products
+// GET  /api/admin/product/sliderecent-products
+const sliderecentProducts = asyncHandler(async (req, res) => {
+  try {
+    const product = await Product.aggregate([
+      {
+        $lookup: {
+          from: "categories",
+          localField: "selectedCategoryId",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      {
+        $unwind: "$category",
+      },
+      {
+        $project: {
+          _id: 1,
+          title: 1,
+          description: 1,
+          picture: 1,
+          price: 1,
+          featured: 1,
+          categoryTitle: "$category.title",
+          createdAt: 1,
+        },
+      },
+      {
+        $sort: { createdAt: -1 }, // Sort by createdAt field in descending order
+      },
+      {
+        $limit: 1, // Limit the result to 2 documents
+      },
+    ]);
+
+    res.status(200).json({ message: "Slide Recent Products ", product });
+  } catch (error) {
+    res.status(400);
+    throw new Error("Error occurred... products could not be retrieved.");
+  }
+});
 
 // Update product
 // PUT /api/admin/product/:productId
@@ -248,8 +290,8 @@ const updateProducts = asyncHandler(async (req, res) => {
 // GET /api/admin/product/:productId
 const singleProduct = asyncHandler(async (req, res) => {
   try {
-    const { productId } = req.params;
-    const selectedProduct = await Product.findOne({ _id: productId });
+    const { selectedproductId } = req.params;
+    const selectedProduct = await Product.findOne({ _id: selectedproductId });
     res.status(200).json({ meassge: "Selected product ", selectedProduct });
   } catch (error) {
     res.status(400);
@@ -318,9 +360,11 @@ module.exports = {
   getFeaturedProducts,
   latestProducts,
   recentProducts,
+  sliderecentProducts,
   deleteProducts,
   updateProducts,
   singleProduct,
-  getRecommendedProducts
+  getRecommendedProducts,
+  
 };
 

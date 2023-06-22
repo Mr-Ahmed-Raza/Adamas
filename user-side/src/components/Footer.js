@@ -57,7 +57,7 @@ function Footer() {
                   aliquam erat volutpat.
                 </p>
               </div>
-              <div className="col-sm-10 col-md-3">
+              <div className="col-sm-10 col-md-3" >
                 <div>
                   <h6>Recent Products</h6>
                 </div>
@@ -68,12 +68,11 @@ function Footer() {
                   recentProducts.map((product) => (
                     <ul>
                       <li>
-                        <a href="#">
+                        <a href="#" onClick={() => getselectedProduct(product._id)}>
                           <div className="" key={product._id}>
                             <img
                               className="category-image-modify-recent"
                               src={`http://localhost:5000/img/${product.picture}`}
-                              onClick={() => getselectedProduct(product._id)}
                               alt={product.title}
                             />
                           </div>
@@ -144,7 +143,7 @@ function Footer() {
                         placeholder="Email"
                       />
                     </div>
-                    <Link to="/">
+                    <Link to="">
                     <button className="" >Subscribe </button>
 
                     </Link>

@@ -41,7 +41,14 @@ function Catagorey() {
     // For default pagination 
     const handleClickDefault = (pageNumber) => {
         setCurrentPageDefault(pageNumber);
-      };
+  };
+
+  const [expandedIndex, setExpandedIndex] = useState(null);
+  //handle the readmore and readless for every single product
+ const toggleDescription = (index) => {
+   setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
+  };
+  
   useEffect(() => {
     getAllcategory();
     getAllProduct();
@@ -126,18 +133,9 @@ function Catagorey() {
           <div className="container">
             <div className="row justify-content-lg-between align-items-center">
               <div className="col-sm- col-md-6">
-                <h1>Shop with a Sidebar On Left</h1>
+                <h1>Shop Your Favorite Product</h1>
                 <div className="slide-bar-heading">
-                  <ul>
-                    <li>
-                      <a href="#">
-                        Home <i className="fa fa-angle-double-right"></i>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">Shop with a sidebar</a>
-                    </li>
-                  </ul>
+                  
                 </div>
               </div>
               <div className="col-sm-10 col-md-6 flex">
@@ -298,7 +296,7 @@ function Catagorey() {
                 <div className="container">
                   <div className="row gy-4 justify-content-md-between justify-content-sm-between">
                     <h3>Products</h3>
-                    {totalcurrentProducts.map((product) => (
+                    {totalcurrentProducts.map((product ,index) => (
                       <div
                         className="card"
                         style={{ width: "18rem" }}
@@ -314,7 +312,24 @@ function Catagorey() {
                         </div>
                         <div className="card-body">
                           <h5 className="card-title">{product.title}</h5>
-                          <p className="card-text">{product.description}</p>
+                          <p>
+                          {expandedIndex === index
+                            ? product.description
+                            : product.description.slice(0, 105) }
+                          {product.description.length > 105 && (
+                            <span>
+                              {""}
+                              <a
+                                className="read-more-a"
+                                onClick={() => toggleDescription(index)}
+                              >
+                                {expandedIndex === index
+                                  ? "Read Less"
+                                  : "Read More"}
+                              </a>
+                            </span>
+                          )}
+                        </p>
                           <b>${product.price}</b>
                           <a href="#" className="btn btn-primary">
                             Buy Now

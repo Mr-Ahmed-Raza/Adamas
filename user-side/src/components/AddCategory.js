@@ -6,18 +6,22 @@ import { useNavigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import toast, { Toaster } from 'react-hot-toast';
 
 function AddCategory() {
   const [title, settitle] = useState();
   const [description, setdescription] = useState();
   const [picture, setPicture] = useState([]);
   const [errors, setErrors] = useState({});
-  const [editing, setEditing] = useState(false); // Added editing state
   const navigate = useNavigate();
   const editorRef = useRef();
 
   useEffect(() => {
-    if (editorRef.current) {
+    if (
+      editorRef.current &&
+      editorRef.current.editor &&
+      editorRef.current.editor.editing
+    ) {
       editorRef.current.editor.editing.view.change((writer) => {
         writer.setStyle(
           "height",
@@ -68,7 +72,10 @@ function AddCategory() {
     }
     if (!picture) {
       formIsValid = false;
-      errors.description = "Picture is required";
+      errors.picture = "Picture is required";
+    } else if (!/^image\/(jpeg|png|gif)$/i.test(picture.type)) {
+      formIsValid = false;
+      errors.picture = "Only JPEG, PNG, and GIF image types are allowed";
     }
     // else if (picture.type !== "jpg","jpeg","png","gif" ) {
     //   formIsValid = false;
@@ -102,7 +109,11 @@ function AddCategory() {
           console.log(data.message);
           settitle("");
           setdescription("");
-          navigate("/category-list");
+          toast.success("Category added Successfully")
+          setTimeout(() => {
+            navigate("/category-list");
+          }, 2000);
+
         });
     } catch (error) {
       console.error("Error ; ", error);
@@ -112,6 +123,7 @@ function AddCategory() {
   return (
     <>
       <div className="main-page">
+      <Toaster/>
         <Container>
           <div>
             <h1>Adamas</h1>

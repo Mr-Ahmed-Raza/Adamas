@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./todoList.css";
 import { Link } from "react-router-dom";
+import toast, { Toaster } from 'react-hot-toast';
+
 
 function Category() {
   const [category, setcategory] = useState([]);
@@ -13,6 +15,19 @@ function Category() {
     picture: "",
   });
 
+  const showToast = (action) => {
+    if (action === "getAllcategory") {
+      toast.success("Category reterived Successfully")
+    }
+    if (action === "handleDelete") {
+      toast.success("Category Delete Successfully")
+    }
+    if (action === "handleEdditSubmit") {
+      toast.success("Category edit Successfully")
+    }
+
+
+  };
   // handle edit to enter the value while form is open
   const handleEdit = (category) => {
     //  getselectedCategory(user._id)
@@ -74,7 +89,10 @@ function Category() {
               return category;
             })
           );
-          getAllcategory();
+          // getAllcategory();
+          
+          window.location.reload();
+          showToast(`handleEdditSubmit`)
         });
       // Reset the selected user and edit form data
       setselectedCategory(null);
@@ -103,6 +121,7 @@ function Category() {
           );
           // call the all user api to fetch all the user and update the state
           getAllcategory();
+          showToast(`handleDelete`)
         });
     } catch (error) {
       console.error("Error occured while delete user ; ", error);
@@ -111,6 +130,7 @@ function Category() {
 
   useEffect(() => {
     getAllcategory();
+
   }, []);
 
   const getAllcategory = () => {
@@ -119,6 +139,7 @@ function Category() {
       .then((data) => {
         console.log(data);
         setcategory(data.category);
+        showToast(`getAllcategory`);
       })
       .catch((error) => console.log("Error fetching category:", error));
   };
@@ -131,7 +152,7 @@ function Category() {
         handleEdit(data.selectedcategory);
       });
   };
-
+  
   // Pagination logic
 const indexOfLastItem = currentPage * itemsPerPage;
 const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -141,6 +162,7 @@ const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <>
+    <Toaster/>
     <div className="todo-list">
       <div className="list-head">
         <h1>Category list</h1>

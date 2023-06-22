@@ -48,25 +48,31 @@ console.log("Registeration Data: ",req.body);
 
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
- 
-  // Find to user already exists or not
+
+  // Find if the user already exists or not
   const user = await User.findOne({ email });
-  // Condition to check the user email and password to give user login access
-  // Check the whether users enter email and passoword are matched or not
-  const check = await user.matchPassword(password);
-  console.log(check);
-  if (check) {
-    res.json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      token: genrateToken(user._id),          
-    });
+
+  if (user) {
+    // Check if the entered password matches the stored password
+    const isPasswordMatched = await user.matchPassword(password);
+
+    if (isPasswordMatched) {
+      res.json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        token: genrateToken(user._id),
+      });
+    } else {
+      res.status(401);
+      throw new Error("Invalid Email or Password");
+    }
   } else {
     res.status(401);
-    throw new Error("Invalid Email or Password");
+    throw new Error("User not found");
   }
 });
+
 // show all the User  
 // GET /api/user/all-users
 const showUser = asyncHandler(async (req, res) => {

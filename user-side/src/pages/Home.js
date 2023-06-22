@@ -13,6 +13,8 @@ function Home() {
   const [LatestProduct, setLatestProduct] = useState([]);
   const [FeatureProduct, setFeatureProduct] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,6 +24,11 @@ function Home() {
     getsliderecentProduct();
   }, []);
 
+  const [expandedIndex, setExpandedIndex] = useState(null);
+  //handle the readmore and readless for every single product
+ const toggleDescription = (index) => {
+   setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
+ };
   // Fetch all the categories
   const getAllcategory = () => {
     fetch("http://localhost:5000/api/admin/category/reverse-category")
@@ -58,7 +65,7 @@ function Home() {
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
-        setSelectedProduct(data.selectedProduct);
+        // setSelectedProduct(data.selectedProduct);
         // getAllcategory();
         // Redirect to productDetail page with selected product ID
         navigate(`/product-details/${productId}`);
@@ -74,6 +81,19 @@ function Home() {
       })
       .catch((error) => console.log("Error fetching Product:", error));
   };
+  // handle category select
+  const handleCategorySelect = (categoryId) => {
+      fetch(`http://localhost:5000/api/admin/category/${categoryId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log(data);
+          setSelectedCategory(data.selectedcategory);
+          // getAllcategory();
+          // Redirect to productDetail page with selected product ID
+          navigate(`/store/categories/${categoryId}`);
+        });
+    
+  };
 
   return (
     <>
@@ -83,10 +103,9 @@ function Home() {
           <section className="slider-section">
             <div className="container">
               <div className="row d-flex justify-content-between align-items-center single-item-rtl ">
-              
                 {sliderecentProduct.map((product) => (
                   <div className="d-flex">
-                  <div className="carousel-img col-md-6 d-flex justify-content-center align-items-center">
+                    <div className="carousel-img col-md-6 d-flex justify-content-center align-items-center">
                       <img
                         src={`http://localhost:5000/img/${product.picture}`}
                         className="d-block w-100"
@@ -99,17 +118,12 @@ function Home() {
                       <p className="text-center">{product.description}</p>
                       <div>
                         <Link to="/store">
-                        <a href="#">Visit Store</a>
-
+                          <a href="#">Visit Store</a>
                         </Link>
-
                       </div>
                     </div>
-                  
-                    </div>
-                  
+                  </div>
                 ))}
-                
               </div>
             </div>
           </section>
@@ -146,6 +160,7 @@ function Home() {
                         <img
                           className="category-image-modify"
                           src={`http://localhost:5000/img/${category.picture}`}
+                          onClick={() => handleCategorySelect(category._id)}
                           alt={category.title}
                         />
                       </div>
@@ -186,8 +201,8 @@ function Home() {
               <div className="row lazy justify-content-md-between justify-content-sm-between">
                 {LatestProduct.length === 0 ? (
                   <p>No product found</p>
-                ) : (
-                  LatestProduct.map((product) => (
+                 ) : (
+                  LatestProduct.map((product,index) => (
                     <div
                       className="card"
                       style={{ width: "18rem" }}
@@ -205,7 +220,25 @@ function Home() {
                       </div>
                       <div className="card-body">
                         <h5 className="card-title">{product.title}</h5>
-                        <p className="card-text">{product.description}</p>
+                        <p> 
+                          {expandedIndex === index
+                            ? product.description
+                            : product.description.slice(0 , 105)}
+                          {product.description.length > 105 && (
+                            <span>
+                              {""}
+                              <a
+                                className="read-more-a"
+                                onClick={() => toggleDescription(index)}
+                              >
+                                {expandedIndex === index
+                                  ? "Read Less"
+                                  : "Read More"}
+                              </a>
+                            </span>
+                          )}
+                        
+                        </p>
                         <b>${product.price}</b>
                         <div>
                           <a href="#" className="btn btn-primary">
@@ -259,7 +292,7 @@ function Home() {
                 {FeatureProduct.length === 0 ? (
                   <p>No product found</p>
                 ) : (
-                  FeatureProduct.map((product) => (
+                  FeatureProduct.map((product ,index) => (
                     <div
                       className="card"
                       style={{ width: "18rem" }}
@@ -276,7 +309,25 @@ function Home() {
                       </div>
                       <div className="card-body">
                         <h5 className="card-title">{product.title}</h5>
-                        <p className="card-text">{product.description}</p>
+                        <p> 
+                          {expandedIndex === index
+                            ? product.description
+                            : product.description.slice(0 , 105)}
+                          {product.description.length > 105 && (
+                            <span>
+                              {""}
+                              <a
+                                className="read-more-a"
+                                onClick={() => toggleDescription(index)}
+                              >
+                                {expandedIndex === index
+                                  ? "Read Less"
+                                  : "Read More"}
+                              </a>
+                            </span>
+                          )}
+                        
+                        </p>
                         <b>${product.price}</b>
                         <a className="btn btn-primary">Buy Now</a>
                       </div>

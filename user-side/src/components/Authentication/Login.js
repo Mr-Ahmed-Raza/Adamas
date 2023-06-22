@@ -1,13 +1,11 @@
 import { Button } from "@chakra-ui/button";
-// import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { InputGroup, InputRightElement } from "@chakra-ui/input";
-// import { VStack } from "@chakra-ui/layout";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import "../../App.css";
 import { useNavigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 function Login() {
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState();
@@ -33,7 +31,7 @@ function Login() {
     setErrors((prevErrors) => {
       return {
         ...prevErrors,
-        [fieldName]: ""
+        [fieldName]: "",
       };
     });
   };
@@ -68,7 +66,7 @@ function Login() {
   };
 
   const submitHandler = async (event) => {
-    debugger
+    debugger;
     try {
       event.preventDefault();
       // send data to the backend api
@@ -78,7 +76,6 @@ function Login() {
       };
 
       if (!validationChecks()) {
-        
         return;
       }
       // make api call by fetch method
@@ -95,22 +92,24 @@ function Login() {
           console.log(data.message);
           setEmail("");
           setPassword("");
+          toast.success("login Successfully");
           localStorage.setItem("userData", JSON.stringify(data));
-          navigate("/");
+          setTimeout(() => {
+            navigate("/");
+          }, 2000);
         });
     } catch (error) {
       console.log("Invalid email or password", error);
       // errors.err = "Invalid email or password";
-      toast.error("Invalid email or password")
+      toast.error("Invalid email or password");
       setErrors(errors);
     }
   };
 
   return (
     <>
-      
       <div className="main-page">
-        <Toaster/>
+        <Toaster />
         <Container>
           <div>
             <h1>Adamas</h1>
@@ -122,7 +121,9 @@ function Login() {
             </div>
 
             <div className="input-group">
-              <label>Enter Email</label>
+              <label for="email" className="text-label">
+                Enter Email <span className="require-field">*</span>{" "}
+              </label>
               <div className="input-field">
                 <input
                   className="form-control"
@@ -134,7 +135,9 @@ function Login() {
               <div className="error">{<span>{errors.email}</span>}</div>
             </div>
             <div className="input-group">
-              <label>Enter Password</label>
+              <label for="password" className="text-label">
+                Enter Password <span className="require-field">*</span>{" "}
+              </label>
               <div className="input-field">
                 <InputGroup size="md">
                   <input
@@ -172,54 +175,6 @@ function Login() {
         </Container>
       </div>
     </>
-    // <VStack spacing="5px">
-    //   <div>
-    //       <h1>Login</h1>
-    //     </div>
-    //   <FormControl id="email" isRequired>
-    //     <FormLabel>Email</FormLabel>
-    //     <Input
-    //       placeholder="Enter Your Email"
-    //       onChange={onChnageEmail}
-    //     />
-    //     <div className="errors">
-    //     {<span>{errors.email}</span>}
-    //     </div>
-    //   </FormControl>
-
-    //   <FormControl id="password" isRequired>
-    //     <FormLabel>Password</FormLabel>
-    //     <InputGroup size="md">
-    //       <Input
-    //         type={show ? "text" : "password"}
-    //         placeholder="Enter Password"
-    //         onChange={onChnagePassword}
-    //       />
-
-    //       <InputRightElement width="4.5rem">
-    //         <Button h="1.75rem" size="sm" onClick={handleClick}>
-    //           {show ? "Hide" : "Show"}
-    //         </Button>
-    //       </InputRightElement>
-
-    //     </InputGroup>
-    //     <div className="errors">
-    //     {<span >{errors.password}</span>}
-    //     </div>
-    //   </FormControl>
-
-    //   <Button
-    //     style={{ marginTop: 15 }}
-    //     onClick={submitHandler}
-    //   >
-    //     Login
-    //   </Button>
-    //   <Link to="/register">
-    //   <Button>
-    //       Sign Up
-    //     </Button>
-    //     </Link>
-    // </VStack>
   );
 }
 

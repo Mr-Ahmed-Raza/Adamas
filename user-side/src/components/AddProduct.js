@@ -8,6 +8,7 @@ import { Container } from "react-bootstrap";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import DOMPurify from "dompurify";
+import toast, { Toaster } from 'react-hot-toast';
 
 function AddProduct() {
   const [title, settitle] = useState();
@@ -97,6 +98,9 @@ function AddProduct() {
     if (!picture) {
       formIsValid = false;
       errors.picture = "Picture is required";
+    } else if (!/^image\/(jpeg|png|gif)$/i.test(picture.type)) {
+      formIsValid = false;
+      errors.picture = "Only JPEG, PNG, and GIF image types are allowed";
     }
     // else if (!picture.type === "jpg","jpeg","png","gif" ) {
     //   formIsValid = false;
@@ -137,7 +141,11 @@ function AddProduct() {
           setPicture("");
           setFeatured("");
           setSelectedCategoryId("");
-          navigate("/product-list");
+          toast.success("Category added Successfully")
+          setTimeout(() => {
+            navigate("/product-list");
+          }, 2000);
+
         });
     } catch (error) {
       console.error("Error ; ", error);
@@ -160,6 +168,7 @@ function AddProduct() {
   return (
     <>
       <div className="main-page">
+      <Toaster/>
         <Container>
           <div>
             <h1>Adamas</h1>

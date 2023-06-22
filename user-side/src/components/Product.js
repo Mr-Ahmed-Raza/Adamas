@@ -16,7 +16,14 @@ function Product() {
     picture: "",
     featured: "",
   });
+  
 
+  const [expandedIndex, setExpandedIndex] = useState(null);
+   //handle the readmore and readless for every single product
+  const toggleDescription = (index) => {
+    setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
+  };
+ 
   // handle edit to enter the value while form is open
   const handleEdit = (product) => {
     //  getselectedProduct(user._id)
@@ -27,7 +34,6 @@ function Product() {
       price: product.price,
       selectedCategoryId: product.selectedCategoryId,
       picture: product.picture.file,
-      
     });
   };
   const handlePictureChange = (event) => {
@@ -99,7 +105,7 @@ function Product() {
         picture: "",
         price: "",
         featured: "",
-        selectedCategoryId: ""
+        selectedCategoryId: "",
       });
     } catch (error) {
       console.error("Error occured while updating user ; ", error);
@@ -161,11 +167,11 @@ function Product() {
       });
   };
 
-// Pagination logic
-const indexOfLastItem = currentPage * itemsPerPage;
-const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-const currentItems = Product.slice(indexOfFirstItem, indexOfLastItem);
-const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // Pagination logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = Product.slice(indexOfFirstItem, indexOfLastItem);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="todo-list">
@@ -173,7 +179,7 @@ const paginate = (pageNumber) => setCurrentPage(pageNumber);
         <h1>Product list</h1>
       </div>
       <div className="list-data">
-        {Product.length === 0 ? (
+        {currentItems.length === 0 ? (
           <p>No Product found</p>
         ) : (
           <div className="table-responsive">
@@ -196,7 +202,26 @@ const paginate = (pageNumber) => setCurrentPage(pageNumber);
                     <tr key={product._id}>
                       <td>{indexOfFirstItem + index + 1}</td>
                       <td>{product.title}</td>
-                      <td>{product.description}</td>
+                      <td>
+                        <p>
+                          {expandedIndex === index
+                            ? product.description
+                            :product.description?.slice(0, 105) }
+                          {product.description?.length > 105 && (
+                            <span>
+                            {""}
+                              <a
+                                className="read-more-a" 
+                                onClick={() => toggleDescription(index)}
+                              >
+                                {expandedIndex === index
+                                  ? "Read Less"                   
+                                  : "Read More"}
+                              </a>
+                            </span>
+                          )}
+                        </p>
+                      </td>
                       <td>${product.price}</td>
                       <td>
                         {product.picture ? (
@@ -358,18 +383,27 @@ const paginate = (pageNumber) => setCurrentPage(pageNumber);
         </Link>
       </div>
       <div>
-          <ul className="pagination">
-            {Array.from({ length: Math.ceil(Product.length / itemsPerPage) }).map((_, index) => (
-              <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                <button className="page-link" onClick={() => paginate(index + 1)}>
+        <ul className="pagination">
+          {Array.from({ length: Math.ceil(Product.length / itemsPerPage) }).map(
+            (_, index) => (
+              <li
+                key={index}
+                className={`page-item ${
+                  currentPage === index + 1 ? "active" : ""
+                }`}
+              >
+                <button
+                  className="page-link"
+                  onClick={() => paginate(index + 1)}
+                >
                   {index + 1}
                 </button>
               </li>
-            ))}
-          </ul>
-        </div>
+            )
+          )}
+        </ul>
+      </div>
     </div>
-    
   );
 }
 

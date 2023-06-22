@@ -25,6 +25,11 @@ function Product_details() {
   useEffect(() => {
     getallthesameCategoryProducts(productId);
   }, []);
+  const [expandedIndex, setExpandedIndex] = useState(null);
+   //handle the readmore and readless for every single product
+  const toggleDescription = (index) => {
+    setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
+  };
   // handle quantity change
   const handleQuantityChange = (event) => {
     const value = event.target.value;
@@ -298,7 +303,7 @@ function Product_details() {
             <div className="container">
               <div className="row lazy justify-content-md-between justify-content-sm-between">
                 {Array.isArray(sameCategoryProducts) ? (
-                  sameCategoryProducts.map((product) => (
+                  sameCategoryProducts.map((product , index) => (
                     <div
                       className="card"
                       style={{ width: "18rem" }}
@@ -314,7 +319,24 @@ function Product_details() {
                       </div>
                       <div className="card-body">
                         <h5 className="card-title">{product.title}</h5>
-                        <p className="card-text">{product.description}</p>
+                        <p>
+                          {expandedIndex === index
+                            ? product.description
+                            :product.description?.slice(0, 105) }
+                          {product.description?.length > 105 && (
+                            <span>
+                            {""}
+                              <a
+                                className="read-more-a"
+                                onClick={() => toggleDescription(index)}
+                              >
+                                {expandedIndex === index
+                                  ? "Read Less"
+                                  : "Read More"}
+                              </a>
+                            </span>
+                          )}
+                        </p>
                       </div>
                       <div className="category-icons">
                         <p>

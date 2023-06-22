@@ -6,11 +6,10 @@ const Product = require("../models/ProductsModel");
 // GET /api/admin/product/add-product
 const addProducts = asyncHandler(async (req, res) => {
   try {
-    const { title, description, price, selectedCategoryId, featured } =
-      req.body;
+    const { title, description, price, selectedCategoryId, featured } = req.body;
     const picture = req.file.filename;
-    console.log(req.body);
-    console.log(req.file.filename);
+    // console.log(req.body);
+    // console.log(req.file.filename);
     const product_Details = await Product.create({
       title,
       description,
@@ -74,7 +73,7 @@ const showAllProducts = asyncHandler(async (req, res) => {
 const deleteProducts = asyncHandler(async (req, res) => {
   try {
     const { productId } = req.params;
-    console.log(productId);
+    // console.log(productId);
     await Product.findByIdAndDelete(productId);
     res.status(200).json({ message: "deleted product sucessfully" });
   } catch (error) {

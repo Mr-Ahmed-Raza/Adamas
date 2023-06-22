@@ -18,11 +18,17 @@ function AllProducts() {
     indexOfFirstProduct,
     indexOfLastProduct
   );
+  const [expandedIndex, setExpandedIndex] = useState(null);
+   //handle the readmore and readless for every single product
+  const toggleDescription = (index) => {
+    setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
+  };
+ 
 
   useEffect(() => {
     getAllProduct();
   }, []);
-    // To handle the paginations clicks 
+  // To handle the paginations clicks
   const handleClick = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -62,7 +68,7 @@ function AllProducts() {
                 {currentProducts.length === 0 ? (
                   <p>No product found</p>
                 ) : (
-                    currentProducts.map((product) => (
+                  currentProducts.map((product ,index) => (
                     <div
                       className="card"
                       style={{ width: "18rem" }}
@@ -78,7 +84,24 @@ function AllProducts() {
                       </div>
                       <div className="card-body">
                         <h5 className="card-title">{product.title}</h5>
-                        <p className="card-text">{product.description}</p>
+                        <p>
+                          {expandedIndex === index
+                            ? product.description
+                            : product.description.slice(0, 105)}
+                          {product.description.length > 105 && (
+                            <span>
+                              {""}
+                              <a
+                                className="read-more-a"
+                                onClick={() => toggleDescription(index)}
+                              >
+                                {expandedIndex === index
+                                  ? "Read Less"
+                                  : "Read More"}
+                              </a>
+                            </span>
+                          )}
+                        </p>
                         <b>${product.price}</b>
                         <div>
                           <a href="#" className="btn btn-primary">
@@ -101,8 +124,6 @@ function AllProducts() {
                     </div>
                   ))
                 )}
-
-               
 
                 {/* Pagination start  */}
 
@@ -143,8 +164,8 @@ function AllProducts() {
                       </li>
                     )}
                   </ul>
-                              </div>
-                              <div>
+                </div>
+                <div>
                   <Link to="/">
                     <a href="#">Back To Home </a>
                   </Link>

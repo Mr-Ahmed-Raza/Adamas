@@ -38,7 +38,7 @@ const addCategories = asyncHandler(async (req, res) => {
 const showCategories = asyncHandler(async (req, res) => {
     
     try {
-        const category = await categories.find()
+        const category = await categories.find().sort({ createdAt: -1 })
         res.status(201).json({ message: "Category list", category })
         
     } catch (error) {

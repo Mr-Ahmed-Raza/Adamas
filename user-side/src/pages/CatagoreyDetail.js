@@ -31,6 +31,11 @@ function Catagorey() {
   useEffect(() => {
     getAllselectedcategory();
   }, []);
+  const [expandedIndex, setExpandedIndex] = useState(null);
+  //handle the readmore and readless for every single product
+ const toggleDescription = (index) => {
+   setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
+  };
 
 // fetch selected category
 const getAllselectedcategory = () => {
@@ -114,8 +119,8 @@ const getAllselectedcategory = () => {
           <div className="container">
             <div className="row justify-content-lg-between align-items-center">
               <div className="col-sm- col-md-6">
-                <h1>Shop with a Sidebar On Left</h1>
-                <div className="slide-bar-heading">
+                <h1>Shop Your Favorite categorized Product</h1>
+                {/* <div className="slide-bar-heading">
                   <ul>
                     <li>
                       <a href="#">
@@ -123,10 +128,10 @@ const getAllselectedcategory = () => {
                       </a>
                     </li>
                     <li>
-                      <a href="#">Shop with a sidebar</a>
+                      <a href="#">Shop Your Favorite categorized Product</a>
                     </li>
                   </ul>
-                </div>
+                </div> */}
               </div>
               <div className="col-sm-10 col-md-6 flex">
                 <div>
@@ -282,7 +287,7 @@ const getAllselectedcategory = () => {
                     {currentProducts.length == 0 ? (
                       <p>No product found</p>
                     ) : (
-                      currentProducts.map((product) => (
+                      currentProducts.map((product,index) => (
                         <div
                           className="card"
                           style={{ width: "18rem" }}
@@ -299,7 +304,25 @@ const getAllselectedcategory = () => {
                           </div>
                           <div className="card-body">
                             <h5 className="card-title">{product.title}</h5>
-                            <p className="card-text">{product.description}</p>
+                            <p>
+                          {expandedIndex === index
+                            ? product.description
+                            : product.description.slice(0, 105)}
+                          {product.description.length > 105 && (
+                            <span>
+                              {""}
+                              <a
+                                className="read-more-a"
+                                onClick={() => toggleDescription(index)}
+                              >
+                                {expandedIndex === index
+                                  ? "Read Less"
+                                  : "Read More"}
+                                  </a>
+                                  
+                            </span>
+                          )}
+                        </p>
                             <b>${product.price}</b>
                             <a href="#" className="btn btn-primary">
                               Buy Now
@@ -325,7 +348,13 @@ const getAllselectedcategory = () => {
                     )}
                     <div >
                   <Link to="/store">
-                    <a href="#" className="btn btn-primary">Go Back </a>
+                    <a href="#" className="btn btn-primary">Back To Store </a>
+                  </Link>
+                    </div>
+                    
+                    <div >
+                  <Link to="/">
+                    <a href="#" className="btn btn-primary">Back To Home </a>
                   </Link>
                 </div>
                   </div>

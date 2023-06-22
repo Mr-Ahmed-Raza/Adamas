@@ -1,13 +1,12 @@
-// import { FormControl, FormLabel } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/button";
 import { useState } from "react";
-// import { VStack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import "../todo.css";
-import {InputGroup, InputRightElement } from "@chakra-ui/input";
+import { InputGroup, InputRightElement } from "@chakra-ui/input";
 // import "../../App.css";
 import { useNavigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
+import toast, { Toaster } from "react-hot-toast";
 
 function Signup() {
   const [show, setShow] = useState(false);
@@ -97,7 +96,10 @@ function Signup() {
           setfirstName("");
           setEmail("");
           setPassword("");
-          navigate("/");
+          toast.success("login Successfully");
+          setTimeout(() => {
+            navigate("/");
+          }, 2000);
           localStorage.setItem("userData", JSON.stringify(data));
         });
     } catch (error) {
@@ -108,6 +110,7 @@ function Signup() {
   return (
     <>
       <div className="main-page">
+        <Toaster />
         <Container>
           <div>
             <h1>Adamas</h1>
@@ -118,7 +121,9 @@ function Signup() {
               <h3>Signup</h3>
             </div>
             <div className="input-group">
-              <label for="title">Enter First Name</label>
+              <label for="firstName" className="text-label">
+                Enter First Name <span className="require-field">*</span>{" "}
+              </label>
               <div className="input-field">
                 <input
                   className="form-control"
@@ -132,7 +137,9 @@ function Signup() {
               <div className="error">{<span>{errors.firstName}</span>}</div>
             </div>
             <div className="input-group">
-              <label>Enter Email</label>
+              <label for="email" className="text-label">
+                Enter Email <span className="require-field">*</span>{" "}
+              </label>
               <div className="input-field">
                 <input
                   className="form-control"
@@ -146,7 +153,9 @@ function Signup() {
               <div className="error">{<span>{errors.email}</span>}</div>
             </div>
             <div className="input-group">
-              <label>Enter Password</label>
+              <label for="password" className="text-label">
+                Enter Password <span className="require-field">*</span>{" "}
+              </label>
               <div className="input-field">
                 <InputGroup size="md">
                   <input
@@ -171,84 +180,15 @@ function Signup() {
                 Signup
               </button>
             </div>
-            <br>
-            </br>
+            <br></br>
             <div className="button">
-            <Link to="/login">
-              <Button className="button1">Login</Button>
+              <Link to="/login">
+                <Button className="button1">Login</Button>
               </Link>
-              </div>
+            </div>
           </form>
         </Container>
       </div>
-
-      {/* <VStack spacing="5px">
-        <div>
-          <h1>Signup</h1>
-        </div>
-        <FormControl id="first-name" isRequired >
-          <FormLabel>First Name</FormLabel>
-          <Input
-            className='input-group'
-            placeholder="Enter Your Name"
-            name="firstName"
-            value={firstName}
-            onChange={onchangename}
-          />
-         
-          <div className="error">
-          {<span >{errors.firstName}</span>} 
-            </div>
-          
-        </FormControl>
-
-        <FormControl id="email" isRequired>
-          <FormLabel>Email</FormLabel>
-          <Input
-            placeholder="Enter Your Email"
-            name="email"
-            value={email}
-            onChange={onchangeemail}
-          />
-          <div className="error">
-          {<span >{errors.email}</span>} 
-
-          </div>
-
-        </FormControl>
-
-        <FormControl id="password" isRequired>
-          <FormLabel>Password</FormLabel>
-          <InputGroup size="md">
-            <Input
-              placeholder="Enter Password"
-              name="password"
-              type={show ? "text" : "password"}
-              value={password}
-              onChange={onchangepassword}
-            />
-            
-          <InputRightElement width="4.5rem">
-            <Button h="1.75rem" size="sm" onClick={handleClick}>
-              {show ? "Hide" : "Show"}
-              </Button>
-              
-            </InputRightElement>
-            
-          </InputGroup>
-          <div className="error">
-          {<span >{errors.password}</span>} 
-          </div>
-        </FormControl>
-        <Button style={{ marginTop: 15 }} onClick={submitHandle}>
-          Sign Up
-        </Button>
-        <Link to="/login">
-      <Button>
-          Login
-        </Button>
-          </Link>
-      </VStack> */}
     </>
   );
 }

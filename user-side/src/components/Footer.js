@@ -21,6 +21,7 @@ function Footer() {
       .then((data) => {
         // console.log(data);
         setrecentProducts(data.product);
+        
       })
       .catch((error) => console.log("Error fetching Product:", error));
   };
@@ -33,6 +34,7 @@ function Footer() {
         // setSelectedProduct(data.selectedProduct);
         // getAllcategory();
         // Redirect to productDetail page with selected product ID
+        
         navigate(`/product-details/${productId}`);
       });
      };

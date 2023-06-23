@@ -58,15 +58,25 @@ function Signup() {
       formIsValid = false;
       errors.email = "Invalid email address";
     }
-
     if (!password) {
       formIsValid = false;
       errors.password = "Password is required";
     } else if (password.length < 8) {
       formIsValid = false;
       errors.password = "Password must be at least 8 characters long";
+    } else if (!/(?=.*[a-z])/.test(password)) {
+      formIsValid = false;
+      errors.password = "Password must contain at least one lowercase letter";
+    } else if (!/(?=.*[A-Z])/.test(password)) {
+      formIsValid = false;
+      errors.password = "Password must contain at least one uppercase letter";
+    } else if (!/(?=.*\d)/.test(password)) {
+      formIsValid = false;
+      errors.password = "Password must contain at least one digit";
+    } else if (!/(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?])/.test(password)) {
+      formIsValid = false;
+      errors.password = "Password must contain at least one special character";
     }
-
     setErrors(errors);
     return formIsValid;
   };
@@ -96,7 +106,7 @@ function Signup() {
           setfirstName("");
           setEmail("");
           setPassword("");
-          toast.success("login Successfully");
+          toast.success("Successfully Registered");
           setTimeout(() => {
             navigate("/");
           }, 2000);

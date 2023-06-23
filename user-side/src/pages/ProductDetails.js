@@ -230,6 +230,7 @@ function Product_details() {
                         <div className="qty-div">
                           <i
                             className="fa fa-angle-left"
+                            type ="number"
                             aria-hidden="true"
                             onClick={handleQuantityDecrement}
                           ></i>

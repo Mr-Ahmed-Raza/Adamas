@@ -3,9 +3,9 @@ import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import SocialSection from "../components/SocialSection";
 import { Link } from "react-router-dom";
-import "../components/todoList.css";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import "../components/todoList.css";
 
 
 function Catagorey() {

@@ -17,7 +17,7 @@ function AddProduct() {
   const [featured, setFeatured] = useState("No");
   const [categories, setcategories] = useState([]);
   const [picture, setPicture] = useState([]);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({}); 
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const navigate = useNavigate();
   const editorRef = useRef();

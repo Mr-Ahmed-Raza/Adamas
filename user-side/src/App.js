@@ -14,6 +14,7 @@ import AddProduct from './components/AddProduct';
 import AllCategories from './pages/AllCategories';
 import AllProducts from './pages/AllProducts'
 import VisitStore from "./pages/VisitStore"
+import CartItems from "./pages/CartItems"
 // User name changed
 function App() {
   return (
@@ -33,6 +34,9 @@ function App() {
         <Route path="/add-product" element={<AddProduct />} />
         <Route path="/all-categories" element={<AllCategories />} />
         <Route path="/all-products" element={<AllProducts />} />
+        <Route path="/cart-items" element={<CartItems />} />
+
+
 
 
 

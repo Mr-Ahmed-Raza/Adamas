@@ -5,6 +5,8 @@ import SocialSection from "../components/SocialSection";
 import { Link } from "react-router-dom";
 import "../components/todoList.css";
 import { useNavigate } from "react-router-dom";
+import Loader from "../components/Loader";
+
 
 function Catagorey() {
   const [Product, setProduct] = useState([]);
@@ -12,7 +14,10 @@ function Catagorey() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [categoryProducts, setCategoryProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState([]);
-    const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+
     // Paginations state for products 
   const productsPerPage = 6;
   const [currentPage, setCurrentPage] = useState(1);
@@ -89,7 +94,12 @@ function Catagorey() {
           setSelectedCategory(data.selectedcategory);
           // getAllcategory();
           // Redirect to productDetail page with selected product ID
-          navigate(`/store/categories/${categoryId}`);
+          setLoading(true); // Show loader
+          setTimeout(() => {
+            console.log("loader is hit");
+            setLoading(false); // Hide loader
+            navigate(`/store/categories/${categoryId}`);
+          }, 1000); // Simulating a delay of 2 seconds before redirecting
         });
     }
   };
@@ -121,12 +131,19 @@ function Catagorey() {
         // console.log(data);
         setSelectedProduct(data.selectedProduct);
         // getAllcategory();
-        // Redirect to productDetail page with selected product ID
-        navigate(`/product-details/${productId}`);
+        //load and  Redirect to productDetail page with selected product ID
+        setLoading(true); // Show loader
+        setTimeout(() => {
+          setLoading(false); // Hide loader
+          navigate(`/product-details/${productId}`);
+        }, 1000); // Simulating a delay of 2 seconds before redirecting
+
+
       });
   };
   return (
     <>
+      {loading && <Loader />}
       <header>
         <NavBar />
         <section className="slide-bar">

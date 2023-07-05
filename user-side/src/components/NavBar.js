@@ -156,6 +156,18 @@ function NavBar({}) {
                           <i className="fa fa-angle-double-right"></i>
                         </a>
                       </li>
+                </Link>
+                <Link to="/cart-items">
+                      <li className="nav-item">
+                        <a
+                          className="nav-link active"
+                          aria-current="page"
+                          href="#"
+                        >
+                          CartItems
+                          <i className="fa fa-angle-double-right"></i>
+                        </a>
+                      </li>
                     </Link>
                   </ul>
                 </div>

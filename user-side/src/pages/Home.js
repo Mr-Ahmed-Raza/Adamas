@@ -5,6 +5,7 @@ import SocialSection from "../components/SocialSection";
 import "../components/todoList.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import Loader from "../components/Loader";
 
 function Home() {
   const [category, setcategory] = useState([]);
@@ -14,8 +15,18 @@ function Home() {
   const [FeatureProduct, setFeatureProduct] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+
+  const handleVisitStore = () => {
+    setLoading(true); // Show loader
+    setTimeout(() => {
+      console.log("loader is hit");
+      setLoading(false); // Hide loader
+      navigate("/store"); // Redirect to store page
+    }, 2000); // Simulating a delay of 2 seconds before redirecting
+  };
 
   useEffect(() => {
     getAllcategory();
@@ -68,7 +79,12 @@ function Home() {
         // setSelectedProduct(data.selectedProduct);
         // getAllcategory();
         // Redirect to productDetail page with selected product ID
-        navigate(`/product-details/${productId}`);
+        setLoading(true); // Show loader
+        setTimeout(() => {
+          setLoading(false); // Hide loader
+          navigate(`/product-details/${productId}`);
+        }, 1000); // Simulating a delay of 2 seconds before redirecting
+
       });
   };
   // Fetch sliderecent product
@@ -90,13 +106,19 @@ function Home() {
           setSelectedCategory(data.selectedcategory);
           // getAllcategory();
           // Redirect to productDetail page with selected product ID
-          navigate(`/store/categories/${categoryId}`);
+          setLoading(true); // Show loader
+          setTimeout(() => {
+            setLoading(false); // Hide loader
+            navigate(`/store/categories/${categoryId}`);
+          }, 1000); // Simulating a delay of 2 seconds before redirecting
+  
         });
     
   };
 
   return (
     <>
+      {loading && <Loader />}
       <wrapper>
         <header className="header">
           <NavBar />
@@ -117,9 +139,9 @@ function Home() {
                       <h1>{product.title}</h1>
                       <p className="text-center">{product.description}</p>
                       <div>
-                        <Link to="/store">
-                          <a href="#">Visit Store</a>
-                        </Link>
+                        
+                          <a href="#" onClick={()=>handleVisitStore()}>Visit Store</a>
+                        
                       </div>
                     </div>
                   </div>
@@ -171,13 +193,11 @@ function Home() {
                 )}
               </div>
               <div>
-                <Link to="/store">
-                  <a href="#">Visit the Store</a>
-                </Link>
+                  <a href="#" onClick={()=>handleVisitStore()}>Visit the Store</a>  
               </div>
             </div>
           </section>
-          {/* List Ctaegory finish. */}
+          {/* List Category finish. */}
 
           {/* Latest Arrival start. */}
           <section className="latus-arrival">

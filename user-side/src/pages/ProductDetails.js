@@ -1,4 +1,5 @@
 import NavBar from "../components/NavBar";
+import axios from 'axios';
 import Footer from "../components/Footer";
 import SocialSection from "../components/SocialSection";
 import React, { useState, useEffect } from "react";
@@ -6,12 +7,16 @@ import { useParams } from "react-router-dom";
 import "../components/todoList.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import Loader from "../components/Loader";
+import toast, { Toaster } from 'react-hot-toast';
+
 
 function Product_details() {
   const { productId } = useParams();
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [sameCategoryProducts, setsameCategoryProduct] = useState([]);
   const [quantity, setQuantity] = useState(1);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,6 +25,10 @@ function Product_details() {
       .then((response) => response.json())
       .then((data) => {
         setSelectedProduct(data.selectedProduct);
+        // const loggedInUserId = (JSON.parse(localStorage.getItem("userData"))._id);
+        // console.log(loggedInUserId);
+        // console.log(JSON.parse(localStorage.getItem("userData"))._id);
+        // console.log(productId);
       });
   }, [productId]);
   useEffect(() => {
@@ -71,13 +80,42 @@ function Product_details() {
         // console.log(data);
         setSelectedProduct(data.selectedProduct);
         // getAllcategory();
-        // Redirect to productDetail page with selected product ID
-        navigate(`/product-details/${productId}`);
-      });
+         //load and  Redirect to productDetail page with selected product ID
+         setLoading(true); // Show loader
+         setTimeout(() => {
+           setLoading(false); // Hide loader
+           navigate(`/product-details/${productId}`);
+         }, 1000); // Simulating a delay of 2 seconds before redirecting
+        
+      });    
   };
+
+  const handleaddToCart = async () => {
+   const loggedInUserId = (JSON.parse(localStorage.getItem("userData"))._id);
+    const payload = {
+      userId: loggedInUserId, 
+      productId: productId, 
+      quantity,
+    }
+    axios.post(`http://localhost:5001/api/cart/addToCart`, payload)
+    .then((response) => response.json())
+      .then((data) => {
+        console.log(data.message);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+    toast.success("product added to cart Successfully")
+    setTimeout(() => {
+      navigate("/cart-items");
+    }, 2000);
+
+  }
 
   return (
     <>
+      {loading && <Loader />}
+      <Toaster/>
       <wrapper>
         <header>
           <NavBar />
@@ -256,7 +294,7 @@ function Product_details() {
                         </small>
                       </li>
                       <li>
-                        <a href="#">Add TO CART</a>
+                        <a href="#" onClick={()=>handleaddToCart()}>Add TO CART</a>
                       </li>
                     </ul>
                   </div>

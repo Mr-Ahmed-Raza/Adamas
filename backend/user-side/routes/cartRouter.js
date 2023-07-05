@@ -3,7 +3,7 @@ const {addToCart, getCartItems, removeFromCart } = require ("../controllers/cart
 const router = express.Router()
 
 router.route("/addToCart").post(addToCart)
-router.route("/userId").get(getCartItems)
-router.route("/cartItemId").delete(removeFromCart)
+router.route("/:userId").get(getCartItems)
+router.route("/:itemId").delete(removeFromCart)
 
 module.exports = router

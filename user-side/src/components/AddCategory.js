@@ -113,6 +113,7 @@ function AddCategory() {
           setTimeout(() => {
             navigate("/category-list");
           }, 2000);
+          
 
         });
     } catch (error) {

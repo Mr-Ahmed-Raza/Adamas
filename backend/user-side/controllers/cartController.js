@@ -1,10 +1,9 @@
 // const Cart = require("../models/CartModel")
 const CartItem = require("../models/CartItemModel");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 // Add a product to the cart
 const addToCart = async (req, res) => {
-
   try {
     const { userId, productId, quantity } = req.body;
 
@@ -15,16 +14,16 @@ const addToCart = async (req, res) => {
       // If the item exists, update the quantity
       existingItem.quantity += quantity;
       await existingItem.save();
-      res.status(200).json({ message: 'Product quantity updated in cart.' });
+      res.status(200).json({ message: "Product quantity updated in cart." });
     } else {
       // If the item doesn't exist, create a new cart item
       const newItem = new CartItem({ userId, productId, quantity });
       await newItem.save();
-      res.status(201).json({ message: 'Product added to cart.' });
+      res.status(201).json({ message: "Product added to cart." });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
   // try {
   //   const { userId, productId, quantity } = req.body;
@@ -63,40 +62,44 @@ const addToCart = async (req, res) => {
 // Get all cart items for a user
 const getCartItems = async (req, res) => {
   try {
-    const { userId } = req.params; 
+    const { userId } = req.params;
     const cartItems = await CartItem.aggregate([
       {
         $match: {
-          userId:new mongoose.Types.ObjectId(userId)
-        }
+          userId: new mongoose.Types.ObjectId(userId),
+        },
       },
       {
         $lookup: {
-          from: 'products', 
-          localField: 'productId',
-          foreignField: '_id',
-          as: 'product'
-        }
+          from: "products",
+          localField: "productId",
+          foreignField: "_id",
+          as: "product",
+        },
       },
       {
-        $unwind: '$product'
+        $unwind: "$product",
       },
       {
         $project: {
-          _id: 0,
-          productId: '$product._id',
-          productName: '$product.title',
-          productPicture: '$product.picture',
-          productPrice: '$product.price',
-          quantity: 1
-        }
-      }
+          _id: "$_id",
+          productId: "$product._id",
+          productName: "$product.title",
+          productPicture: "$product.picture",
+          productPrice: "$product.price",
+          quantity: 1,
+          createdAt: 1,
+        },
+      },
+      {
+        $sort: { createdAt: -1 }, // Sort by createdAt field in descending order
+      },
     ]);
 
     res.json(cartItems);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'An error occurred' });
+    res.status(500).json({ error: "An error occurred" });
   }
 
   // try {
@@ -147,23 +150,22 @@ const getCartItems = async (req, res) => {
   // }
 };
 
-
 // Remove a product from the cart
 const removeFromCart = async (req, res) => {
   try {
-    const {itemId} = req.params;
+    const { itemId } = req.params;
 
     // Find and remove the cart item
     const removedItem = await CartItem.findByIdAndRemove(itemId);
 
     if (!removedItem) {
-      return res.status(404).json({ error: 'Cart item not found' });
+      return res.status(404).json({ error: "Cart item not found" });
     }
 
-    res.json({ message: 'Cart item removed successfully' });
+    res.json({ message: "Cart item removed successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'An error occurred' });
+    res.status(500).json({ error: "An error occurred" });
   }
   // try {
   //   const { cartItemId } = req.body;
@@ -174,5 +176,33 @@ const removeFromCart = async (req, res) => {
   // }
 };
 
-module.exports = { addToCart, getCartItems, removeFromCart };
-   
+const getselectedCartItem = async (req, res) => {
+  try {
+    const { itemId } = req.params;
+    console.log("itemId", itemId);
+    console.log("item hit id ");
+
+    // Find the cart item by its ID
+    const cartItem = await CartItem.findById(itemId);
+
+    if (!cartItem) {
+      return res.status(404).json({ error: 'Cart item not found' });
+    }
+
+    // You can customize the response to include the desired cart item details
+    const cartItemDetails = {
+      id: cartItem._id,
+      userId: cartItem.userId,
+      productId: cartItem.productId,
+      quantity: cartItem.quantity,
+      createdAt: cartItem.createdAt,
+    };
+
+    res.status(200).json({ cartItem: cartItemDetails });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+};
+
+module.exports = { addToCart, getCartItems, removeFromCart, getselectedCartItem };

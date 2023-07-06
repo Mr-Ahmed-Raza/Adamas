@@ -15,6 +15,7 @@ import AllCategories from './pages/AllCategories';
 import AllProducts from './pages/AllProducts'
 import VisitStore from "./pages/VisitStore"
 import CartItems from "./pages/CartItems"
+import Checkout from './pages/Checkout';
 // User name changed
 function App() {
   return (
@@ -35,6 +36,8 @@ function App() {
         <Route path="/all-categories" element={<AllCategories />} />
         <Route path="/all-products" element={<AllProducts />} />
         <Route path="/cart-items" element={<CartItems />} />
+        <Route path="/checkout" element={<Checkout/>} />
+
 
 
 

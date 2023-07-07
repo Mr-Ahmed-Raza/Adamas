@@ -38,9 +38,17 @@ body {
   }
   
   button:hover {
-    background-color: #45a049; /* Change the background color on hover */
+    background-color: black; /* Change the background color on hover */
   }
 
+  a {
+    color: #3bbdfb; 
+    
+  }
+  
+  a:hover {
+   color: black; /* Change the background color on hover */
+  }
 
 
   .cart-checkbox {
@@ -61,8 +69,8 @@ body {
   
   /* Styling for the checked state */
   .cart-checkbox:checked {
-    background-color: #3f51b5;
-    border-color: #3f51b5;
+    background-color: #3bbdfb;
+    border-color: #3bbdfb;
   }
   
   /* Styling for the checked state's inner icon */
@@ -80,7 +88,7 @@ body {
   
   /* Styling for the hover state */
   .cart-checkbox:hover {
-    border-color: #3f51b5;
+    border-color: #3bbdfb;
   }
   
   /* Styling for the focus state */

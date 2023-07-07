@@ -179,9 +179,7 @@ const removeFromCart = async (req, res) => {
 const getselectedCartItem = async (req, res) => {
   try {
     const { itemId } = req.params;
-    console.log("itemId", itemId);
-    console.log("item hit id ");
-
+   
     // Find the cart item by its ID
     const cartItem = await CartItem.findById(itemId);
 

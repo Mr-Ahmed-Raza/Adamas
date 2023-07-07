@@ -4,11 +4,12 @@ import NavBar from "../components/NavBar";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./cartitem.css";
-import toast, { Toaster } from 'react-hot-toast';
-
+import "./checkout.css";
+import toast, { Toaster } from "react-hot-toast";
 
 function CartItems() {
   const [cartItems, setCartItems] = useState([]);
+  const [selectedCartItem, setselectedCartItem] = useState([]);
   const loggedInUserId = JSON.parse(localStorage.getItem("userData"))._id;
 
   useEffect(() => {
@@ -18,7 +19,7 @@ function CartItems() {
 
   const fetchCartItems = () => {
     axios
-      .get(`http://localhost:5001/api/cart/${loggedInUserId}`)
+      .get(`http://localhost:5001/api/cart/cartItemsByUser/${loggedInUserId}`)
       .then((response) => {
         setCartItems(response.data);
         console.log(response.data);
@@ -29,7 +30,7 @@ function CartItems() {
   };
   const removeCartItem = (itemId) => {
     axios
-      .delete(`http://localhost:5001/api/cart/${itemId}`)
+      .delete(`http://localhost:5001/api/cart/removeCartItem/${itemId}`)
       .then((response) => {
         // console.log(response.data.message);
         setTimeout(() => {
@@ -41,15 +42,35 @@ function CartItems() {
         console.error(error);
       });
   };
+
+  const getselectedCartItem = (item) => {
+    if (
+      selectedCartItem.some(
+        (selectedItem) => selectedItem.productId === item.productId
+      )
+    ) {
+      setselectedCartItem((prevItems) =>
+        prevItems.filter(
+          (selectedItem) => selectedItem.productId !== item.productId
+        )
+      );
+    } else {
+      setselectedCartItem((prevItems) => [...prevItems, item]);
+    }
+  };
   return (
     <>
-       <Toaster/>
+      <Toaster />
       <wrapper>
         <NavBar />
         <h1>Cart-Items </h1>
         {cartItems.map((item) => (
           <div class="cart-item" key={item.productId}>
-          <input type="checkbox" className="cart-checkbox" />
+            <input
+              type="checkbox"
+              className="cart-checkbox"
+              onClick={() => getselectedCartItem(item)}
+            />
             <img
               className="category-image"
               src={`http://localhost:5001/img/${item.productPicture}`}
@@ -59,18 +80,48 @@ function CartItems() {
             <p class="product-name">
               Total Price: ${item.productPrice * item.quantity}
             </p>
-            <p class="quantity">quantity:{item.quantity}</p>
-            <button onClick={() => removeCartItem(item._id)}>
+            <p class="quantity colorchange">quantity:{item.quantity}</p>
+            <a href="" onClick={() => removeCartItem(item._id)}>
               Remove From Cart
-            </button>
+            </a>
           </div>
-          
         ))}
+        <div class="form-container">
+        <h3>Order Summary</h3>
+          {Array.isArray(selectedCartItem)
+            ? selectedCartItem.map((item, index) => (
+                <div class="form-group" key={item._id}>
+                  <p className="bold">
+                    {index + 1}: &nbsp;
+                    <span className="unbold colorchange">
+                      {item.productName}
+                    </span>
+                </p>
+                <p class="quantity colorchange">quantity:{item.quantity}</p>
+                  <p className="bold">
+                    Price: &nbsp;
+                    <span className="unbold colorchange">
+                      ${item.productPrice * item.quantity}
+                    </span>
+                  </p>
+                </div>
+              ))
+            : ""}
+          <p className="bold">
+            Total Payment:&nbsp; $
+            {Array.isArray(selectedCartItem)
+              ? selectedCartItem.reduce(
+                  (total, item) => total + item.productPrice * item.quantity,
+                  0
+                )
+              : 0}
+          </p>
+        </div>
+        <br></br>
 
         <button>Proceed To Checkout</button>
         <br></br>
         <br></br>
-
 
         <Footer />
       </wrapper>

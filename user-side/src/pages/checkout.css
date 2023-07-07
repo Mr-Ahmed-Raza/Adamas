@@ -43,6 +43,15 @@ body {
     cursor: pointer;
     font-size: 14px;
   }
+  .bold {
+    font-weight: bold;
+  }
+  .unbold{
+    font-weight: lighter;
+  }
+  .colorchange{
+    color:#3bbdfb ;
+  }
   
   /* Add responsive styles */
   @media (max-width: 600px) {

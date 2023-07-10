@@ -19,6 +19,8 @@ const userSchema = mongoose.Schema({
 
 //Compare  both passwords
 userSchema.methods.matchPassword = async function (enteredPassword) {
+    // console.log("enteredPassword: ", enteredPassword)
+    // console.log("this.password: ", this.password)
     return await bcrypt.compare(enteredPassword, this.password);
 };
   
@@ -26,7 +28,7 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 
 userSchema.pre("save", async function (next) {
     // Agr password modified nhi hua hoga then moves to the next
-    if (!this.isModified) {
+    if (!this.isModified('password')){
       next();
     }
     // than modifies a password into to bcrypt form

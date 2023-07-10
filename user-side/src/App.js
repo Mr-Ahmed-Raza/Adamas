@@ -16,6 +16,7 @@ import AllProducts from './pages/AllProducts'
 import VisitStore from "./pages/VisitStore"
 import CartItems from "./pages/CartItems"
 import Checkout from './pages/Checkout';
+import ForgetPassword from './components/Authentication/ForgetPassword';
 // User name changed
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/store/categories/:categoryId" element={<CatagoreyDetail/>} />
         <Route path="/product-details/:productId" element={<ProductDetails />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/reset-password" element={<ForgetPassword />} />
         <Route path="/register" element={<Signup />} />
         <Route path="/user-list" element={<Userlist />} />
         <Route path="/category-list" element={<Category />} />

@@ -48,9 +48,11 @@ console.log("Registeration Data: ",req.body);
 
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-
+  console.log("email: ",email)
+  console.log("password: ",password)
   // Find if the user already exists or not
   const user = await User.findOne({ email });
+  console.log("User" , user);
 
   if (user) {
     // Check if the entered password matches the stored password
@@ -59,7 +61,7 @@ const authUser = asyncHandler(async (req, res) => {
     if (isPasswordMatched) {
       res.json({
         _id: user._id,
-        name: user.name,
+        firstName: user.firstName,
         email: user.email,
         token: genrateToken(user._id),
       });
@@ -72,6 +74,34 @@ const authUser = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 });
+
+// Reset Password
+const resetPassword = asyncHandler(async (req, res) => {
+  const { resetToken, newPassword } = req.body;
+  console.log("reset token:", resetToken);
+  console.log("new password:" , newPassword);
+
+  // Find the user with the reset token
+  const user = await User.findOne({ resetToken });
+  console.log(user);
+
+  if (!user) {
+    res.status(404);
+    throw new Error("Invalid or expired reset token");
+  }
+
+  // Update the user's password
+  user.password = newPassword;
+  user.resetToken = undefined;
+  await user.save();
+
+  res.status(200).json({ message: "Password reset successful" });
+});
+
+// Add the reset password route to your Express app
+// app.post("/api/user/reset-password", resetPassword);
+
+
 
 // show all the User  
 // GET /api/user/all-users
@@ -129,4 +159,4 @@ const updateUser = asyncHandler(async (req, res) => {
 });
 
 
-module.exports = { registrationUser, showUser, deleteUser, updateUser, authUser ,singleUser };
+module.exports = { registrationUser, showUser, deleteUser, updateUser, authUser ,singleUser , resetPassword };

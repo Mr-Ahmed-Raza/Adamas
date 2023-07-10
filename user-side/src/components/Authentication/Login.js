@@ -66,7 +66,7 @@ function Login() {
   };
 
   const submitHandler = async (event) => {
-    debugger;
+   
     try {
       event.preventDefault();
       // send data to the backend api

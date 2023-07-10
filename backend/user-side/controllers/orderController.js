@@ -1,4 +1,4 @@
-const Order = require("../models/Order");
+const Order = require("../models/OrderModel");
 
 // Create a new order
 const createOrder = async (req, res) => {
@@ -14,7 +14,7 @@ const createOrder = async (req, res) => {
     if (err) {
       return res.status(400).json({
         error: "Failed to create order",
-      });
+      }); 
     }
     res.json(order);
   });

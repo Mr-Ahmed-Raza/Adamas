@@ -1,12 +1,12 @@
 const asyncHandler = require("express-async-handler");
 const Product = require("../models/ProductsModel");
 
-
 // Add Product
 // GET /api/admin/product/add-product
 const addProducts = asyncHandler(async (req, res) => {
   try {
-    const { title, description, price, selectedCategoryId, featured } = req.body;
+    const { title, description, price, selectedCategoryId, featured } =
+      req.body;
     const picture = req.file.filename;
     // console.log(req.body);
     // console.log(req.file.filename);
@@ -58,7 +58,6 @@ const showAllProducts = asyncHandler(async (req, res) => {
       {
         $sort: { createdAt: -1 }, // Sort by createdAt field in descending order
       },
-      
     ]);
 
     res.status(200).json({ message: "Product list", product });
@@ -273,12 +272,10 @@ const updateProducts = asyncHandler(async (req, res) => {
     }
 
     const updatedProduct = await product.save();
-    res
-      .status(200)
-      .json({
-        message: "Product updated successfully",
-        product: updatedProduct,
-      });
+    res.status(200).json({
+      message: "Product updated successfully",
+      product: updatedProduct,
+    });
   } catch (error) {
     res.status(400);
     throw new Error("Product not updated", error);
@@ -308,24 +305,27 @@ const getRecommendedProducts = asyncHandler(async (req, res) => {
     const selectedProduct = await Product.findById(ProductId);
     if (!selectedProduct) {
       res.status(404);
-      throw new Error('Product not found');
+      throw new Error("Product not found");
     }
 
     // Fetch recommended products based on the selected product's category
     const recommendedProducts = await Product.aggregate([
       {
-        $match: { selectedCategoryId: selectedProduct.selectedCategoryId, _id: { $ne: selectedProduct._id } },
-      },
-      {
-        $lookup: {
-          from: 'categories',
-          localField: 'selectedCategoryId',
-          foreignField: '_id',
-          as: 'category',
+        $match: {
+          selectedCategoryId: selectedProduct.selectedCategoryId,
+          _id: { $ne: selectedProduct._id },
         },
       },
       {
-        $unwind: '$category',
+        $lookup: {
+          from: "categories",
+          localField: "selectedCategoryId",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      {
+        $unwind: "$category",
       },
       {
         $project: {
@@ -335,7 +335,7 @@ const getRecommendedProducts = asyncHandler(async (req, res) => {
           picture: 1,
           price: 1,
           featured: 1,
-          categoryTitle: '$category.title',
+          categoryTitle: "$category.title",
           createdAt: 1,
         },
       },
@@ -344,14 +344,14 @@ const getRecommendedProducts = asyncHandler(async (req, res) => {
       },
     ]);
 
-    res.status(200).json({ message: 'Recommended Products', recommendedProducts });
+    res
+      .status(200)
+      .json({ message: "Recommended Products", recommendedProducts });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: "Server error" });
   }
 });
-
-
 
 module.exports = {
   addProducts,
@@ -364,6 +364,4 @@ module.exports = {
   updateProducts,
   singleProduct,
   getRecommendedProducts,
-  
 };
-

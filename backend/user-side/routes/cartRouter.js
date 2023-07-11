@@ -7,7 +7,6 @@ router.route("/addToCart").post(addToCart)
 router.route("/cartItemsByUser/:userId").get(getCartItems)
 router.route("/removeCartItem/:itemId").delete(removeFromCart)
 router.route("/selectedCartItem/:itemId").get(getselectedCartItem)
-router.route("/createOrder").post(createOrder)
 
 
 

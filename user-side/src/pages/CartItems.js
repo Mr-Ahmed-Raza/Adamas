@@ -11,7 +11,14 @@ function CartItems() {
   const [cartItems, setCartItems] = useState([]);
   const [selectedCartItem, setselectedCartItem] = useState([]);
   const loggedInUserId = JSON.parse(localStorage.getItem("userData"))._id;
+  const totalPayment = selectedCartItem
+  ? selectedCartItem.reduce(
+      (total, item) => total + item.productPrice * item.quantity,
+      0
+    )
+  : 0;
 
+  
   useEffect(() => {
     // Fetch the cart items when the component mounts
     fetchCartItems();
@@ -74,6 +81,7 @@ function CartItems() {
             <img
               className="category-image"
               src={`http://localhost:5001/img/${item.productPicture}`}
+              alt=""
             />
             <p class="product-name">{item.productName}</p>
             <p class="product-name">Price: ${item.productPrice}</p>
@@ -109,12 +117,9 @@ function CartItems() {
             : ""}
           <p className="bold">
             Total Payment:&nbsp; $
-            {Array.isArray(selectedCartItem)
-              ? selectedCartItem.reduce(
-                  (total, item) => total + item.productPrice * item.quantity,
-                  0
-                )
-              : 0}
+            {
+              totalPayment
+            }
           </p>
         </div>
         <br></br>

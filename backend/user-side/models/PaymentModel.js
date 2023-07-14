@@ -1,28 +1,31 @@
 const mongoose = require("mongoose");
 
 const paymentSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+  totalPayment: {
+    type: Number,
     required: true,
   },
-  fullName: {
+  name: {
     type: String,
     required: true,
   },
-  mobileNumber: {
+  cardNumber: {
     type: String,
     required: true,
   },
-  contactNumber: {
+  expiryMonth: {
+    type: Number,
+    required: true,
+  },
+  expiryYear: {
+    type: Number,
+    required: true,
+  },
+  cvv: {
     type: String,
     required: true,
   },
-  paymentMethod: {
-    type: String,
-    default: "EasyPaisa",
-  },
-  timestamp: {
+  createdAt: {
     type: Date,
     default: Date.now,
   },

@@ -6,15 +6,23 @@ import axios from "axios";
 import "./checkout.css";
 
 function Checkout() {
-  const amount = null;
-  const [name, setName] = useState('');
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiryMonth, setExpiryMonth] = useState('');
-  const [expiryYear, setExpiryYear] = useState('');
-  const [cvv, setCvv] = useState('');
-  const [message, setMessage] = useState('');
+  const [name, setName] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [expiryMonth, setExpiryMonth] = useState("");
+  const [expiryYear, setExpiryYear] = useState("");
+  const [cvv, setCvv] = useState("");
+  const [message, setMessage] = useState("");
   const [errors, setErrors] = useState({});
 
+
+  // Retrieve the order summary data from local storage
+  const orderSummaryDataString = localStorage.getItem('orderSummaryData');
+ // Parse the JSON string back into an object
+const orderSummaryData = JSON.parse(orderSummaryDataString);
+// Access the individual properties of the order summary data object
+const selectedCartItem = orderSummaryData.selectedCartItem;
+  const totalPayment = orderSummaryData.totalPayment;
+  
   const validateCardNumber = (cardNumber) => {
     // Validate card number using a regular expression
     const regex = /^[0-9]{16}$/;
@@ -38,18 +46,18 @@ function Checkout() {
     const cvvValid = validateCvv(cvv);
 
     if (!cardNumberValid) {
-      setErrors({ ...errors, cardNumber: 'Invalid card number' });
+      setErrors({ ...errors, cardNumber: "Invalid card number" });
       return;
     }
 
     if (!cvvValid) {
-      setErrors({ ...errors, cvv: 'Invalid CVV' });
+      setErrors({ ...errors, cvv: "Invalid CVV" });
       return;
     }
 
     try {
-      const response = await axios.post('/payment', {
-        amount,
+      const response = await axios.post("http://localhost:5001/api/payment/create-payments", {
+        totalPayment,
         name,
         cardNumber,
         expiryMonth,
@@ -58,13 +66,13 @@ function Checkout() {
       });
 
       if (response.data.success) {
-        setMessage('Payment successful');
+        setMessage("Payment successful");
       } else {
-        setMessage('Payment failed');
+        setMessage("Payment failed");
       }
     } catch (error) {
       console.error(error);
-      setMessage('An error occurred');
+      setMessage("An error occurred");
     }
   };
   return (
@@ -72,9 +80,50 @@ function Checkout() {
       <wrapper>
         <NavBar />
         <br></br>
-        <h2>Checkout Payments </h2>
+        <div className="parent-container">
 
+        <div class="summary-container">
+        {Array.isArray(selectedCartItem) && selectedCartItem.length > 0 ? (
+          <div className="form-container">
+            <h3>Order Summary</h3>
+            {selectedCartItem.map((item, index) => (
+              <div className="form-group" key={item._id}>
+                <p className="bold">
+                  {index + 1}: &nbsp;
+                  <span className="unbold colorchange">
+                    {item.productName}
+                  </span>
+                </p>
+                <p className="bold">
+                  Price: &nbsp;
+                  <span className="unbold colorchange">
+                    ${item.productPrice}
+                  </span>
+                </p>
+                <p className="quantity colorchange">quantity: {item.quantity}</p>
+                <p className="bold">
+                  Total Price: &nbsp;
+                  <span className="unbold colorchange">
+                    ${item.productPrice * item.quantity}
+                  </span>
+                </p>
+              </div>
+            ))}
+            
+          </div>
+            ) : null}
+            <br></br>
+            <p className="bold">
+              Total To Pay: ${totalPayment}
+            </p>
+        </div>
+        
         <div class="form-container">
+
+            <h2>Checkout Payments</h2> 
+            <div className="summary-container1">
+
+           
           <form>
             <div class="form-group">
               <label for="name">Enter Full Name:</label>
@@ -86,7 +135,7 @@ function Checkout() {
                 required
               />
             </div>
-            
+
             <div class="form-group">
               <label for="address">Enter Card Number:</label>
               <input
@@ -128,18 +177,21 @@ function Checkout() {
                 required
               />
             </div>
-            <div>
-            {errors.cvv && <p>{errors.cvv}</p>}
-            </div>
+            <div>{errors.cvv && <p>{errors.cvv}</p>}</div>
             <div class="form-group">
               <button type="submit">Pay with Paypro</button>
             </div>
-          
+
             <div class="form-group">
               <button type="submit">Pay with EasyPaissa</button>
             </div>
-          </form>
-        </div>
+              </form>
+              </div>
+          </div>
+          
+
+          </div>
+
         <br />
 
         <br />

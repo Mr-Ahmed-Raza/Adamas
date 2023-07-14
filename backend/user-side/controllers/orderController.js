@@ -2,7 +2,12 @@ const Order = require("../models/OrderModel");
 
 // Create a new order
 const createOrder = async (req, res) => {
-  const { userId, products, totalPayment } = req.body;
+  const { userId, products } = req.body;
+
+  // Calculate the total payment
+  const totalPayment = products.reduce((acc, product) => {
+    return acc + product.price;
+  }, 0);
 
   const order = new Order({
     userId,
@@ -19,4 +24,7 @@ const createOrder = async (req, res) => {
     res.json(order);
   });
 };
+
+
+
 module.exports = { createOrder };

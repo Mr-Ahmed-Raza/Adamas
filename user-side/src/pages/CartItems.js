@@ -2,6 +2,7 @@ import React from "react";
 import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./cartitem.css";
 import "./checkout.css";
@@ -11,14 +12,35 @@ function CartItems() {
   const [cartItems, setCartItems] = useState([]);
   const [selectedCartItem, setselectedCartItem] = useState([]);
   const loggedInUserId = JSON.parse(localStorage.getItem("userData"))._id;
-  const totalPayment = selectedCartItem
-  ? selectedCartItem.reduce(
-      (total, item) => total + item.productPrice * item.quantity,
-      0
-    )
-  : 0;
+  const loggedInUserName = JSON.parse(
+    localStorage.getItem("userData")
+  ).firstName;
+  const loggedInUserEmail = JSON.parse(localStorage.getItem("userData")).email;
+  const navigate = useNavigate();
 
-  
+  const totalPayment = selectedCartItem
+    ? selectedCartItem.reduce(
+        (total, item) => total + item.productPrice * item.quantity,
+        0
+      )
+    : 0;
+
+  console.log("email: ", loggedInUserEmail);
+  console.log("Name: ", loggedInUserName);
+
+  const handleProceedToCheckout = () => {
+    // Store the order summary data in an object
+    const orderSummaryData = {
+      selectedCartItem,
+      totalPayment,
+    };
+    // Convert the order summary object to a JSON string
+    const orderSummaryDataString = JSON.stringify(orderSummaryData);
+    // Store the order summary data in local storage
+    localStorage.setItem("orderSummaryData", orderSummaryDataString);
+    navigate("/checkout");
+  };
+
   useEffect(() => {
     // Fetch the cart items when the component mounts
     fetchCartItems();
@@ -95,7 +117,7 @@ function CartItems() {
           </div>
         ))}
         <div class="form-container">
-        <h3>Order Summary</h3>
+          <h3>Order Summary</h3>
           {Array.isArray(selectedCartItem)
             ? selectedCartItem.map((item, index) => (
                 <div class="form-group" key={item._id}>
@@ -104,10 +126,18 @@ function CartItems() {
                     <span className="unbold colorchange">
                       {item.productName}
                     </span>
-                </p>
-                <p class="quantity colorchange">quantity:{item.quantity}</p>
+                  </p>
                   <p className="bold">
                     Price: &nbsp;
+                    <span className="unbold colorchange">
+                      ${item.productPrice}
+                    </span>
+                  </p>
+                  <p className="quantity colorchange">
+                    quantity: {item.quantity}
+                  </p>
+                  <p className="bold">
+                    Total Price: &nbsp;
                     <span className="unbold colorchange">
                       ${item.productPrice * item.quantity}
                     </span>
@@ -115,16 +145,14 @@ function CartItems() {
                 </div>
               ))
             : ""}
-          <p className="bold">
-            Total Payment:&nbsp; $
-            {
-              totalPayment
-            }
-          </p>
+          <p className="bold">Total Payment:&nbsp; ${totalPayment}</p>
         </div>
         <br></br>
 
-        <button>Proceed To Checkout</button>
+        <button onClick={() => handleProceedToCheckout()}>
+          {" "}
+          Proceed To Checkout
+        </button>
         <br></br>
         <br></br>
 

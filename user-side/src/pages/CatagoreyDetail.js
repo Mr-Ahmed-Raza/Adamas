@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "../components/todoList.css";
+import FullPageLoader from "../components/FullPageLoader";
 
 
 function Catagorey() {
@@ -15,6 +16,7 @@ function Catagorey() {
   const [categoryProducts, setCategoryProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProduct, setSelectedProduct] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const productsPerPage = 6;
   const totalPages = Math.ceil(categoryProducts.length / productsPerPage);
@@ -25,6 +27,20 @@ function Catagorey() {
     indexOfLastProduct
   );
 
+  const handleVisitStore = () => {
+    setLoading(true); // Show loader
+    setTimeout(() => {
+      setLoading(false); // Hide loader
+      navigate("/store"); // Redirect to store page
+    }, 2000); // Simulating a delay of 2 seconds before redirecting
+  };
+  const handleVisitHome = () => {
+    setLoading(true); // Show loader
+    setTimeout(() => {
+      setLoading(false); // Hide loader
+      navigate("/"); // Redirect to home page
+    }, 2000); // Simulating a delay of 2 seconds before redirecting
+  };
   const handleClick = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -39,7 +55,7 @@ function Catagorey() {
 
 // fetch selected category
 const getAllselectedcategory = () => {
-  fetch(`http://localhost:5000/api/admin/category/${categoryId}`)
+  fetch(`http://192.168.1.38:5000/api/admin/category/${categoryId}`)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -52,7 +68,7 @@ const getAllselectedcategory = () => {
   // Fetch products by category
   const getProductsByCategory = () => {
     fetch(
-      `http://localhost:5000/api/admin/category/categorized-product/${selectedCategory}`
+      `http://192.168.1.38:5000/api/admin/category/categorized-product/${selectedCategory}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -68,7 +84,7 @@ const getAllselectedcategory = () => {
      setSelectedCategory(categoryId);
   
   //   // if (category === "All") {
-  //   //   fetch("http://localhost:5000/api/admin/Product")
+  //   //   fetch("http://192.168.1.38:5000/api/admin/Product")
   //   //     .then((response) => response.json())
   //   //     .then((data) => {
   //   //       console.log(data);
@@ -90,7 +106,7 @@ const getAllselectedcategory = () => {
   // }, []);
   // //Fetch all products
   // const getAllProduct = () => {
-  //   fetch("http://localhost:5000/api/admin/Product")
+  //   fetch("http://192.168.1.38:5000/api/admin/Product")
   //     .then((response) => response.json())
   //     .then((data) => {
   //       console.log(data);
@@ -101,18 +117,23 @@ const getAllselectedcategory = () => {
 
   // get the selected product
   const getselectedProduct = (productId) => {
-    fetch(`http://localhost:5000/api/admin/Product/${productId}`)
+    fetch(`http://192.168.1.38:5000/api/admin/Product/${productId}`)
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
           setSelectedProduct(data.selectedProduct);
         // getAllcategory();
         // Redirect to productDetail page with selected product ID
-        navigate(`/product-details/${productId}`);
+        setLoading(true); // Show loader
+        setTimeout(() => {
+          setLoading(false); // Hide loader
+          navigate(`/product-details/${productId}`);
+        }, 1000); // Simulating a delay of 2 seconds before redirecting
       });
   };
   return (
     <>
+       {loading && <FullPageLoader />}
       <header>
         <NavBar />
         <section className="slide-bar">
@@ -295,7 +316,7 @@ const getAllselectedcategory = () => {
                         >
                           <div className="catagory-imgs">
                             <img
-                              src={`http://localhost:5000/img/${product.picture}`}
+                              src={`http://192.168.1.38:5000/img/${product.picture}`}
                               className="category-image-modify"
                               alt={product.title}
                               onClick={() => getselectedProduct(product._id)}
@@ -347,15 +368,15 @@ const getAllselectedcategory = () => {
                       ))
                     )}
                     <div >
-                  <Link to="/store">
-                    <a href="#" className="btn btn-primary">Back To Store </a>
-                  </Link>
+                  
+                    <a href="#" className="btn btn-primary" onClick={()=>{handleVisitStore()}}>Back To Store </a>
+                  
                     </div>
                     
                     <div >
-                  <Link to="/">
-                    <a href="#" className="btn btn-primary">Back To Home </a>
-                  </Link>
+                  
+                    <a href="#" className="btn btn-primary" onClick={()=>{handleVisitHome()}}>Back To Home </a>
+                  
                 </div>
                   </div>
 

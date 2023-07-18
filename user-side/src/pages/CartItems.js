@@ -6,11 +6,13 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./cartitem.css";
 import "./checkout.css";
+import FullPageLoader from "../components/FullPageLoader";
 import toast, { Toaster } from "react-hot-toast";
 
 function CartItems() {
   const [cartItems, setCartItems] = useState([]);
   const [selectedCartItem, setselectedCartItem] = useState([]);
+  const [loading, setLoading] = useState(false);
   const loggedInUserId = JSON.parse(localStorage.getItem("userData"))._id;
   const loggedInUserName = JSON.parse(
     localStorage.getItem("userData")
@@ -38,7 +40,12 @@ function CartItems() {
     const orderSummaryDataString = JSON.stringify(orderSummaryData);
     // Store the order summary data in local storage
     localStorage.setItem("orderSummaryData", orderSummaryDataString);
-    navigate("/checkout");
+    setLoading(true); // Show loader
+        setTimeout(() => {
+          setLoading(false); // Hide loader
+          navigate("/checkout");
+        }, 1000); // Simulating a delay of 2 seconds before redirecting
+   
   };
 
   useEffect(() => {
@@ -62,10 +69,9 @@ function CartItems() {
       .delete(`http://localhost:5001/api/cart/removeCartItem/${itemId}`)
       .then((response) => {
         // console.log(response.data.message);
-        setTimeout(() => {
-          toast.success("product remove from cart Successfully");
-        }, 1000);
+        toast.success("product remove from cart Successfully");
         fetchCartItems(); // Refresh cart items after deletion
+      
       })
       .catch((error) => {
         console.error(error);
@@ -90,6 +96,7 @@ function CartItems() {
   return (
     <>
       <Toaster />
+      {loading && <FullPageLoader />}
       <wrapper>
         <NavBar />
         <h1>Cart-Items </h1>

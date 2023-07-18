@@ -2,19 +2,36 @@ import React, { useEffect, useState } from "react";
 import "./todoList.css";
 import { Link } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
-
+import Swal from "sweetalert2";
 
 function Category() {
   const [category, setcategory] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
   const [selectedCategory, setselectedCategory] = useState();
+  const [loading, setLoading] = useState(false);
   const [editformdata, seteditformdata] = useState({
     title: "",
     description: "",
     picture: "",
   });
+  const removeRequest = (id)=> {
+    Swal.fire({
+        title: "Are you sure you want to delete?",
+        html: "If you delete an item, it would be permanently lost.",
+        showCloseButton: true,
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Delete",
+    }).then(async (result) => {
+        if (result.value) {
+          setLoading(true);
+          handleDelete(id)
+        }
+    });
 
+}
   const showToast = (action) => {
     if (action === "getAllcategory") {
       toast.success("Category reterived Successfully")
@@ -64,7 +81,7 @@ function Category() {
 
       // make api calling to update the user
       await fetch(
-        `http://localhost:5000/api/admin/Category/${selectedCategory._id}`,
+        `http://192.168.1.38:5000/api/admin/Category/${selectedCategory._id}`,
         {
           method: "PUT",
          
@@ -109,7 +126,7 @@ function Category() {
   // Handle delete  to delete the user
   const handleDelete = async (userId) => {
     try {
-      await fetch(`http://localhost:5000/api/admin/Category/${userId}`, {
+      await fetch(`http://192.168.1.38:5000/api/admin/Category/${userId}`, {
         method: "DELETE",
       })
         .then((response) => response.json())
@@ -134,7 +151,7 @@ function Category() {
   }, []);
 
   const getAllcategory = () => {
-    fetch("http://localhost:5000/api/admin/category/all-category")
+    fetch("http://192.168.1.38:5000/api/admin/category/all-category")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -145,7 +162,7 @@ function Category() {
   };
 
   const getselectedCategory = (userId) => {
-    fetch(`http://localhost:5000/api/admin/category/${userId}`)
+    fetch(`http://192.168.1.38:5000/api/admin/category/${userId}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -162,6 +179,7 @@ const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <>
+      {loading}
     <Toaster/>
     <div className="todo-list">
       <div className="list-head">
@@ -196,7 +214,7 @@ const paginate = (pageNumber) => setCurrentPage(pageNumber);
                             className="category-image"
                             // src={`assets/images/slider-content-img.jpg`}
                             // src={`/public/images/${category.picture}`}
-                            src={`http://localhost:5000/img/${category.picture}`}
+                            src={`http://192.168.1.38:5000/img/${category.picture}`}
                             alt={category.title}
                           />
                         ) : (
@@ -211,7 +229,7 @@ const paginate = (pageNumber) => setCurrentPage(pageNumber);
                           Edit
                         </button>
 
-                        <button onClick={() => handleDelete(category._id)}>
+                        <button onClick={() => removeRequest(category._id)}>
                           Delete
                         </button>
                       </td>

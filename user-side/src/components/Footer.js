@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import "../components/todoList.css";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import FullPageLoader from "../components/FullPageLoader";
 
 
 function Footer() {
   const [recentProducts, setrecentProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   // const [category, setcategory] = useState([]);
   const navigate = useNavigate();
 
@@ -16,7 +19,7 @@ function Footer() {
   }, []);
   // // get the recent products
   const getRecentProduct = () => {
-    fetch("http://localhost:5000/api/admin/Product/recent-products")
+    fetch("http://192.168.1.38:5000/api/admin/Product/recent-products")
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
@@ -27,21 +30,25 @@ function Footer() {
   };
   // get the selected product
   const getselectedProduct = (productId) => {
-    fetch(`http://localhost:5000/api/admin/Product/${productId}`)
+    fetch(`http://192.168.1.38:5000/api/admin/Product/${productId}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
         // setSelectedProduct(data.selectedProduct);
         // getAllcategory();
-        // Redirect to productDetail page with selected product ID
-        
-        navigate(`/product-details/${productId}`);
+        setLoading(true); // Show loader
+        setTimeout(() => {
+          setLoading(false); // Hide loader
+          navigate(`/product-details/${productId}`);
+        }, 1000); // Simulating a delay of 2 seconds before redirecting
+
       });
      };
    
 
     return (
       <>
+         {loading && <FullPageLoader />}
         <footer className="footer bg-light">
           <div className="container">
             <div className="row">
@@ -74,7 +81,7 @@ function Footer() {
                           <div className="" key={product._id}>
                             <img
                               className="category-image-modify-recent"
-                              src={`http://localhost:5000/img/${product.picture}`}
+                              src={`http://192.168.1.38:5000/img/${product.picture}`}
                               alt={product.title}
                             />
                           </div>

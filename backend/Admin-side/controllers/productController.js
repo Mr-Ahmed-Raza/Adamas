@@ -111,6 +111,7 @@ const getFeaturedProducts = asyncHandler(async (req, res) => {
           createdAt: 1,
         },
       },
+      
     ]);
 
     res.json({ message: "Featured Products", product });

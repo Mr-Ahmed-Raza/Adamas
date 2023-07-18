@@ -8,7 +8,7 @@ import { Container } from "react-bootstrap";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import DOMPurify from "dompurify";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 
 function AddProduct() {
   const [title, settitle] = useState();
@@ -17,12 +17,11 @@ function AddProduct() {
   const [featured, setFeatured] = useState("No");
   const [categories, setcategories] = useState([]);
   const [picture, setPicture] = useState([]);
-  const [errors, setErrors] = useState({}); 
+  const [errors, setErrors] = useState({});
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const navigate = useNavigate();
   const editorRef = useRef();
 
-  
   useEffect(() => {
     if (
       editorRef.current &&
@@ -46,7 +45,7 @@ function AddProduct() {
   const onchangedescription = (event, editor) => {
     const data = editor.getData();
     setdescription(data);
-    clearError('description');
+    clearError("description");
   };
   const onchangepicture = (event) => {
     setPicture(event.target.files[0]);
@@ -112,7 +111,7 @@ function AddProduct() {
   const submitHandle = async (event) => {
     try {
       event.preventDefault();
-      // Send data front to api backend
+      // Send data to the backend API
       var formData = new FormData();
       formData.append("title", title);
       formData.append("description", description);
@@ -124,12 +123,9 @@ function AddProduct() {
       if (!validationChecks()) {
         return;
       }
-      // calling backend api
-      await fetch("http://localhost:5000/api/admin/product/add-product", {
+      // Call backend API
+      await fetch("http://192.168.1.38:5000/api/admin/product/add-product", {
         method: "POST",
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
         body: formData,
       })
         .then((response) => response.json())
@@ -138,17 +134,16 @@ function AddProduct() {
           settitle("");
           setdescription("");
           setprice("");
-          setPicture("");
+          setPicture(null);
           setFeatured("");
           setSelectedCategoryId("");
-          toast.success("Category added Successfully")
+          toast.success("Category added Successfully");
           setTimeout(() => {
             navigate("/product-list");
           }, 2000);
-
         });
     } catch (error) {
-      console.error("Error ; ", error);
+      console.error("Error: ", error);
     }
   };
 
@@ -157,7 +152,7 @@ function AddProduct() {
   }, []);
 
   const getAllcategory = () => {
-    fetch("http://localhost:5000/api/admin/category/all-category")
+    fetch("http://192.168.1.38:5000/api/admin/category/all-category")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -168,7 +163,7 @@ function AddProduct() {
   return (
     <>
       <div className="main-page">
-      <Toaster/>
+        <Toaster />
         <Container>
           <div>
             <h1>Adamas</h1>
@@ -223,17 +218,18 @@ function AddProduct() {
                       "undo",
                       "redo",
                       "|",
-                      "fontColor", // Add the "fontColor" option to the toolbar
+                      "fontColor",
                     ],
                   },
                   language: "en",
-                  // Add the "fontColor" configuration option
                 }}
               />
-              <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(description) }} />
-              
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(description),
+                }}
+              />
             </div>
-            
 
             <div className="input-group">
               <div className="error">{<span>{errors.description}</span>}</div>

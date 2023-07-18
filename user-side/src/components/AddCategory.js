@@ -97,7 +97,7 @@ function AddCategory() {
         return;
       }
       // calling backend api
-      await fetch("http://localhost:5000/api/admin/category/add-category", {
+      await fetch("http://192.168.1.38:5000/api/admin/category/add-category", {
         method: "POST",
         // headers: {
         //   "Content-Type": "application/json",

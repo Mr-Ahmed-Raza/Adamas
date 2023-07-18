@@ -67,7 +67,7 @@ function Category() {
 
       // make api calling to update the user
       await fetch(
-        `http://localhost:5000/api/admin/Category/${selectedCategory._id}`,
+        `http://192.168.1.38:5000/api/admin/Category/${selectedCategory._id}`,
         {
           method: "PUT",
           // headers: {
@@ -112,7 +112,7 @@ function Category() {
   // Handle delete  to delete the user
   const handleDelete = async (userId) => {
     try {
-      await fetch(`http://localhost:5000/api/admin/Category/${userId}`, {
+      await fetch(`http://192.168.1.38:5000/api/admin/Category/${userId}`, {
         method: "DELETE",
       })
         .then((response) => response.json())
@@ -135,7 +135,7 @@ function Category() {
   }, []);
 
   const getAllcategory = () => {
-    fetch("http://localhost:5000/api/admin/category/all-category")
+    fetch("http://192.168.1.38:5000/api/admin/category/all-category")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -145,7 +145,7 @@ function Category() {
   };
 
   const getselectedCategory = (userId) => {
-    fetch(`http://localhost:5000/api/admin/category/${userId}`)
+    fetch(`http://192.168.1.38:5000/api/admin/category/${userId}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -186,7 +186,7 @@ function Category() {
                         {category.picture ? (
                           <img
                             className="category-image"
-                            src={`http://localhost:5000/img/${category.picture}`}
+                            src={`http://192.168.1.38:5000/img/${category.picture}`}
                             alt={category.title}
                           />
                         ) : (

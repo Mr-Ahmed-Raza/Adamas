@@ -5,7 +5,7 @@ import SocialSection from "../components/SocialSection";
 import "../components/todoList.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import Loader from "../components/Loader";
+import FullPageLoader from "../components/FullPageLoader";
 
 function Home() {
   const [category, setcategory] = useState([]);
@@ -16,13 +16,19 @@ function Home() {
   const [selectedProduct, setSelectedProduct] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [loading, setLoading] = useState(false);
+  const [visibleProducts, setVisibleProducts] = useState(12);
+  const [allProductsDisplayed, setAllProductsDisplayed] = useState(false);
   const navigate = useNavigate();
+
+  const handleViewAll = () => {
+    setVisibleProducts((prevVisibleProducts) => prevVisibleProducts + 12);
+  };
+ const featuredProductsToDisplay = FeatureProduct.slice(0, visibleProducts);
 
 
   const handleVisitStore = () => {
     setLoading(true); // Show loader
     setTimeout(() => {
-      console.log("loader is hit");
       setLoading(false); // Hide loader
       navigate("/store"); // Redirect to store page
     }, 2000); // Simulating a delay of 2 seconds before redirecting
@@ -42,7 +48,7 @@ function Home() {
  };
   // Fetch all the categories
   const getAllcategory = () => {
-    fetch("http://localhost:5000/api/admin/category/reverse-category")
+    fetch("http://192.168.1.38:5000/api/admin/category/reverse-category")
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
@@ -52,7 +58,7 @@ function Home() {
   };
   // Fetch all the products
   const getLatestProduct = () => {
-    fetch("http://localhost:5000/api/admin/product/latest-arrivals")
+    fetch("http://192.168.1.38:5000/api/admin/product/latest-arrivals")
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
@@ -62,7 +68,7 @@ function Home() {
   };
   // Fetch all the featured products
   const getAllFeaturedProduct = () => {
-    fetch("http://localhost:5000/api/admin/product/feature-products")
+    fetch("http://192.168.1.38:5000/api/admin/product/feature-products")
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
@@ -72,7 +78,7 @@ function Home() {
   };
   // get the selected product
   const getselectedProduct = (productId) => {
-    fetch(`http://localhost:5000/api/admin/product/${productId}`)
+    fetch(`http://192.168.1.38:5000/api/admin/product/${productId}`)
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
@@ -89,7 +95,7 @@ function Home() {
   };
   // Fetch sliderecent product
   const getsliderecentProduct = () => {
-    fetch("http://localhost:5000/api/admin/product/sliderecent-product")
+    fetch("http://192.168.1.38:5000/api/admin/product/sliderecent-product")
       .then((response) => response.json())
       .then((data) => {
         //  console.log("sliderecent products" , data);
@@ -99,7 +105,7 @@ function Home() {
   };
   // handle category select
   const handleCategorySelect = (categoryId) => {
-      fetch(`http://localhost:5000/api/admin/category/${categoryId}`)
+      fetch(`http://192.168.1.38:5000/api/admin/category/${categoryId}`)
         .then((response) => response.json())
         .then((data) => {
           // console.log(data);
@@ -118,7 +124,7 @@ function Home() {
 
   return (
     <>
-      {loading && <Loader />}
+      {loading && <FullPageLoader />}
       <wrapper>
         <header className="header">
           <NavBar />
@@ -129,7 +135,7 @@ function Home() {
                   <div className="d-flex">
                     <div className="carousel-img col-md-6 d-flex justify-content-center align-items-center">
                       <img
-                        src={`http://localhost:5000/img/${product.picture}`}
+                        src={`http://192.168.1.38:5000/img/${product.picture}`}
                         className="d-block w-100"
                         alt={product.title}
                         onClick={() => getselectedProduct(product._id)}
@@ -181,7 +187,7 @@ function Home() {
                       <div className="car-img-div">
                         <img
                           className="category-image-modify"
-                          src={`http://localhost:5000/img/${category.picture}`}
+                          src={`http://192.168.1.38:5000/img/${category.picture}`}
                           onClick={() => handleCategorySelect(category._id)}
                           alt={category.title}
                         />
@@ -231,7 +237,7 @@ function Home() {
                       <div className="catagory-imgs">
                         <a href="#">
                           <img
-                            src={`http://localhost:5000/img/${product.picture}`}
+                            src={`http://192.168.1.38:5000/img/${product.picture}`}
                             className="category-image-modify"
                             alt={product.title}
                             onClick={() => getselectedProduct(product._id)}
@@ -309,10 +315,10 @@ function Home() {
                 <Link to="/product-details">
                   <a href="#"></a>
                 </Link>
-                {FeatureProduct.length === 0 ? (
+                {featuredProductsToDisplay.length === 0 ? (
                   <p>No product found</p>
                 ) : (
-                  FeatureProduct.map((product ,index) => (
+                  featuredProductsToDisplay.map((product ,index) => (
                     <div
                       className="card"
                       style={{ width: "18rem" }}
@@ -320,7 +326,7 @@ function Home() {
                     >
                       <div className="catagory-imgs">
                         <img
-                          src={`http://localhost:5000/img/${product.picture}`}
+                          src={`http://192.168.1.38:5000/img/${product.picture}`}
                           className="category-image-modify"
                           alt={product.title}
                           href="#"
@@ -367,7 +373,15 @@ function Home() {
                     </div>
                   ))
                 )}
+
               </div>
+              {!allProductsDisplayed && visibleProducts < FeatureProduct.length && (
+          <div className="col-12 text-center">
+            <button className="btn btn-primary" onClick={()=>{handleViewAll()}}>
+              View All
+            </button>
+          </div>
+        )}
             </div>
           </section>
         </main>

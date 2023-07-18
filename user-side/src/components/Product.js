@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "./todoList.css";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 function Product() {
   const [Product, setProduct] = useState([]);
   const [categories, setcategories] = useState([]);
   const [selectedProduct, setselectedProduct] = useState();
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
   const [itemsPerPage] = useState(5);
   const [editformdata, seteditformdata] = useState({
     title: "",
@@ -16,14 +18,28 @@ function Product() {
     picture: "",
     featured: "",
   });
-  
-
   const [expandedIndex, setExpandedIndex] = useState(null);
    //handle the readmore and readless for every single product
   const toggleDescription = (index) => {
     setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
   };
- 
+  const removeRequest = (id)=> {
+    Swal.fire({
+        title: "Are you sure you want to delete?",
+        html: "If you delete an item, it would be permanently lost.",
+        showCloseButton: true,
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Delete",
+    }).then(async (result) => {
+        if (result.value) {
+          setLoading(true);
+          handleDelete(id)
+        }
+    });
+
+}
   // handle edit to enter the value while form is open
   const handleEdit = (product) => {
     //  getselectedProduct(user._id)
@@ -64,7 +80,7 @@ function Product() {
       formData.append("selectedCategoryId", editformdata.selectedCategoryId);
       formData.append("picture", editformdata.picture); // make api calling to update the user
       await fetch(
-        `http://localhost:5000/api/admin/Product/${selectedProduct._id}`,
+        `http://192.168.1.38:5000/api/admin/Product/${selectedProduct._id}`,
         {
           method: "PUT",
           // headers: {
@@ -115,7 +131,7 @@ function Product() {
   // Handle delete  to delete the user
   const handleDelete = async (userId) => {
     try {
-      await fetch(`http://localhost:5000/api/admin/Product/${userId}`, {
+      await fetch(`http://192.168.1.38:5000/api/admin/Product/${userId}`, {
         method: "DELETE",
       })
         .then((response) => response.json())
@@ -138,7 +154,7 @@ function Product() {
   }, []);
 
   const getAllProduct = () => {
-    fetch("http://localhost:5000/api/admin/Product")
+    fetch("http://192.168.1.38:5000/api/admin/Product")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -148,7 +164,7 @@ function Product() {
   };
 
   const getAllcategory = () => {
-    fetch("http://localhost:5000/api/admin/category/all-category")
+    fetch("http://192.168.1.38:5000/api/admin/category/all-category")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -158,7 +174,7 @@ function Product() {
   };
 
   const getselectedProduct = (productId) => {
-    fetch(`http://localhost:5000/api/admin/Product/${productId}`)
+    fetch(`http://192.168.1.38:5000/api/admin/Product/${productId}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -227,7 +243,7 @@ function Product() {
                         {product.picture ? (
                           <img
                             className="category-image"
-                            src={`http://localhost:5000/img/${product.picture}`}
+                            src={`http://192.168.1.38:5000/img/${product.picture}`}
                             alt={product.title}
                           />
                         ) : (
@@ -242,7 +258,7 @@ function Product() {
                           Edit
                         </button>
 
-                        <button onClick={() => handleDelete(product._id)}>
+                        <button onClick={() => removeRequest(product._id)}>
                           Delete
                         </button>
                       </td>

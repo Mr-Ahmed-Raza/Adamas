@@ -102,7 +102,7 @@ function AddProduct() {
         return;
       }
       // calling backend api
-      await fetch("http://localhost:5000/api/admin/product/add-product", {
+      await fetch("http://192.168.1.38:5000/api/admin/product/add-product", {
         method: "POST",
         // headers: {
         //   "Content-Type": "application/json",
@@ -129,7 +129,7 @@ function AddProduct() {
   }, []);
 
   const getAllcategory = () => {
-    fetch("http://localhost:5000/api/admin/category/all-category")
+    fetch("http://192.168.1.38:5000/api/admin/category/all-category")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);

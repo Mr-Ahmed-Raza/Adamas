@@ -1,4 +1,5 @@
 const Payment = require("../models/PaymentModel");
+const request =require('request')
 const asyncHandler = require("express-async-handler");
 const axios = require('axios');
 // const PayPro = require('paypro-api');
@@ -190,6 +191,67 @@ const createCharges = async(req,res)=>{
 
 }
 
+const getPaymentauth = async (req, res) => {
 
+const options = {
+  method: 'GET',
+  url: 'https://api.eu-de.apiconnect.appdomain.cloud/easypaisaapigw-telenorbankpk-tmbdev/dev-catalog/gateway-login/gen',
+  headers: {
+    'X-IBM-Client-Id': '6dc6f9b2-08ec-4e23-a329-f20818324cd6',
+    'X-IBM-Client-Secret': 'uN7kQ1jF6gM7vM3gI3cP6pA8jY4hD7sD3mW0mT0aP2sX1oP6iS',
+    'iss-claim': 'https://myidp.ibm.com',
+    'aud-claim': 'ClientID1',
+    accept: 'application/json'
+  }
+};
 
-module.exports = {createPayments , requestPayments , createCustomer, addNewCard , createCharges}
+request(options, function (error, response, body) {
+  if (error) throw new Error(error);
+
+  console.log(body);
+});
+}
+const verifytoken = async (req, res) => {
+  const options = {
+    method: 'GET',
+    url: 'https://api.eu-de.apiconnect.appdomain.cloud/easypaisaapigw-telenorbankpk-tmbdev/dev-catalog/gateway-login/verify',
+    headers: {
+      'X-IBM-Client-Id': '6dc6f9b2-08ec-4e23-a329-f20818324cd6',
+      'X-IBM-Client-Secret': 'uN7kQ1jF6gM7vM3gI3cP6pA8jY4hD7sD3mW0mT0aP2sX1oP6iS',
+      Authorization: 'eyJraWQiOiJoczI1Ni1rZXkiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL215aWRwLmlibS5jb20iLCJhdWQiOiJDbGllbnRJRDEiLCJleHAiOjE2ODk1OTU3ODYsImlhdCI6MTY4OTU5NTQ4Nn0.We7z73cRjRJ0NIe0VPBbjS1K7kcRZmiK7cdsHf42REs',
+      accept: 'application/json'
+    }
+  };
+  
+  request(options, function (error, response, body) {
+    if (error) throw new Error(error);
+  
+    console.log(body);
+  });
+}
+const aquireUserInfo = async (req, res) => {
+  const request = require('request');
+
+const options = {
+  method: 'POST',
+  url: 'https://api.eu-de.apiconnect.appdomain.cloud/easypaisaapigw-telenorbankpk-tmbdev/dev-catalog/inquireuserinfo/InquireUserInfov1',
+  headers: {
+    'X-IBM-Client-Id': '6dc6f9b2-08ec-4e23-a329-f20818324cd6',
+    'X-IBM-Client-Secret': 'uN7kQ1jF6gM7vM3gI3cP6pA8jY4hD7sD3mW0mT0aP2sX1oP6iS',
+    'Access-Token': 'eyJraWQiOiJoczI1Ni1rZXkiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL215aWRwLmlibS5jb20iLCJhdWQiOiJDbGllbnRJRDEiLCJleHAiOjE2ODk2MDIyMzksImlhdCI6MTY4OTYwMTkzOX0.RzySCR-eX3MWePvPwOVNrYCfgUFYssg6S3cHPq8uKwc',
+    Authorization: 'eyJraWQiOiJoczI1Ni1rZXkiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL215aWRwLmlibS5jb20iLCJhdWQiOiJDbGllbnRJRDEiLCJleHAiOjE2ODk2MDIyMzksImlhdCI6MTY4OTYwMTkzOX0.RzySCR-eX3MWePvPwOVNrYCfgUFYssg6S3cHPq8uKwc',
+    'content-type': 'application/json',
+    accept: 'application/json'
+  },
+  body: {authCode: 'kohimpigig'},
+  json: true
+};
+
+request(options, function (error, response, body) {
+  if (error) throw new Error(error);
+
+  console.log(body);
+});
+}
+
+module.exports = {createPayments , requestPayments , createCustomer, addNewCard , createCharges , getPaymentauth , verifytoken , aquireUserInfo }

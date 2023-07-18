@@ -13,7 +13,10 @@ function Checkout() {
   const [cvv, setCvv] = useState("");
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState({});
-
+  const loggedInUserName = JSON.parse(
+    localStorage.getItem("userData")
+  ).firstName;
+  const loggedInUserEmail = JSON.parse(localStorage.getItem("userData")).email;
 
   // Retrieve the order summary data from local storage
   const orderSummaryDataString = localStorage.getItem('orderSummaryData');
@@ -130,8 +133,17 @@ const selectedCartItem = orderSummaryData.selectedCartItem;
               <input
                 type="text"
                 placeholder="Name"
-                value={name}
+                value={loggedInUserName}
                 onChange={(e) => setName(e.target.value)}
+                required
+              />
+                </div>
+                <div class="form-group">
+              <label for="email">Enter Email:</label>
+              <input
+                type="text"
+                placeholder="Email"
+                value={loggedInUserEmail}
                 required
               />
             </div>

@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import "../components/todoList.css";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
+import FullPageLoader from "../components/FullPageLoader";
 
 
 function Catagorey() {
@@ -60,7 +61,7 @@ function Catagorey() {
   }, []);
   // fetch all the categories
   const getAllcategory = () => {
-    fetch("http://localhost:5000/api/admin/category/all-category")
+    fetch("http://192.168.1.38:5000/api/admin/category/all-category")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -72,7 +73,7 @@ function Catagorey() {
   // Fetch products by category
   const getProductsByCategory = () => {
     fetch(
-      `http://localhost:5000/api/admin/category/categorized-product/${selectedCategory}`
+      `http://192.168.1.38:5000/api/admin/category/categorized-product/${selectedCategory}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -87,7 +88,7 @@ function Catagorey() {
     if (categoryId === "all") {
       getAllProduct();
     } else {
-      fetch(`http://localhost:5000/api/admin/category/${categoryId}`)
+      fetch(`http://192.168.1.38:5000/api/admin/category/${categoryId}`)
         .then((response) => response.json())
         .then((data) => {
           // console.log(data);
@@ -114,7 +115,7 @@ function Catagorey() {
   // }, []);
   // //Fetch all products
   const getAllProduct = () => {
-    fetch("http://localhost:5000/api/admin/Product")
+    fetch("http://192.168.1.38:5000/api/admin/Product")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -125,7 +126,7 @@ function Catagorey() {
 
   // get the selected product
   const getselectedProduct = (productId) => {
-    fetch(`http://localhost:5000/api/admin/Product/${productId}`)
+    fetch(`http://192.168.1.38:5000/api/admin/Product/${productId}`)
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
@@ -143,7 +144,7 @@ function Catagorey() {
   };
   return (
     <>
-      {loading && <Loader />}
+      {loading && <FullPageLoader />}
       <header>
         <NavBar />
         <section className="slide-bar">
@@ -321,7 +322,7 @@ function Catagorey() {
                       >
                         <div className="catagory-imgs">
                           <img
-                            src={`http://localhost:5000/img/${product.picture}`}
+                            src={`http://192.168.1.38:5000/img/${product.picture}`}
                             className="category-image-modify"
                             alt={product.title}
                             onClick={() => getselectedProduct(product._id)}
@@ -422,7 +423,7 @@ function Catagorey() {
                         >
                           <div className="catagory-imgs">
                             <img
-                              src={`http://localhost:5000/img/${product.picture}`}
+                              src={`http://192.168.1.38:5000/img/${product.picture}`}
                               className="category-image-modify"
                               alt={product.title}
                               onClick={() => getselectedProduct(product._id)}

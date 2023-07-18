@@ -4,9 +4,14 @@ import NavBar from "../components/NavBar";
 import SocialSection from "../components/SocialSection";
 import "../components/todoList.css";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import FullPageLoader from "../components/FullPageLoader";
+
 function AllCategories() {
   const [category, setcategory] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const CategoryPerPage = 6;
   const totalPages = Math.ceil(category.length / CategoryPerPage);
   const indexOfLastCategory = currentPage * CategoryPerPage;
@@ -23,9 +28,16 @@ function AllCategories() {
   const handleClick = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+  const handlebacktohome = () => {
+    setLoading(true); // Show loader
+    setTimeout(() => {
+      setLoading(false); // Hide loader
+      navigate(`/`);
+    }, 1000); // Simulating a delay of 2 seconds before redirecting
+}
   // fetch all the categories
   const getAllcategory = () => {
-    fetch("http://localhost:5000/api/admin/category/all-category")
+    fetch("http://192.168.1.38:5000/api/admin/category/all-category")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -35,6 +47,7 @@ function AllCategories() {
   };
   return (
     <>
+      {loading && <FullPageLoader />}
       <wrapper>
         <header className="header">
           <NavBar />
@@ -53,7 +66,7 @@ function AllCategories() {
                       <div className="car-img-div">
                         <img
                           className="category-image-modify"
-                          src={`http://localhost:5000/img/${category.picture}`}
+                          src={`http://192.168.1.38:5000/img/${category.picture}`}
                           alt={category.title}
                         />
                       </div>
@@ -103,9 +116,9 @@ function AllCategories() {
                   </ul>
                 </div>
                 <div>
-                  <Link to="/">
-                    <a href="#">Back To Home </a>
-                  </Link>
+                  
+                    <a href="#" onClick={()=>{handlebacktohome()}}>Back To Home </a>
+                 
                 </div>
               </div>
             </div>

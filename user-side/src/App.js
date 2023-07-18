@@ -22,6 +22,7 @@ function App() {
   return (
     <div className="App">
       <Routes>
+        
         <Route path="/" element={<Home />} />
         <Route path="/contact-us" element={<Contact />} />
         <Route path="/store" element={<VisitStore/>} />
@@ -38,17 +39,8 @@ function App() {
         <Route path="/all-categories" element={<AllCategories />} />
         <Route path="/all-products" element={<AllProducts />} />
         <Route path="/cart-items" element={<CartItems />} />
-        <Route path="/checkout" element={<Checkout/>} />
-
-
-
-
-
-
-
-
-
-
+        <Route path="/checkout" element={<Checkout />} />
+        
     </Routes>
     </div>
   );

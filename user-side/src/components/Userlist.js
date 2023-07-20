@@ -36,7 +36,7 @@ function Userlist() {
       };
       console.log("Updated User:", updatedUser);
       // make api calling to update the user
-      await fetch(`http://192.168.1.38:5000/api/users/${selectedUser._id}`, {
+      await fetch(`http://localhost:5000/api/users/${selectedUser._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -76,7 +76,7 @@ function Userlist() {
   // Handle delete  to delete the user
   const handleDelete = async (userId) => {
     try {
-      await fetch(`http://192.168.1.38:5000/api/users/${userId}`, {
+      await fetch(`http://localhost:5000/api/users/${userId}`, {
         method: "DELETE",
       })
         .then((response) => response.json())
@@ -99,7 +99,7 @@ function Userlist() {
   }, []);
 
   const getAllUsers = () => {
-    fetch("http://192.168.1.38:5000/api/Users/all-users")
+    fetch("http://localhost:5000/api/Users/all-users")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -109,7 +109,7 @@ function Userlist() {
   };
 
   const getselectedUser = (userId) => {
-    fetch(`http://192.168.1.38:5000/api/users/${userId}`)
+    fetch(`http://localhost:5000/api/users/${userId}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);

@@ -80,7 +80,7 @@ function Product() {
       formData.append("selectedCategoryId", editformdata.selectedCategoryId);
       formData.append("picture", editformdata.picture); // make api calling to update the user
       await fetch(
-        `http://192.168.1.38:5000/api/admin/Product/${selectedProduct._id}`,
+        `http://localhost:5000/api/admin/Product/${selectedProduct._id}`,
         {
           method: "PUT",
           // headers: {
@@ -131,7 +131,7 @@ function Product() {
   // Handle delete  to delete the user
   const handleDelete = async (userId) => {
     try {
-      await fetch(`http://192.168.1.38:5000/api/admin/Product/${userId}`, {
+      await fetch(`http://localhost:5000/api/admin/Product/${userId}`, {
         method: "DELETE",
       })
         .then((response) => response.json())
@@ -154,7 +154,7 @@ function Product() {
   }, []);
 
   const getAllProduct = () => {
-    fetch("http://192.168.1.38:5000/api/admin/Product")
+    fetch("http://localhost:5000/api/admin/Product")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -164,7 +164,7 @@ function Product() {
   };
 
   const getAllcategory = () => {
-    fetch("http://192.168.1.38:5000/api/admin/category/all-category")
+    fetch("http://localhost:5000/api/admin/category/all-category")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -174,7 +174,7 @@ function Product() {
   };
 
   const getselectedProduct = (productId) => {
-    fetch(`http://192.168.1.38:5000/api/admin/Product/${productId}`)
+    fetch(`http://localhost:5000/api/admin/Product/${productId}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -243,7 +243,7 @@ function Product() {
                         {product.picture ? (
                           <img
                             className="category-image"
-                            src={`http://192.168.1.38:5000/img/${product.picture}`}
+                            src={`http://localhost:5000/img/${product.picture}`}
                             alt={product.title}
                           />
                         ) : (

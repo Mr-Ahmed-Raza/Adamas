@@ -37,7 +37,7 @@ function AllCategories() {
 }
   // fetch all the categories
   const getAllcategory = () => {
-    fetch("http://192.168.1.38:5000/api/admin/category/all-category")
+    fetch("http://localhost:5000/api/admin/category/all-category")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -66,7 +66,7 @@ function AllCategories() {
                       <div className="car-img-div">
                         <img
                           className="category-image-modify"
-                          src={`http://192.168.1.38:5000/img/${category.picture}`}
+                          src={`http://localhost:5000/img/${category.picture}`}
                           alt={category.title}
                         />
                       </div>

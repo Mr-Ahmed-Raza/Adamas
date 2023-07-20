@@ -48,7 +48,7 @@ function Home() {
  };
   // Fetch all the categories
   const getAllcategory = () => {
-    fetch("http://192.168.1.38:5000/api/admin/category/reverse-category")
+    fetch("http://localhost:5000/api/admin/category/reverse-category")
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
@@ -58,7 +58,7 @@ function Home() {
   };
   // Fetch all the products
   const getLatestProduct = () => {
-    fetch("http://192.168.1.38:5000/api/admin/product/latest-arrivals")
+    fetch("http://localhost:5000/api/admin/product/latest-arrivals")
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
@@ -68,7 +68,7 @@ function Home() {
   };
   // Fetch all the featured products
   const getAllFeaturedProduct = () => {
-    fetch("http://192.168.1.38:5000/api/admin/product/feature-products")
+    fetch("http://localhost:5000/api/admin/product/feature-products")
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
@@ -78,7 +78,7 @@ function Home() {
   };
   // get the selected product
   const getselectedProduct = (productId) => {
-    fetch(`http://192.168.1.38:5000/api/admin/product/${productId}`)
+    fetch(`http://localhost:5000/api/admin/product/${productId}`)
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
@@ -95,7 +95,7 @@ function Home() {
   };
   // Fetch sliderecent product
   const getsliderecentProduct = () => {
-    fetch("http://192.168.1.38:5000/api/admin/product/sliderecent-product")
+    fetch("http://localhost:5000/api/admin/product/sliderecent-product")
       .then((response) => response.json())
       .then((data) => {
         //  console.log("sliderecent products" , data);
@@ -105,7 +105,7 @@ function Home() {
   };
   // handle category select
   const handleCategorySelect = (categoryId) => {
-      fetch(`http://192.168.1.38:5000/api/admin/category/${categoryId}`)
+      fetch(`http://localhost:5000/api/admin/category/${categoryId}`)
         .then((response) => response.json())
         .then((data) => {
           // console.log(data);
@@ -135,7 +135,7 @@ function Home() {
                   <div className="d-flex">
                     <div className="carousel-img col-md-6 d-flex justify-content-center align-items-center">
                       <img
-                        src={`http://192.168.1.38:5000/img/${product.picture}`}
+                        src={`http://localhost:5000/img/${product.picture}`}
                         className="d-block w-100"
                         alt={product.title}
                         onClick={() => getselectedProduct(product._id)}
@@ -187,7 +187,7 @@ function Home() {
                       <div className="car-img-div">
                         <img
                           className="category-image-modify"
-                          src={`http://192.168.1.38:5000/img/${category.picture}`}
+                          src={`http://localhost:5000/img/${category.picture}`}
                           onClick={() => handleCategorySelect(category._id)}
                           alt={category.title}
                         />
@@ -237,7 +237,7 @@ function Home() {
                       <div className="catagory-imgs">
                         <a href="#">
                           <img
-                            src={`http://192.168.1.38:5000/img/${product.picture}`}
+                            src={`http://localhost:5000/img/${product.picture}`}
                             className="category-image-modify"
                             alt={product.title}
                             onClick={() => getselectedProduct(product._id)}
@@ -326,7 +326,7 @@ function Home() {
                     >
                       <div className="catagory-imgs">
                         <img
-                          src={`http://192.168.1.38:5000/img/${product.picture}`}
+                          src={`http://localhost:5000/img/${product.picture}`}
                           className="category-image-modify"
                           alt={product.title}
                           href="#"

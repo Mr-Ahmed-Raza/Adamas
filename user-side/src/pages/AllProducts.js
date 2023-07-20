@@ -43,7 +43,7 @@ function AllProducts() {
   };
   // get all products
   const getAllProduct = () => {
-    fetch("http://192.168.1.38:5000/api/admin/Product")
+    fetch("http://localhost:5000/api/admin/Product")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -53,7 +53,7 @@ function AllProducts() {
   };
   // get the selected product
   const getselectedProduct = (productId) => {
-    fetch(`http://192.168.1.38:5000/api/admin/Product/${productId}`)
+    fetch(`http://localhost:5000/api/admin/Product/${productId}`)
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
@@ -89,7 +89,7 @@ function AllProducts() {
                     >
                       <div className="catagory-imgs">
                         <img
-                          src={`http://192.168.1.38:5000/img/${product.picture}`}
+                          src={`http://localhost:5000/img/${product.picture}`}
                           className="category-image-modify"
                           alt={product.title}
                           onClick={() => getselectedProduct(product._id)}

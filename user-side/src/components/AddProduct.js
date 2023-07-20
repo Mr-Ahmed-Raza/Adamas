@@ -124,7 +124,7 @@ function AddProduct() {
         return;
       }
       // Call backend API
-      await fetch("http://192.168.1.38:5000/api/admin/product/add-product", {
+      await fetch("http://localhost:5000/api/admin/product/add-product", {
         method: "POST",
         body: formData,
       })
@@ -137,7 +137,7 @@ function AddProduct() {
           setPicture(null);
           setFeatured("");
           setSelectedCategoryId("");
-          toast.success("Category added Successfully");
+          toast.success("Product added Successfully");
           setTimeout(() => {
             navigate("/product-list");
           }, 2000);
@@ -152,7 +152,7 @@ function AddProduct() {
   }, []);
 
   const getAllcategory = () => {
-    fetch("http://192.168.1.38:5000/api/admin/category/all-category")
+    fetch("http://localhost:5000/api/admin/category/all-category")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);

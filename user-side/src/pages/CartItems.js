@@ -13,6 +13,7 @@ function CartItems() {
   const [cartItems, setCartItems] = useState([]);
   const [selectedCartItem, setselectedCartItem] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectAll, setSelectAll] = useState(false);
   const loggedInUserId = JSON.parse(localStorage.getItem("userData"))._id;
   const loggedInUserName = JSON.parse(
     localStorage.getItem("userData")
@@ -30,6 +31,19 @@ function CartItems() {
   console.log("email: ", loggedInUserEmail);
   console.log("Name: ", loggedInUserName);
 
+  const handleSelectAll = () => {
+    setLoading(true); // Show loader when "Select All" checkbox is clicked
+    setTimeout(() => {
+      if (selectAll) {
+        setselectedCartItem([]);
+      } else {
+        setselectedCartItem([...cartItems]);
+      }
+      setSelectAll((prev) => !prev);
+      setLoading(false); // Hide loader after a brief delay
+    }, 1000); // Simulating a 1-second delay before updating checkbox state
+  };
+
   const handleProceedToCheckout = () => {
     // Store the order summary data in an object
     const orderSummaryData = {
@@ -41,11 +55,10 @@ function CartItems() {
     // Store the order summary data in local storage
     localStorage.setItem("orderSummaryData", orderSummaryDataString);
     setLoading(true); // Show loader
-        setTimeout(() => {
-          setLoading(false); // Hide loader
-          navigate("/checkout");
-        }, 1000); // Simulating a delay of 2 seconds before redirecting
-   
+    setTimeout(() => {
+      setLoading(false); // Hide loader
+      navigate("/checkout");
+    }, 1000); // Simulating a delay of 2 seconds before redirecting
   };
 
   useEffect(() => {
@@ -67,32 +80,30 @@ function CartItems() {
   const removeCartItem = (itemId) => {
     axios
       .delete(`http://localhost:5001/api/cart/removeCartItem/${itemId}`)
-      .then((response) => {
+      .then(() => {
         // console.log(response.data.message);
         toast.success("product remove from cart Successfully");
         fetchCartItems(); // Refresh cart items after deletion
-      
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
-  const getselectedCartItem = (item) => {
-    if (
-      selectedCartItem.some(
-        (selectedItem) => selectedItem.productId === item.productId
-      )
-    ) {
-      setselectedCartItem((prevItems) =>
-        prevItems.filter(
-          (selectedItem) => selectedItem.productId !== item.productId
-        )
-      );
-    } else {
-      setselectedCartItem((prevItems) => [...prevItems, item]);
-    }
+  const handleCartItemCheckbox = (item) => {
+    setLoading(true);
+    setTimeout(() => {
+      if (selectedCartItem.some((selectedItem) => selectedItem.productId === item.productId)) {
+        setselectedCartItem((prevItems) =>
+          prevItems.filter((selectedItem) => selectedItem.productId !== item.productId)
+        );
+      } else {
+        setselectedCartItem((prevItems) => [...prevItems, item]);
+      }
+      setLoading(false); 
+    }, 1000); 
   };
+
   return (
     <>
       <Toaster />
@@ -100,13 +111,27 @@ function CartItems() {
       <wrapper>
         <NavBar />
         <h1>Cart-Items </h1>
+        <label>
+              <input
+                type="checkbox"
+                className="cart-checkbox"
+                checked={selectAll}
+                onChange={handleSelectAll}
+              />
+              Select All
+        </label>
+        
         {cartItems.map((item) => (
           <div class="cart-item" key={item.productId}>
+            
+          <label>
             <input
               type="checkbox"
               className="cart-checkbox"
-              onClick={() => getselectedCartItem(item)}
-            />
+              checked={selectedCartItem.some((selectedItem) => selectedItem.productId === item.productId)}
+              onChange={() => handleCartItemCheckbox(item)}
+              />
+              </label>
             <img
               className="category-image"
               src={`http://localhost:5001/img/${item.productPicture}`}

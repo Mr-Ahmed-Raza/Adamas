@@ -77,7 +77,7 @@ function Login() {
           }
           // make api call by fetch method
     
-          await fetch("http://192.168.1.38:5000/api/admin/login", {
+          await fetch("http://localhost:5000/api/admin/login", {
             method: "post",
             headers: {
               "Content-Type": "application/json",

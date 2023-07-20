@@ -21,7 +21,7 @@ function Product_details() {
 
   useEffect(() => {
     // console.log(productId);
-    fetch(`http://192.168.1.38:5000/api/admin/Product/${productId}`)
+    fetch(`http://localhost:5000/api/admin/Product/${productId}`)
       .then((response) => response.json())
       .then((data) => {
         setSelectedProduct(data.selectedProduct);
@@ -59,7 +59,7 @@ function Product_details() {
   // Fetch all the same category products
   const getallthesameCategoryProducts = (productId) => {
     // console.log(productId);
-    fetch(`http://192.168.1.38:5000/api/admin/Product/recommended/${productId}`)
+    fetch(`http://localhost:5000/api/admin/Product/recommended/${productId}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Request failed with status: " + response.status);
@@ -74,7 +74,7 @@ function Product_details() {
   };
   // get the selected product
   const getselectedProduct = (productId) => {
-    fetch(`http://192.168.1.38:5000/api/admin/Product/${productId}`)
+    fetch(`http://localhost:5000/api/admin/Product/${productId}`)
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
@@ -168,7 +168,7 @@ function Product_details() {
                     <img
                       src={
                         selectedProduct
-                          ? `http://192.168.1.38:5000/img/${selectedProduct.picture}`
+                          ? `http://localhost:5000/img/${selectedProduct.picture}`
                           : ""
                       }
                       className="category-image-modify-product"
@@ -350,7 +350,7 @@ function Product_details() {
                     >
                       <div className="category-imgs">
                         <img
-                          src={`http://192.168.1.38:5000/img/${product.picture}`}
+                          src={`http://localhost:5000/img/${product.picture}`}
                           className="card-img-top"
                           alt={product.title}
                           onClick={() => getselectedProduct(product._id)}

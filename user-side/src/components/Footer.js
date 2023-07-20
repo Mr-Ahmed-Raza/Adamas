@@ -19,7 +19,7 @@ function Footer() {
   }, []);
   // // get the recent products
   const getRecentProduct = () => {
-    fetch("http://192.168.1.38:5000/api/admin/Product/recent-products")
+    fetch("http://localhost:5000/api/admin/Product/recent-products")
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
@@ -30,7 +30,7 @@ function Footer() {
   };
   // get the selected product
   const getselectedProduct = (productId) => {
-    fetch(`http://192.168.1.38:5000/api/admin/Product/${productId}`)
+    fetch(`http://localhost:5000/api/admin/Product/${productId}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -81,7 +81,7 @@ function Footer() {
                           <div className="" key={product._id}>
                             <img
                               className="category-image-modify-recent"
-                              src={`http://192.168.1.38:5000/img/${product.picture}`}
+                              src={`http://localhost:5000/img/${product.picture}`}
                               alt={product.title}
                             />
                           </div>

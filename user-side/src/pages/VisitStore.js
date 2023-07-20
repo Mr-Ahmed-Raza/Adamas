@@ -61,7 +61,7 @@ function Catagorey() {
   }, []);
   // fetch all the categories
   const getAllcategory = () => {
-    fetch("http://192.168.1.38:5000/api/admin/category/all-category")
+    fetch("http://localhost:5000/api/admin/category/all-category")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -73,7 +73,7 @@ function Catagorey() {
   // Fetch products by category
   const getProductsByCategory = () => {
     fetch(
-      `http://192.168.1.38:5000/api/admin/category/categorized-product/${selectedCategory}`
+      `http://localhost:5000/api/admin/category/categorized-product/${selectedCategory}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -88,7 +88,7 @@ function Catagorey() {
     if (categoryId === "all") {
       getAllProduct();
     } else {
-      fetch(`http://192.168.1.38:5000/api/admin/category/${categoryId}`)
+      fetch(`http://localhost:5000/api/admin/category/${categoryId}`)
         .then((response) => response.json())
         .then((data) => {
           // console.log(data);
@@ -115,7 +115,7 @@ function Catagorey() {
   // }, []);
   // //Fetch all products
   const getAllProduct = () => {
-    fetch("http://192.168.1.38:5000/api/admin/Product")
+    fetch("http://localhost:5000/api/admin/Product")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -126,7 +126,7 @@ function Catagorey() {
 
   // get the selected product
   const getselectedProduct = (productId) => {
-    fetch(`http://192.168.1.38:5000/api/admin/Product/${productId}`)
+    fetch(`http://localhost:5000/api/admin/Product/${productId}`)
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
@@ -322,7 +322,7 @@ function Catagorey() {
                       >
                         <div className="catagory-imgs">
                           <img
-                            src={`http://192.168.1.38:5000/img/${product.picture}`}
+                            src={`http://localhost:5000/img/${product.picture}`}
                             className="category-image-modify"
                             alt={product.title}
                             onClick={() => getselectedProduct(product._id)}
@@ -423,7 +423,7 @@ function Catagorey() {
                         >
                           <div className="catagory-imgs">
                             <img
-                              src={`http://192.168.1.38:5000/img/${product.picture}`}
+                              src={`http://localhost:5000/img/${product.picture}`}
                               className="category-image-modify"
                               alt={product.title}
                               onClick={() => getselectedProduct(product._id)}

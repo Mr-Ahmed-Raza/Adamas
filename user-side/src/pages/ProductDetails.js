@@ -21,7 +21,7 @@ function Product_details() {
 
   useEffect(() => {
     // console.log(productId);
-    fetch(`http://localhost:5000/api/admin/Product/${productId}`)
+    fetch(`http://localhost:5000/api/admin/Product/unique/${productId}`)
       .then((response) => response.json())
       .then((data) => {
         setSelectedProduct(data.selectedProduct);
@@ -74,7 +74,7 @@ function Product_details() {
   };
   // get the selected product
   const getselectedProduct = (productId) => {
-    fetch(`http://localhost:5000/api/admin/Product/${productId}`)
+    fetch(`http://localhost:5000/api/admin/Product/unique/${productId}`)
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);

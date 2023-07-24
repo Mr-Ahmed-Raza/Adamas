@@ -205,7 +205,7 @@ const options = {
   }
 };
 
-request(options, function (error, response, body) {
+request(options, function (error, res, body) {
   if (error) throw new Error(error);
 
   console.log(body);
@@ -218,14 +218,13 @@ const verifytoken = async (req, res) => {
     headers: {
       'X-IBM-Client-Id': '6dc6f9b2-08ec-4e23-a329-f20818324cd6',
       'X-IBM-Client-Secret': 'uN7kQ1jF6gM7vM3gI3cP6pA8jY4hD7sD3mW0mT0aP2sX1oP6iS',
-      Authorization: 'eyJraWQiOiJoczI1Ni1rZXkiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL215aWRwLmlibS5jb20iLCJhdWQiOiJDbGllbnRJRDEiLCJleHAiOjE2ODk1OTU3ODYsImlhdCI6MTY4OTU5NTQ4Nn0.We7z73cRjRJ0NIe0VPBbjS1K7kcRZmiK7cdsHf42REs',
+      Authorization: 'eyJraWQiOiJoczI1Ni1rZXkiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL215aWRwLmlibS5jb20iLCJhdWQiOiJDbGllbnRJRDEiLCJleHAiOjE2ODk5MzM0NDYsImlhdCI6MTY4OTkzMzE0Nn0.YeXujjVixtB_yBXt-9b3ukFeC5_F3GOCw0YG7bOhIlQ',
       accept: 'application/json'
     }
   };
   
   request(options, function (error, response, body) {
     if (error) throw new Error(error);
-  
     console.log(body);
   });
 }

@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from 'axios'
 import { Link } from "react-router-dom";
+import "./todo.css";
+import FullPageLoader from "./FullPageLoader";
+
 
 function NavBar({}) {
   const [Logout, setLogout] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("");     
+  const [isSearching, setIsSearching] = useState(false);
   const navigate = useNavigate()
+  const location = useLocation();
   const userData = localStorage.getItem("userData")
   
   useEffect(() => {
@@ -17,7 +24,47 @@ function NavBar({}) {
     setLogout(false)
     navigate("/login")
   }
+  
+  const handleSearch = async (event) => {
+    event.preventDefault();
+    setIsSearching(true); // Show loader
+  
+    try {
+      const response = await axios.get(`http://localhost:5000/api/admin/product/searchproduct`, {
+        params: { title: searchQuery },
+      });
+  
+      if (!response.data || response.data.results.length === 0) {
+        throw new Error("Search failed");
+      }
+  
+      console.log("search results", response.data.results);
+  
+      setTimeout(() => {
+        setIsSearching(false); // Hide loader
+        navigate(`/search-products?query=${searchQuery}`);
+      }, 1000);
+    } catch (error) {
+      console.error(error);
+      setIsSearching(false);
+    }
+  };
 
+  
+   // Function to check if the current page is excluded from showing the search bar
+  const isSearchBarExcluded = () => {
+    const paths = ["/contact-us", "/cart-items", "/search-products", ];
+    const currentPath = location.pathname;
+    if (currentPath.startsWith("/product-details/")) {
+      return true;
+    }
+    console.log(currentPath);
+if(paths.includes(currentPath))
+    return true;
+else
+    return false;
+  
+  };
   return (
     <>
       <section className="info-section">
@@ -46,7 +93,7 @@ function NavBar({}) {
             </div>
             
             <div className="col-sm-10 col-md-4 right-div">
-              
+           
               <ul className="ul-right">
                 {
                   userData ? (
@@ -72,7 +119,7 @@ function NavBar({}) {
             <nav className="navbar navbar-expand-lg navbar-light">
               <div className="container">
                 <strong>
-                  <a href="index.html">
+                  <a href="/">
                     <img src="assets/images/logo.png" alt="logo" />
                   </a>
                 </strong>
@@ -90,8 +137,11 @@ function NavBar({}) {
                 <div
                   className="collapse navbar-collapse"
                   id="navbarSupportedContent"
-                >
-                  <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+            >
+
+              <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+                
+              
                    <Link to="/">
                     <li className="nav-item">
                       <a
@@ -157,7 +207,8 @@ function NavBar({}) {
                         </a>
                       </li>
                 </Link>
-                <Link to="/cart-items">
+                
+                <Link to={userData? "/cart-items" : '/login'}>
                       <li className="nav-item">
                         <a
                           className="nav-link active"
@@ -170,7 +221,24 @@ function NavBar({}) {
                       </li>
                     </Link>
                   </ul>
-                </div>
+            </div>
+            {!isSearchBarExcluded() && (
+              <form className="d-flex" onSubmit={handleSearch}>
+                <input
+                  className="form-control me-2"
+                  type="search"
+                  placeholder="Search"
+                  aria-label="Search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <button className="btn btn-outline-success" type="submit">
+                  Search
+                  </button>
+              </form>
+            )}
+            {isSearching && <FullPageLoader/>}
+            
               </div>
             </nav>
           </section>

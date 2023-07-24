@@ -3,15 +3,19 @@ import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
 import SocialSection from "../components/SocialSection";
 import "../components/todoList.css";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import axios from 'axios'
+import { useNavigate ,useLocation } from "react-router-dom";
 import FullPageLoader from "../components/FullPageLoader";
 
 function AllProducts() {
   const [Product, setProduct] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [searchResults, setSearchResults] = useState([]);
+    const navigate = useNavigate();
+    const searchLocation = useLocation();
+    const searchQuery = new URLSearchParams(searchLocation.search).get("query");
+    
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12;
   const totalPages = Math.ceil(Product.length / productsPerPage);
@@ -34,26 +38,45 @@ function AllProducts() {
       navigate(`/`);
     }, 1000); // Simulating a delay of 2 seconds before redirecting
 }
-  useEffect(() => {
-    getAllProduct();
-  }, []);
+useEffect(() => {
+    setLoading(true);
+
+    // Fetch search results based on the searchQuery
+    // Make an API call to fetch the search results from the backend
+    const fetchSearchResults = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/admin/product/searchproduct`,
+          {
+            params: { title: searchQuery },
+          }
+        );
+
+        if (!response.data || response.data.results.length === 0) {
+          throw new Error("Search failed");
+        }
+
+        // Assuming the API response contains the product details in 'results'
+        setSearchResults(response.data.results);
+
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        setLoading(false);
+      }
+    };
+
+    fetchSearchResults();
+}, [searchQuery]);
+    
   // To handle the paginations clicks
   const handleClick = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-  // get all products
-  const getAllProduct = () => {
-    fetch("http://localhost:5000/api/admin/Product")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setProduct(data.product);
-      })
-      .catch((error) => console.log("Error fetching Product:", error));
-  };
+  
   // get the selected product
   const getselectedProduct = (productId) => {
-    fetch(`http://localhost:5000/api/admin/Product/unique/${productId}`)
+    fetch(`http://localhost:5000/api/admin/Product/${productId}`)
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
@@ -77,11 +100,11 @@ function AllProducts() {
           <section className="cards-section">
             <div className="container">
               <div className="row justify-content-lg-between ">
-                <h1>ALL Products</h1>
-                {currentProducts.length === 0 ? (
+                <h1>Products</h1>
+                {searchResults.length === 0 ? (
                   <p>No product found</p>
                 ) : (
-                  currentProducts.map((product ,index) => (
+                    searchResults.map((product ,index) => (
                     <div
                       className="card"
                       style={{ width: "18rem" }}

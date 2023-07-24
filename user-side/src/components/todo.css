@@ -246,3 +246,35 @@
 .require-field{
 color: red;
 }
+
+/*  search bar section  */
+/* Add these styles to your CSS file or style section */
+
+/* For small screens */
+@media (max-width: 767px) {
+  .navbar .navbar-collapse .form-control {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .navbar .navbar-collapse .btn {
+    width: 100%;
+  }
+}
+
+/* For medium screens and above */
+@media (min-width: 768px) {
+  .navbar .navbar-collapse form {
+    display: flex;
+    align-items: center;
+  }
+
+  .navbar .navbar-collapse .form-control {
+    width: 250px;
+    margin-right: 10px;
+  }
+
+  .navbar .navbar-collapse .btn {
+    width: 80px;
+  }
+}

@@ -126,7 +126,7 @@ function Catagorey() {
 
   // get the selected product
   const getselectedProduct = (productId) => {
-    fetch(`http://localhost:5000/api/admin/Product/${productId}`)
+    fetch(`http://localhost:5000/api/admin/Product/unique/${productId}`)
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);

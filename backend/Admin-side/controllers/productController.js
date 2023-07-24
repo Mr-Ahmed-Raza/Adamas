@@ -354,6 +354,23 @@ const getRecommendedProducts = asyncHandler(async (req, res) => {
   }
 });
 
+// Search Products by title
+const getserachproduct = asyncHandler(async (req, res) => {
+  try {
+    const { title } = req.query;
+    // Use a regular expression to perform a case-insensitive search for the product title
+    const searchResults = await Product.find({
+      title: { $regex: new RegExp(title, "i") },
+    });
+
+    res.status(200).json({ message: "Search Results", results: searchResults });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+
+})
+
 module.exports = {
   addProducts,
   showAllProducts,
@@ -363,6 +380,7 @@ module.exports = {
   sliderecentProducts,
   deleteProducts,
   updateProducts,
-  singleProduct,
+   singleProduct,
   getRecommendedProducts,
+  getserachproduct,
 };

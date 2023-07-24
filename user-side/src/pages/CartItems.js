@@ -111,16 +111,23 @@ function CartItems() {
       <wrapper>
         <NavBar />
         <h1>Cart-Items </h1>
-        <label>
-              <input
-                type="checkbox"
-                className="cart-checkbox"
-                checked={selectAll}
-                onChange={handleSelectAll}
-              />
-              Select All
-        </label>
-        
+        {cartItems.length > 0 && ( // Check if there are any cart items
+          <label>
+            <input
+              type="checkbox"
+              className="cart-checkbox"
+              checked={selectAll}
+              onChange={handleSelectAll}
+            />
+            Select All
+          </label>
+        )}
+        {
+          cartItems.length === 0 && 
+          (
+            <p>No products in cartitem yet</p>
+          )
+        }
         {cartItems.map((item) => (
           <div class="cart-item" key={item.productId}>
             

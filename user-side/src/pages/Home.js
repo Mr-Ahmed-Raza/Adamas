@@ -78,7 +78,7 @@ function Home() {
   };
   // get the selected product
   const getselectedProduct = (productId) => {
-    fetch(`http://localhost:5000/api/admin/product/${productId}`)
+    fetch(`http://localhost:5000/api/admin/product/unique/${productId}`)
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);

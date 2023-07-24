@@ -9,6 +9,8 @@ import FullPageLoader from "../components/FullPageLoader";
 
 function AllCategories() {
   const [category, setcategory] = useState([]);
+  const [Product, setProduct] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -45,6 +47,38 @@ function AllCategories() {
       })
       .catch((error) => console.log("Error fetching category:", error));
   };
+
+  // Handle category selection
+  const handleCategorySelect = (categoryId) => {
+    if (categoryId === "all") {
+      getAllProduct();
+    } else {
+      fetch(`http://localhost:5000/api/admin/category/${categoryId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log(data);
+          setSelectedCategory(data.selectedcategory);
+          // getAllcategory();
+          // Redirect to productDetail page with selected product ID
+          setLoading(true); // Show loader
+          setTimeout(() => {
+            console.log("loader is hit");
+            setLoading(false); // Hide loader
+            navigate(`/store/categories/${categoryId}`);
+          }, 1000); // Simulating a delay of 2 seconds before redirecting
+        });
+    }
+  };
+   //Fetch all products
+   const getAllProduct = () => {
+    fetch("http://localhost:5000/api/admin/Product")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setProduct(data.product);
+      })
+      .catch((error) => console.log("Error fetching Product:", error));
+  };
   return (
     <>
       {loading && <FullPageLoader />}
@@ -62,12 +96,13 @@ function AllCategories() {
                   <p>No category found</p>
                 ) : (
                   currentCategory.map((category) => (
-                    <div className="col-sm-10 col-md-4 center">
+                    <div className="col-sm-10 col-md-4 center" key={category._id}>
                       <div className="car-img-div">
                         <img
                           className="category-image-modify"
                           src={`http://localhost:5000/img/${category.picture}`}
                           alt={category.title}
+                          onClick={()=>handleCategorySelect(category._id)}
                         />
                       </div>
                       <h2>{category.title}</h2>

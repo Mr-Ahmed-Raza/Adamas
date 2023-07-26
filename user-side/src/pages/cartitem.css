@@ -1,0 +1,100 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+  }
+
+  h1 {
+    margin-bottom: 20px;
+  }
+
+  .cart-item {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .product-name {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .quantity {
+    font-size: 14px;
+    color: #666;
+  }
+  button {
+    background-color: #3bbdfb; 
+    border: none; /* Remove the border */
+    color: white; /* Set the text color */
+    padding: 10px 20px; /* Add padding */
+    text-align: center; /* Center the text */
+    text-decoration: none; /* Remove text underline */
+    display: inline-block; /* Make the button a block element */
+    font-size: 16px; /* Set the font size */
+    cursor: pointer; /* Add a cursor on hover */
+    border-radius: 4px; /* Add rounded corners */
+  }
+  
+  button:hover {
+    background-color: black; /* Change the background color on hover */
+  }
+
+  a {
+    color: #3bbdfb; 
+    
+  }
+  
+  a:hover {
+   color: black; /* Change the background color on hover */
+  }
+
+
+  .cart-checkbox {
+    /* Hide the default checkbox */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #ccc;
+    border-radius: 3px;
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+  
+  /* Styling for the checked state */
+  .cart-checkbox:checked {
+    background-color: #3bbdfb;
+    border-color: #3bbdfb;
+  }
+  
+  /* Styling for the checked state's inner icon */
+  .cart-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 6px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  
+  /* Styling for the hover state */
+  .cart-checkbox:hover {
+    border-color: #3bbdfb;
+  }
+  
+  /* Styling for the focus state */
+  .cart-checkbox:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.3);
+  }
+  
+  

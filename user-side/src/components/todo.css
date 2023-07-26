@@ -1,0 +1,309 @@
+.main-page {
+  width: 100%;
+  /* color: #fff; */
+  padding: 60px 0px;
+  margin: 0 0 30px;
+}
+.main-page h1 {
+  font-size: 50px;
+  line-height: 70px;
+  font-weight: bold;
+  margin: 0 0 50px;
+  color: #3bbdfb;
+}
+.main-page h3 {
+  font-weight: bold;
+  color: #000000;
+}
+.main-page .text {
+  text-align: start;
+  font-size: 20px;
+  line-height: 30px;
+  font-weight: 500;
+  margin: 0 0 50px;
+}
+.main-page form {
+  padding: 50px;
+  background: #3bbdfb;
+  border-radius: 20px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.main-page form .input-group {
+  flex-direction: column;
+  align-items: start;
+  margin: 0 0 30px;
+}
+.main-page form .input-group label {
+  font-size: 20px;
+  line-height: 30px;
+  display: block;
+  margin: 0 0 15px;
+}
+.main-page form .input-group .input-field {
+  width: 100%;
+}
+.main-page form .input-group input {
+  width: 100%;
+  height: 45px;
+  
+}
+.main-page form .input-group textarea {
+  width: 100%;
+  height: 150px;
+  resize: none;
+  
+}
+.button1 {
+  font-size: 20px;
+  line-height: 30px;
+  font-weight: 500;
+  background: #fff;
+  color: #04abf8;
+  border-radius: 20px;
+  border: none;
+  padding: 15px 30px;
+}
+.button1:hover {
+  background: #04abf8;
+  color: #000;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+.switch input[type="checkbox"] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input[type="checkbox"]:checked + .slider {
+    background-color: #2196F3;
+  }
+  
+  input[type="checkbox"]:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+  
+  /* Optional styles to customize appearance */
+  
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+  
+  .checkbox {
+    display: inline-block;
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  .checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+    border-radius: 4px;
+  }
+  
+  .checkbox:hover input ~ .checkmark {
+    background-color: #ccc;
+  }
+  
+  .checkbox input:checked ~ .checkmark {
+    background-color: #2196F3;
+  }
+  
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  .checkbox input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  .checkbox .checkmark:after {
+    left: 7px;
+    top: 3px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+  
+
+  /*
+  Radio button */
+
+  .radio-group {
+    display: flex;
+  }
+  
+  .radio-group label {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+  }
+  
+  .radio-group input[type="radio"] {
+    margin-right: 5px;
+  }
+  
+  .radio-group input[type="radio"]:checked::before {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #2196F3;
+  }
+  
+  .radio-group input[type="radio"]:not(:checked)::before {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid #2196F3;
+    border-radius: 50%;
+    background-color: transparent;
+  }
+  /* Ck-editor */
+  .ckeditor-container .ck.ck-editor {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    background: #ffffff;
+    color: #000;
+  }
+
+  .ckeditor-container .ck.ck-editor .ck-editor__editable {
+    min-height: 200px;
+    padding: 10px;
+    font-size: 16px;
+    color: #000000;
+  }
+
+  @media (max-width: 768px) {
+    .ckeditor-container .ck.ck-editor .ck-editor__editable {
+      min-height: 150px;
+      font-size: 14px;
+    }
+  }
+
+  /* label text */
+  .text-label{
+    color: #ffffff;
+  }
+/* Require-field*/
+.require-field{
+color: red;
+}
+
+/*  search bar section  */
+/* Add these styles to your CSS file or style section */
+
+/* For small screens */
+@media (max-width: 767px) {
+  .navbar .navbar-collapse .form-control {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .navbar .navbar-collapse .btn {
+    width: 100%;
+  }
+}
+
+/* For medium screens and above */
+@media (min-width: 768px) {
+  .navbar .navbar-collapse form {
+    display: flex;
+    align-items: center;
+  }
+
+  .navbar .navbar-collapse .form-control {
+    width: 250px;
+    margin-right: 10px;
+  }
+
+  .navbar .navbar-collapse .btn {
+    width: 80px;
+  }
+}
+
+
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  z-index: 1;
+}
+
+.search-results a {
+  display: block;
+  padding: 8px;
+  text-decoration: none;
+  color: #333333;
+}
+
+.search-results a img {
+  max-width: 40px;
+  max-height: 40px;
+  margin-right: 8px;
+}

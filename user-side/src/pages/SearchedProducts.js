@@ -76,17 +76,19 @@ useEffect(() => {
   
   // get the selected product
   const getselectedProduct = (productId) => {
-    fetch(`http://localhost:5000/api/admin/Product/${productId}`)
+    fetch(`http://localhost:5000/api/admin/product/unique/${productId}`)
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
-        setSelectedProduct(data.selectedProduct);
+        // setSelectedProduct(data.selectedProduct);
         // getAllcategory();
+        // Redirect to productDetail page with selected product ID
         setLoading(true); // Show loader
         setTimeout(() => {
           setLoading(false); // Hide loader
           navigate(`/product-details/${productId}`);
         }, 1000); // Simulating a delay of 2 seconds before redirecting
+
       });
   };
   return (
@@ -115,8 +117,7 @@ useEffect(() => {
                           src={`http://localhost:5000/img/${product.picture}`}
                           className="category-image-modify"
                           alt={product.title}
-                          onClick={() => getselectedProduct(product._id)}
-                        />
+                          onClick={() => getselectedProduct(product._id)}                        />
                       </div>
                       <div className="card-body">
                         <h5 className="card-title">{product.title}</h5>

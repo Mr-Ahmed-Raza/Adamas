@@ -278,3 +278,32 @@ color: red;
     width: 80px;
   }
 }
+
+
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  z-index: 1;
+}
+
+.search-results a {
+  display: block;
+  padding: 8px;
+  text-decoration: none;
+  color: #333333;
+}
+
+.search-results a img {
+  max-width: 40px;
+  max-height: 40px;
+  margin-right: 8px;
+}

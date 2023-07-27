@@ -133,7 +133,8 @@ function Userlist() {
                 <tr>
                   <th>#</th>
                   <th>First Name</th>
-                  <th>Email</th>
+                    <th>Email</th>
+                    <th>Picture</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -144,6 +145,13 @@ function Userlist() {
                       <td>{index + 1}</td>
                       <td>{user.firstName}</td>
                       <td>{user.email}</td>
+                      <td>   
+                          <img
+                            className="category-image"
+                            src={`http://localhost:5000/img/${user.picture}`}
+                            alt={user.firstName}
+                          />
+                      </td>
                       <td>
                         
                           <button

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -11,15 +12,23 @@ function NavBar({}) {
   const [Logout, setLogout] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   // const socket = io("http://localhost:5000");
-  const userData = localStorage.getItem("userData");
-
   useEffect(() => {
-    console.log("userData: ", userData);
-  }, [userData]);
+    const userData = localStorage.getItem("userData");
+    if (userData) {
+      const parsedUserData = JSON.parse(userData);
+      setUserEmail(parsedUserData.email);
+    }
+  }, []);
+  const handleEmailClick = (event) => {
+    event.preventDefault();
+    setShowDropdown((prevShowDropdown) => !prevShowDropdown);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("userData");
@@ -145,12 +154,27 @@ function NavBar({}) {
 
             <div className="col-sm-10 col-md-4 right-div">
               <ul className="ul-right">
-                {userData ? (
-                  <li>
-                    <a href="#" value={Logout} onClick={handleLogout}>
-                      Logout
+                {/* Conditionally render user's email if logged in */}
+                {userEmail ? (
+                  <div className="user-dropdown">
+                    <a href="#" onClick={handleEmailClick}>
+                      {userEmail} <i className="fa fa-caret-down"></i>
                     </a>
-                  </li>
+                    {showDropdown && (
+                      <ul className="user-dropdown-menu">
+                        {" "}
+                        {/* Updated class name */}
+                        <li>
+                          <Link to="/profile">Profile</Link>
+                        </li>
+                        <li>
+                          <a href="#" onClick={handleLogout}>
+                            Logout
+                          </a>
+                        </li>
+                      </ul>
+                    )}
+                  </div>
                 ) : (
                   <li>
                     <Link to="/login">sigin</Link>
@@ -232,7 +256,7 @@ function NavBar({}) {
                   </li>
                 </Link>
 
-                <Link to={userData ? "/cart-items" : "/login"}>
+                <Link to={userEmail ? "/cart-items" : "/login"}>
                   <li className="nav-item">
                     <a className="nav-link active" aria-current="page" href="#">
                       CartItems

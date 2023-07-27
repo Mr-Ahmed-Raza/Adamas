@@ -357,11 +357,13 @@ const getRecommendedProducts = asyncHandler(async (req, res) => {
 // Search Products by title
 const getserachproduct = asyncHandler(async (req, res) => {
   try {
-    const { title } = req.query;
+    const { title,selectedCategoryId } = req.query;
     // Use a regular expression to perform a case-insensitive search for the product title
     const searchResults = await Product.find({
       title: { $regex: new RegExp(title, "i") },
-    });
+      selectedCategoryId: { $regex: new RegExp(selectedCategoryId, "i") },
+
+    });   
 
     res.status(200).json({ message: "Search Results", results: searchResults });
   } catch (error) {

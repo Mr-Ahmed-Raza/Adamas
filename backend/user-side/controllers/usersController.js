@@ -7,6 +7,7 @@ const Cart = require("../models/CartModel");
 // api: POST /api/user/register-user
 const registrationUser = asyncHandler(async (req, res) => {
   const { firstName, email, password } = req.body;
+  const picture = req.file ? req.file.filename : null;
 console.log("Registeration Data: ",req.body);
   if (!firstName || !email || !password) {
     res.status(400);
@@ -21,13 +22,9 @@ console.log("Registeration Data: ",req.body);
     firstName,
     email,
     password,
+    picture
   });
-   // Create a cart for the user
-   const cart = new Cart({ userId: user._id });
-   await cart.save();
-
-   // Link the cart to the user
-   user.cart = cart._id;
+   
   await user.save();
   
   if (user) {
@@ -35,6 +32,7 @@ console.log("Registeration Data: ",req.body);
       _id: user._id,
       firstName: user.firstName,
       email: user.email,
+      picture:user.picture,
      token: genrateToken(user._id),
     });
   } else {

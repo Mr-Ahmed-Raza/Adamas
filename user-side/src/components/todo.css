@@ -307,3 +307,40 @@ color: red;
   max-height: 40px;
   margin-right: 8px;
 }
+
+
+/* Styles for the user's email dropdown */
+/* Rename the class to avoid conflicts with Bootstrap's default class */
+.user-dropdown {
+  position: relative;
+}
+
+.user-dropdown-menu { /* Updated class name */
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  padding: 8px 0;
+  min-width: 150px;
+  z-index: 1;
+}
+
+.user-dropdown-menu li { /* Updated class name */
+  list-style: none;
+}
+
+.user-dropdown-menu a { /* Updated class name */
+  display: block;
+  padding: 8px 16px;
+  color: #58b4ff;
+  text-decoration: bold;
+}
+
+.user-dropdown-menu a:hover { /* Updated class name */
+  background-color: #5eb1f5;
+}
+
+
+

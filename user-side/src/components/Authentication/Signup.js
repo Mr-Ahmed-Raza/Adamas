@@ -13,6 +13,7 @@ function Signup() {
   const [firstName, setfirstName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [picture, setPicture] = useState([]);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
@@ -31,6 +32,12 @@ function Signup() {
     setPassword(event.target.value);
     clearError("password");
   };
+  const onchangepicture = (event) => {
+    setPicture(event.target.files[0]);
+    console.log(event.target.files[0]);
+    clearError("picture");
+  };
+  
   // to clear validation error when user enter anything to particular field
   const clearError = (fieldName) => {
     setErrors((prevErrors) => {
@@ -58,6 +65,14 @@ function Signup() {
       formIsValid = false;
       errors.email = "Invalid email address";
     }
+
+    if (!picture) {
+      formIsValid = false;
+      errors.picture = "Picture is required";
+    } else if (!/^image\/(jpeg|png|gif)$/i.test(picture.type)) {
+      formIsValid = false;
+      errors.picture = "Only JPEG, PNG, and GIF image types are allowed";
+    }
     if (!password) {
       formIsValid = false;
       errors.password = "Password is required";
@@ -84,27 +99,27 @@ function Signup() {
     try {
       event.preventDefault();
       // Send data front to api backend
-      const data = {
-        firstName,
-        email,
-        password,
-      };
+      
+      var formData = new FormData();
+      formData.append("firstName", firstName);
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("picture", picture, picture.name);
+
       if (!validationChecks()) {
         return;
       }
       // calling backend api
       await fetch("http://localhost:5001/api/users/register", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        body: formData,
       })
         .then((response) => response.json())
         .then((data) => {
           console.log(data.message);
           setfirstName("");
           setEmail("");
+          setPicture(null);
           setPassword("");
           toast.success("Successfully Registered");
           setTimeout(() => {
@@ -161,6 +176,20 @@ function Signup() {
                 />
               </div>
               <div className="error">{<span>{errors.email}</span>}</div>
+            </div>
+            <div className="input-group">
+              <label className="text-label">
+                Picture <span className="require-field">*</span>
+              </label>
+              <div className="input-field">
+                <input
+                  className="form-control"
+                  type="file"
+                  name="picture"
+                  onChange={onchangepicture}
+                />
+              </div>
+              <div className="error">{<span>{errors.picture}</span>}</div>
             </div>
             <div className="input-group">
               <label for="password" className="text-label">

@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import ChartistGraph from "react-chartist";
 // react-bootstrap components
 import {
@@ -14,15 +15,68 @@ import {
   Form,
   OverlayTrigger,
   Tooltip,
+  
 } from "react-bootstrap";
 
 function Dashboard() {
+  const [users, setUsers] = useState([]);
+  const [category, setcategory] = useState([]);
+  const [Product, setProduct] = useState([]);
+  const [FeatureProduct, setFeatureProduct] = useState([]);
+
+  // fetching while refreshing
+  useEffect(() => {
+    getAllUsers();
+    getAllcategory();
+    getAllProduct();
+    getAllFeaturedProduct();
+  }, []);
+  const getAllUsers = () => {
+    fetch("http://localhost:5001/api/users/all-users")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setUsers(data.users);
+      })
+      .catch((error) => console.log("Error fetching users:", error));
+  };
+  
+  const getAllcategory = () => {
+    fetch("http://localhost:5000/api/admin/category/all-category")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setcategory(data.category);
+      })
+      .catch((error) => console.log("Error fetching category:", error));
+  };
+  const getAllProduct = () => {
+    fetch("http://localhost:5000/api/admin/Product")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setProduct(data.product);
+      })
+      .catch((error) => console.log("Error fetching Product:", error));
+  };
+// Fetch all the featured products
+const getAllFeaturedProduct = () => {
+  fetch("http://localhost:5000/api/admin/product/feature-products")
+    .then((response) => response.json())
+    .then((data) => {
+      // console.log(data);
+      setFeatureProduct(data.product);
+    })
+    .catch((error) => console.log("Error fetching Product:", error));
+  };
+  
+
   return (
     <>
       <Container fluid>
         <Row>
           <Col lg="3" sm="6">
-            <Card className="card-stats">
+            <Card className="card-stats" >
               <Card.Body>
                 <Row>
                   <Col xs="5">
@@ -31,9 +85,9 @@ function Dashboard() {
                     </div>
                   </Col>
                   <Col xs="7">
-                    <div className="numbers">
-                      <p className="card-category">Number</p>
-                      <Card.Title as="h4">150GB</Card.Title>
+                    <div className="numbers" >
+                      <p className="card-category">Users</p>
+                      <Card.Title as="h4">{ users? users.length : ""}</Card.Title>
                     </div>
                   </Col>
                 </Row>
@@ -41,8 +95,8 @@ function Dashboard() {
               <Card.Footer>
                 <hr></hr>
                 <div className="stats">
-                  <i className="fas fa-redo mr-1"></i>
-                  Update Now
+                  <i className="fas fa-redo mr-1" onClick={()=>window.location.reload()}></i>
+                  Update Now 
                 </div>
               </Card.Footer>
             </Card>
@@ -58,8 +112,8 @@ function Dashboard() {
                   </Col>
                   <Col xs="7">
                     <div className="numbers">
-                      <p className="card-category">Revenue</p>
-                      <Card.Title as="h4">$ 1,345</Card.Title>
+                      <p className="card-category">Categories</p>
+                      <Card.Title as="h4">{ category? category.length : "0"}</Card.Title>
                     </div>
                   </Col>
                 </Row>
@@ -84,8 +138,8 @@ function Dashboard() {
                   </Col>
                   <Col xs="7">
                     <div className="numbers">
-                      <p className="card-category">Errors</p>
-                      <Card.Title as="h4">23</Card.Title>
+                      <p className="card-category">products</p>
+                      <Card.Title as="h4">{Product ? Product.length : "0"}</Card.Title>
                     </div>
                   </Col>
                 </Row>
@@ -110,8 +164,8 @@ function Dashboard() {
                   </Col>
                   <Col xs="7">
                     <div className="numbers">
-                      <p className="card-category">Followers</p>
-                      <Card.Title as="h4">+45K</Card.Title>
+                      <p className="card-category">Feature products</p>
+                      <Card.Title as="h4">{FeatureProduct? FeatureProduct.length : "0"}</Card.Title>
                     </div>
                   </Col>
                 </Row>

@@ -381,7 +381,7 @@ function Home() {
               View All
             </button>
           </div>
-        )}
+         )}
             </div>
           </section>
         </main>

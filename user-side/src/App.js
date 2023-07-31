@@ -18,6 +18,7 @@ import CartItems from "./pages/CartItems"
 import Checkout from './pages/Checkout';
 import SearchProducts from './pages/SearchedProducts'
 import ForgetPassword from './components/Authentication/ForgetPassword';
+import Profile from './pages/Profile';
 // User name changed
 function App() {
   return (
@@ -41,7 +42,9 @@ function App() {
         <Route path="/all-products" element={<AllProducts />} />
         <Route path="/cart-items" element={<CartItems />} />
         <Route path="/checkout" element={<Checkout />} />
-        <Route path="/search-products" element={<SearchProducts/>} />
+        <Route path="/search-products" element={<SearchProducts />} />
+        <Route path="/profile" element={<Profile/>} />
+
 
         
     </Routes>

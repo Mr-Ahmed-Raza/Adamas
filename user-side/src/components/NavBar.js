@@ -13,22 +13,29 @@ function NavBar({}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [userEmail, setUserEmail] = useState("");
+  const [userPicture, setUserPicture] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   // const socket = io("http://localhost:5000");
+  
+
   useEffect(() => {
     const userData = localStorage.getItem("userData");
     if (userData) {
       const parsedUserData = JSON.parse(userData);
       setUserEmail(parsedUserData.email);
+      setUserPicture(parsedUserData.picture)
     }
   }, []);
-  const handleEmailClick = (event) => {
+  const handlePictureClick = (event) => {
     event.preventDefault();
     setShowDropdown((prevShowDropdown) => !prevShowDropdown);
+   
   };
+  
+  
 
   const handleLogout = () => {
     localStorage.removeItem("userData");
@@ -109,6 +116,18 @@ function NavBar({}) {
   // }, [socket, navigate, searchQuery]);
 
   // Function to check if the current page is excluded from showing the search bar
+  const isProfileSectionExcluded = () => {
+    const paths = [
+      "/profile",
+    ];
+    const currentPath = location.pathname;
+    if (currentPath.startsWith("/product-details/")) {
+      return true;
+    }
+    console.log(currentPath);
+    if (paths.includes(currentPath)) return true;
+    else return false;
+  };
   const isSearchBarExcluded = () => {
     const paths = [
       "/contact-us",
@@ -153,12 +172,23 @@ function NavBar({}) {
             </div>
 
             <div className="col-sm-10 col-md-4 right-div">
+              
+
+             
               <ul className="ul-right">
                 {/* Conditionally render user's email if logged in */}
-                {userEmail ? (
+                
+                {userPicture ? (
                   <div className="user-dropdown">
-                    <a href="#" onClick={handleEmailClick}>
-                      {userEmail} <i className="fa fa-caret-down"></i>
+                    <a href="#"
+                     
+                      onClick={handlePictureClick}>
+                       <img
+                        src={`http://localhost:5000/img/${userPicture}`}
+                        alt="User Profile"
+                        style={{ width: "30px", height: "30px", borderRadius: "50%" }}
+                      />
+                      <i className="fa fa-caret-down"></i>
                     </a>
                     {showDropdown && (
                       <ul className="user-dropdown-menu">
@@ -182,7 +212,8 @@ function NavBar({}) {
                     <Link to="/register">register</Link>
                   </li>
                 )}
-              </ul>
+                </ul>
+                
             </div>
           </div>
         </div>

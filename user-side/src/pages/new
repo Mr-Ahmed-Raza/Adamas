@@ -1,0 +1,20 @@
+
+
+Last three weeks Progress:
+Adaamas full project is done according to the document 
+payment method are asking me to integrate the easypaisa or paypro for pakistan 
+i use the pinless api of easypaisa which are fit for my project In this api the varifiication is done (Auth) is done signature is genrate credentials is set all the process is done 
+now i just need to murchant id for thr received payment so how can i get murchant Id i need to give full real time details for getting murchant id details like Bank accounts and documents for the that on the other hand i also integrate the stripe method for the payments
+
+Extra Things which are added in the project:
+Profile section for the navbar
+profile page for the user-site 
+Search bar for the searching product 
+Search product page 
+Add View all buttons 
+Add read more and less for the description section 
+create category page
+create products pages 
+Show Recommended Products on the product details page 
+Apply all the possible checks on the CartItems 
+Order Summary with checkout 
